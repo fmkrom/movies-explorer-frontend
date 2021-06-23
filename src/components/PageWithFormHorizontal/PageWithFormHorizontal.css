@@ -1,0 +1,17 @@
+.form-horizontal{
+    margin-top: 74px;
+    margin-bottom: 70px;
+    width:410px;
+    height: max-content;
+    background-color: inherit;
+    padding: 0;
+}
+
+@media screen and (max-width:500px){
+    .form-horizontal{
+        width:260px;
+        margin-top: 56px;
+        margin-bottom: 30px;
+    }
+}
+

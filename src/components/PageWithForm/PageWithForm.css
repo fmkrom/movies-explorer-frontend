@@ -1,0 +1,20 @@
+.form-main{
+    margin-top: 232px;
+    margin-bottom: 232px;
+    width:396px;
+    height: max-content;
+    background-color: inherit;
+    padding: 0;
+}
+
+@media screen and (max-width:500px){
+    .form-main{
+        width:260px;
+        margin-top: 56px;
+        margin-bottom: 30px;
+    }
+}
+
+.form__inputs-block{
+    width:100%;
+}

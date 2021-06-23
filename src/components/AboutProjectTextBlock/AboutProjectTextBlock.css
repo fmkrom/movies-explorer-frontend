@@ -1,0 +1,40 @@
+.about-project__text-block{
+    width:50%;
+    height: auto;
+}
+
+@media screen and (max-width: 1202px) {
+    .about-project__text-block{
+        width:50%;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .about-project__text-block{
+        width:284px;
+    }
+}
+
+.about-project__text-block-title{
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: -0.04em;
+    text-align: left;
+}
+
+.about-project__text-block-text{
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: 0em;
+    text-align: left;
+}
+
+@media screen and (max-width: 1024px){
+    .about-project__text-block-text{
+        font-size: 12px;
+    }
+}
