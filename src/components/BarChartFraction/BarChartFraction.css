@@ -20,7 +20,7 @@
 }
 
 .bar-chart-fraction__bar_highlighted{
-    background-color: #2BE080;
+    background-color: #3456F3;
 }
 
 .bar-chart-fraction__bar_plain{
@@ -43,10 +43,16 @@
     }
 }
 
-.bar-chart__text_dark{
+.bar-chart__text_white{
+    color:white;
+}
+
+.bar-chart__text_lightgray{
+    color:#A0A0A0;
+}
+
+.bar-chart__text_black{
     color:black;
 }
 
-.bar-chart__text_light{
-    color:#A0A0A0;
-}
+

@@ -26,11 +26,13 @@ function AboutProject(){
                 </div>
                 <div className="about-project__bar-chart">
                     <BarChartFraction 
+                        isTextWhite={true}
                         isSmall={true}
                         title="1 неделя"
                         subtitle="Back-end"
                     />
                     <BarChartFraction 
+                        isTextWhite={false}
                         isSmall={false}
                         title="5 недель"
                         subtitle="Front-end"
