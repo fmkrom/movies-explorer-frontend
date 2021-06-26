@@ -18,6 +18,12 @@
     align-items: center;
     text-decoration: none;
     color:black;
+
+    cursor: pointer;
+}
+
+.header__link:hover{
+    opacity: 0.8;
 }
 
 .header__link_plain{

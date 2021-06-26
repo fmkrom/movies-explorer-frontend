@@ -25,4 +25,5 @@
 
 .filter-checkbox__toggle-button{
     margin-left: 14px;
+    cursor: pointer;
 }

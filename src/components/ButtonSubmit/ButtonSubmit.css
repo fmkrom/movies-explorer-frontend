@@ -22,6 +22,10 @@ button{
     }
 }
 
+button:hover{
+    opacity:0.8;
+}
+
 .button_colored{
     background-color: #3456F3;
     border-radius: 2px;

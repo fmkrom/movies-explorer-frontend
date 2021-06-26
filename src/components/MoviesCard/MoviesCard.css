@@ -53,11 +53,18 @@
     width:24px;
     height: 24px;
     border-radius: 36px;
-    background-image: url('../../images/like-button_active.png');
     background-repeat: no-repeat;
     background-position: center;
     border:0;
     background-color: #F5F5F5;
+}
+
+.movies-card__like-button_inactive{
+    background-image: url('../../images/like-button_inactive.png');
+}
+
+.movies-card__like-button_active{
+    background-image: url('../../images/like-button_active.png');
 }
 
 .movies-card__title{

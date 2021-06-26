@@ -2,24 +2,23 @@ import '../MoviesCardList/MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
 import ContentBlockMain from '../ContentBlockMain/ContentBlockMain';
 import ButtonLong from '../ButtonLong/ButtonLong';
+// import URL from '../../utils/constants';
 
-function MoviesCardList(props){
-
+function BeatFilmMoviesCardList(props){
+    
 return (
     <ContentBlockMain>
         <div className="movies-cards-list">
                 {props.data.map((movie) => {
                     return (
                         <MoviesCard
-                            moviesCardImage={movie.image}
-                            movieName={movie.name}
+                            moviesCardImage={`https://api.nomoreparties.co${movie.image.url}`}
+                            movieName={movie.nameRU}
                             movieDuration={movie.duration}
-                            isSaved={props.isSaved}
                             key={movie._id}
-                            handleSaveMovie={props.onSaveMovie}
                         />
-                    )
-                })}
+                    )}
+                )}
             </div>
             <ButtonLong 
                 buttonText="Еще"
@@ -29,4 +28,4 @@ return (
     )
 };
    
-export default MoviesCardList;
+export default BeatFilmMoviesCardList;

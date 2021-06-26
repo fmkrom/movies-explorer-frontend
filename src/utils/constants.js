@@ -1,4 +1,6 @@
-export const MY_BASE_URL = 'https://api.fmkrom-movies-exp.nomoredomains.icu';
+const URL ={
+    MY_BASE: 'https://api.fmkrom-movies-exp.nomoredomains.icu',
+    BEATFILM_MOVIES: 'https://api.nomoreparties.co/beatfilm-movies'
+}
 
-export const MOVIES_EXPLORER_URL = 'https://api.nomoreparties.co/beatfilm-movies';
-
+export default URL;

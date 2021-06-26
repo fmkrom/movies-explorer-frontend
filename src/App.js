@@ -13,6 +13,7 @@ import Footer from './components/Footer/Footer';
 
 import SearchForm from './components/SearchForm/SearchForm';
 import MoviesCardList from './components/MoviesCardList/MoviesCardList';
+// import BeatFilmMoviesCardList from './components/MoviesCardListBeatfilm/BeatFilmMoviesCardList';
 
 import Login from './components/Login/Login';
 import Register from './components/Register/Register';
@@ -24,18 +25,29 @@ import PageNotFound from './components/PageNotFound/PageNotFound';
 
 import currentUser from './utils/data';
 import moviesArray from './utils/movies';
+import savedMoviesArray from './utils/savedMovies';
 
 import functions from './utils/utils';
+
+// import moviesApi from './utils/Api/MoviesApi';
 
 function App() {
 
   const [ isOverlayMenuOpen, handleOpenOverlayMenuClick ] = useState(false);
+  // const [ beatFilmMovies, setBeatFilmMovies ] = useState([]);
   
+  /*moviesApi.getBeatfilmMovies()
+  .then((movies)=> {
+    setBeatFilmMovies(movies);
+  })*/
+  //console.log(beatFilmMovies);
+   
   function closeAllpopups(){
     handleOpenOverlayMenuClick(false)
   }
 
-  functions.regulateArrayLength(moviesArray, 20);
+  functions.regulateArrayLength(moviesArray, 10);
+  // functions.regulateArrayLength(beatFilmMovies, 13);
 
   function addMoviesToPage(){
     functions.increaseArrayLength(moviesArray);
@@ -73,6 +85,35 @@ function App() {
           <Footer />
         </Route>
 
+        <Route exact path="/saved-movies">
+          <Header 
+            isLoggedIn={true}
+            onOpenOverlayMenu={handleOpenOverlayMenuClick}
+          />
+          <MoviesCardList 
+            data={savedMoviesArray}
+            addFilmsToPage={addMoviesToPage}
+          />
+          <Footer />
+        </Route>
+
+        {/*
+        
+        <Route exact path="/beatfilm-movies">
+          <Header 
+            isLoggedIn={true}
+            onOpenOverlayMenu={handleOpenOverlayMenuClick}
+          />
+          <SearchForm />
+          <BeatFilmMoviesCardList 
+            data={beatFilmMovies}
+            addFilmsToPage={addMoviesToPage}
+          />
+          <Footer />
+        </Route>
+
+        */}
+        
         <Route exact path="/account">
           <Header
             isLoggedIn={true}

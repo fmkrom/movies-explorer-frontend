@@ -69,6 +69,11 @@
     background-image: url('../../images/button__search.png');
     background-position: center;
     background-repeat: no-repeat;
+
+    cursor:pointer;
 }
 
+.search-form__button:hover{
+    opacity: 0.8;
+}
 
