@@ -19,7 +19,7 @@
     align-items: center;
 }
 
-@media screen and (max-width:500px)  {
+@media screen and (max-width:764px)  {
     .form__logo-containter_shown{
         justify-content: center;
     }

@@ -15,7 +15,7 @@ button{
     cursor: pointer;
 }
 
-@media screen and (max-width:500px){
+@media screen and (max-width:764px){
     .button{
         font-size: 12px;
         line-height: 15px;
@@ -36,7 +36,7 @@ button:hover{
     height: 45px;
 }
 
-@media screen and (max-width:500px){
+@media screen and (max-width:764px){
     .button_colored{
         margin-top: 157px;
         margin-bottom: 14px;

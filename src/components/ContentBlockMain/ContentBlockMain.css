@@ -26,7 +26,7 @@
     }
 }
 
-@media screen and (max-width: 500px){
+@media screen and (max-width: 764px){
     .content-block_main{
         width:300px;
         /*margin-left: 10px;

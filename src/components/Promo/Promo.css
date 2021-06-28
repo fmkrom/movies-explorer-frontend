@@ -54,7 +54,7 @@
     }
 }
 
-@media screen and (max-width:500px){
+@media screen and (max-width:764px){
     .promo__title{
         width:229px;
         height: max-content;

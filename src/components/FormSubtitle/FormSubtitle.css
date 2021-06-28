@@ -10,7 +10,7 @@
     letter-spacing: 0em;
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 764px) {
     .form__subtitle-block{
         font-size: 12px;
         line-height: 15px;    

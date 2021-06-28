@@ -33,7 +33,7 @@
     }   
 }
 
-@media screen and (max-width: 500px){
+@media screen and (max-width: 764px){
     .search-form__search-bar{
         width:300px;       
     }   
@@ -54,7 +54,7 @@
     }   
 }
 
-@media screen and (max-width: 500px){
+@media screen and (max-width: 764px){
     .search-form__input{
         width:180px;
     }   

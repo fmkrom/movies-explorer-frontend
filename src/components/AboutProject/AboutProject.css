@@ -16,7 +16,7 @@
     align-items: flex-start;
 }
 
-@media screen and (max-width:500px) {
+@media screen and (max-width:764px) {
     .about-project__content{
         flex-direction: column;
     }

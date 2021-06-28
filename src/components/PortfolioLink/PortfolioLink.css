@@ -23,7 +23,7 @@
     text-align: left;
 }
 
-@media screen and (max-width:500px){
+@media screen and (max-width:764px){
     .portfolio__link-text{
         font-size: 18px;
         line-height: 28px;

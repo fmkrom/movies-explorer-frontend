@@ -60,7 +60,7 @@
     text-align: center;
 }
 
-@media screen and (max-width:500px) {
+@media screen and (max-width:764px) {
     .page-not-found__subtitle{
         font-size: 12px;
         line-height: 15px;

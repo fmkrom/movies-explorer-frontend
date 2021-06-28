@@ -18,20 +18,7 @@
     margin-top: 66px;
 }
 
-/*@media screen and (max-width: 1243px) {
-    .about-me__main{
-        width: 1024px;
-    }
-}
-
-@media screen and (max-width: 1088px) {
-    .about-me__main{
-        width: 668px;
-    }
-}
-*/
-
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 764px) {
     .about-me__main{
         flex-direction: column-reverse;
     }
@@ -51,7 +38,7 @@
     }
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 764px) {
     .about-me__info{
         width:100%;
     }
@@ -75,7 +62,7 @@
     }
 }
 
-@media screen and (max-width: 500px){
+@media screen and (max-width: 764px){
     .about-me__info-title{
         font-size: 30px;        
         line-height: 36px;
@@ -98,7 +85,7 @@
     }
 }
 
-@media screen and (max-width: 500px){
+@media screen and (max-width: 764px){
     .about-me__info-subtitle{
         font-size: 11px;        
         line-height: 16px;
@@ -121,7 +108,7 @@
     }
 }
 
-@media screen and (max-width: 5002px) {
+@media screen and (max-width: 764px) {
     .about-me__info-text{
         font-size: 11px;        
         line-height: 16px;
@@ -182,7 +169,7 @@
     }
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 764px) {
     .about-me__profile-photo{
         margin: 0 auto;
         width:100%;
@@ -207,7 +194,7 @@
     margin-top: 0;
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 764px) {
     .about-me__portfolio-title{
         font-size: 14px;
     }

@@ -28,7 +28,7 @@
     }
 }
 
-@media screen and (max-width: 500px){
+@media screen and (max-width: 764px){
     .content-block-promo{
         width:284px;
         margin-top: 70px;

@@ -20,7 +20,7 @@
     cursor: pointer;
 }
 
-@media screen and (max-width:500px){
+@media screen and (max-width:764px){
     .button-regular{
         margin-bottom: 16px;
         margin-top:0;

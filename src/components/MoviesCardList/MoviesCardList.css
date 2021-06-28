@@ -20,7 +20,7 @@
     }
 }
 
-@media screen and (max-width: 500px){
+@media screen and (max-width: 764px){
   .movies-cards-list {
     grid-template-columns: repeat(1, 302px);
     grid-template-rows: repeat(4, 248px);

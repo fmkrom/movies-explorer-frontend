@@ -10,7 +10,7 @@
     width:100%;
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 764px) {
     .form-input__block{
         width:260px;
         height: max-content;
