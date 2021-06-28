@@ -67,6 +67,12 @@
     background-image: url('../../images/like-button_active.png');
 }
 
+.movies-card__like-button_active:hover{
+    background-image: url('../../images/close-button.png');
+    background-position: center;
+    background-size: 2vh;
+}
+
 .movies-card__title{
     height: 16px;
     width: 226px;
