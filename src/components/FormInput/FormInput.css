@@ -3,19 +3,19 @@
 }
 
 .form-input__block_regular{
-    width:396px;
+    width:100%;
 }
 
 .form-input__block_horizontal{
     width:100%;
 }
 
-@media screen and (max-width: 764px) {
+/*@media screen and (max-width: 764px) {
     .form-input__block{
         width:260px;
         height: max-content;
     }
-}
+}*/
 
 .form-input__input-align-block{
     display: flex;

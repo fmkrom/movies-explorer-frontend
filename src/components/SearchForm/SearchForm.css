@@ -35,6 +35,12 @@
 
 @media screen and (max-width: 764px){
     .search-form__search-bar{
+        width:92%;
+    }   
+}
+
+@media screen and (max-width: 377px){
+    .search-form__search-bar{
         width:300px;       
     }   
 }

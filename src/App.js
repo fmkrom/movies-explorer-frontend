@@ -90,6 +90,7 @@ function App() {
             isLoggedIn={true}
             onOpenOverlayMenu={handleOpenOverlayMenuClick}
           />
+          <SearchForm />
           <MoviesCardList 
             data={savedMoviesArray}
             addFilmsToPage={addMoviesToPage}

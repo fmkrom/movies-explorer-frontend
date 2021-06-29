@@ -1,6 +1,8 @@
 .about-me{
-    width:max-content;
+    width:100%;
     height: max-content;
+
+    margin-top:110px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -18,9 +20,10 @@
     margin-top: 66px;
 }
 
-@media screen and (max-width: 764px) {
+@media screen and (max-width: 640px) {
     .about-me__main{
         flex-direction: column-reverse;
+        align-items: center;
     }
 }
 
@@ -38,11 +41,19 @@
     }
 }
 
-@media screen and (max-width: 764px) {
+@media screen and (max-width: 767px) {
+    .about-me__info{
+        width:48%;
+    }
+}
+
+@media screen and (max-width: 640px) {
     .about-me__info{
         width:100%;
     }
 }
+
+
 
 .about-me__info-title{
     margin-top: 0;
@@ -157,11 +168,32 @@
 }
 
 .about-me__profile-photo{
-    height: 327px;
+    width: 270px;
+    height: auto;
     border-radius:10px;
-    width: auto;
 }
 
+@media screen and (max-width: 768px) {
+    .about-me__profile-photo{
+        width: 255px;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .about-me__profile-photo{
+        width: 80%;
+        margin-bottom: 40px;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .about-me__profile-photo{
+        width: 292px;
+    }
+}
+
+
+/*
 @media screen and (max-width: 1202px) {
     .about-me__profile-photo{
         height: 307px;
@@ -177,6 +209,7 @@
         margin-bottom: 49px;
     }
 }
+*/
 
 .about-me__portfolio{
     margin-top: 101px;

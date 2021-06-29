@@ -9,9 +9,41 @@
 
 @media screen and (max-width:764px){
     .form-main{
-        width:260px;
+        width:51%;
         margin-top: 56px;
         margin-bottom: 30px;
+    }
+}
+
+@media screen and (max-width:360px){
+    .form-main{
+        width:51%;
+        margin-top: 56px;
+        margin-bottom: 30px;
+    }
+}
+
+@media screen and (max-width:595px){
+    .form-main{
+        width:71%;
+        margin-top: 56px;
+        margin-bottom: 30px;
+    }
+}
+
+@media screen and (max-width:495px){
+    .form-main{
+        width:81%;
+        margin-top: 56px;
+        margin-bottom: 30px;
+    }
+}
+
+@media screen and (max-width:320px){
+    .form-main{
+        width:260px;
+        margin-top: 56px;
+        margin-bottom: 36px;
     }
 }
 

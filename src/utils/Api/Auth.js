@@ -1,10 +1,10 @@
-import  MY_BASE_URL from '../constants';
+import  URL from '../constants';
 
 // const checkResponse = (res) => res.ok ? res.json() : Promise.reject(`Ошибка: ${res.statusText}`);
 
 function checkRes(res) {
     if (res.ok) {
-        console.log(res);
+        // console.log(res);
         return res.json();
     } else {
         Promise.reject(`Ошибка: ${res.statusText}`);
@@ -12,7 +12,7 @@ function checkRes(res) {
 }
 
 export function register(name, email, password){  
-  return fetch(`${MY_BASE_URL}/signup`,{
+  return fetch(`${URL.MY_BASE}/signup`,{
     method: 'POST',
     headers: {
       "Accept": "application/json",
@@ -25,7 +25,7 @@ export function register(name, email, password){
 };
 
 export function login(email, password){
-  return fetch(`${MY_BASE_URL}/signin`, {
+  return fetch(`${URL.MY_BASE}/signin`, {
     method: 'POST',
     headers: {
       "Accept": "application/json",
@@ -33,17 +33,20 @@ export function login(email, password){
       "Access-Control-Allow-Origin": "*",
     },
     body: JSON.stringify({email, password})
-  }).then((res)=> checkRes(res))
+  }).then((res)=> {
+      console.log(res.token);
+      checkRes(res)
+    })
     .then((token)=>{
         localStorage.setItem('jwt', token);
         console.log(token)
         return token;
     })
-    .catch((err)=>{ console.log(err) });
+    .catch((err)=>{console.log(err)});
 };
 
 export function getContent(token){
-  return fetch(`${MY_BASE_URL}/users/me`, {
+  return fetch(`${URL.MY_BASE}/users/me`, {
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${token}`,

@@ -5,13 +5,39 @@
     height: max-content;
     background-color: inherit;
     padding: 0;
+    margin:0;
 }
 
-@media screen and (max-width:764px){
+@media screen and (max-width:595px){
+    .form-horizontal{
+        width:71%;
+        margin-top: 56px;
+        margin-bottom: 30px;
+    }
+}
+
+@media screen and (max-width:495px){
+    .form-horizontal{
+        width:81%;
+        margin-top: 56px;
+        margin-bottom: 30px;
+    }
+}
+
+@media screen and (max-width:320px){
+    .form-horizontal{
+        width:260px;
+        margin-top: 56px;
+        margin-bottom: 36px;
+    }
+}
+
+/*
+@media screen and (max-width:320px){
     .form-horizontal{
         width:260px;
         margin-top: 56px;
         margin-bottom: 30px;
     }
 }
-
+*/

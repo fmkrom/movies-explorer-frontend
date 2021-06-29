@@ -1,13 +1,22 @@
-function login(email, password){
-    console.log('User email: ', email);
-    console.log('User password: ', password);
-}
+import auth from './Api/Auth';
 
 function register(name, email, password){
-    console.log('User name: ', name);
-    console.log('User email: ', email);
-    console.log('User password: ', password);
+    auth.register(name, email, password)
+    .then((res) =>{
+        console.log(`Register sucesfull: ${res}`);
+    })
+    .catch((err)=> console.log(err));
 }
+
+function login(email, password){
+    auth.login(email, password)
+    .then((res) =>{
+        console.log(`Login sucesfull: ${res}`);
+    })
+    .catch((err)=> console.log(err));
+}
+
+
 
 function editProfile(name, email){
     console.log('Edited User name: ', name);

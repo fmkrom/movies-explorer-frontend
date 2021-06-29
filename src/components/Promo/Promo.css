@@ -54,9 +54,18 @@
     }
 }
 
-@media screen and (max-width:764px){
+@media screen and (max-width:768px){
     .promo__title{
-        width:229px;
+        width:680px;
+        height: max-content;
+        font-size: 29px;
+        line-height: 37px;
+    }
+}
+
+@media screen and (max-width:767px){
+    .promo__title{
+        width:88%;
         height: max-content;
         font-size: 29px;
         line-height: 37px;
