@@ -11,14 +11,17 @@ function Login(props){
     const [loginUserPassword, setLoginUserPassword] = useState('');
 
     function handleLoginUserEmailSubmit(e){
+        // console.log(e.target.value);
         setLoginUserEmail(e.target.value);
     }
 
     function handleloginUserPasswordSubmit(e){
+        // console.log(e.target.value);
         setLoginUserPassword(e.target.value);
     }    
 
     function handleLoginUserSubmit(e){
+        // console.log(e);
         e.preventDefault();
         props.onLoginUser(loginUserEmail, loginUserPassword)
     }

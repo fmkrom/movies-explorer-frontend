@@ -1,13 +1,14 @@
 import  URL from '../constants';
 
-// const checkResponse = (res) => res.ok ? res.json() : Promise.reject(`Ошибка: ${res.statusText}`);
-
 function checkRes(res) {
     if (res.ok) {
-        // console.log(res);
+        console.log(`Res in checkRes: ${res}`);
+        console.log(res);
         return res.json();
     } else {
-        Promise.reject(`Ошибка: ${res.statusText}`);
+      console.log(`Ошибка: ${res}`);  
+      console.log(res);  
+      Promise.reject(`Ошибка: ${res.statusText}`);
     }
 }
 
@@ -20,8 +21,7 @@ export function register(name, email, password){
       "Access-Control-Allow-Origin": "*",
     },
     body: JSON.stringify({name, email, password})
-  }).then((res) => checkRes(res))
-    .catch((err)=>{ console.log(err) });
+  }).then(checkRes)
 };
 
 export function login(email, password){
@@ -33,17 +33,14 @@ export function login(email, password){
       "Access-Control-Allow-Origin": "*",
     },
     body: JSON.stringify({email, password})
-  }).then((res)=> {
-      console.log(res.token);
-      checkRes(res)
-    })
-    .then((token)=>{
-        localStorage.setItem('jwt', token);
-        console.log(token)
-        return token;
-    })
-    .catch((err)=>{console.log(err)});
+  }).then(checkRes)
+  .then((data)=>{
+    const currentJwt = data.jwt;
+    localStorage.setItem('jwt', currentJwt);
+    return currentJwt;
+  })
 };
+
 
 export function getContent(token){
   return fetch(`${URL.MY_BASE}/users/me`, {

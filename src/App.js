@@ -1,6 +1,6 @@
 import { Route, } from 'react-router-dom';
-import { BrowserRouter } from 'react-router-dom';
-import { useState } from 'react';
+import { BrowserRouter, useHistory } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 
 import './App.css';
 
@@ -23,24 +23,24 @@ import OverlayMenu from './components/OverlayMenu/OverlayMenu';
 
 import PageNotFound from './components/PageNotFound/PageNotFound';
 
-import currentUser from './utils/data';
 import moviesArray from './utils/movies';
 import savedMoviesArray from './utils/savedMovies';
 
 import functions from './utils/utils';
+
+import auth from './utils/Api/Auth';
+import mainApi from './utils/Api/MainApi';
 
 // import moviesApi from './utils/Api/MoviesApi';
 
 function App() {
 
   const [ isOverlayMenuOpen, handleOpenOverlayMenuClick ] = useState(false);
-  // const [ beatFilmMovies, setBeatFilmMovies ] = useState([]);
-  
-  /*moviesApi.getBeatfilmMovies()
-  .then((movies)=> {
-    setBeatFilmMovies(movies);
-  })*/
-  //console.log(beatFilmMovies);
+  const [ currenUserData, setCurrentUserData ] = useState({});
+
+  const history = useHistory();
+
+  //console.log(history);
    
   function closeAllpopups(){
     handleOpenOverlayMenuClick(false)
@@ -52,6 +52,63 @@ function App() {
   function addMoviesToPage(){
     functions.increaseArrayLength(moviesArray);
   }
+
+  function login(email, password){
+    auth.login(email, password)
+      .then((res)=>{
+        console.log(res);
+          if (localStorage.getItem('jwt') === res){
+          // setLoggedIn(true);
+          // setCurrentUserEmail(email);
+            history.push('/movies');
+            return res;
+        }
+      }).catch((err)=>{console.log(`Ошибка входа: ${err}. Тип ошибки: ${err.name}`)});
+  }
+
+  function updateUser(name, email){
+    const token = localStorage.getItem('jwt');
+    mainApi.setUser(name, email, token)
+    .then((data)=>{
+      setCurrentUserData({
+        name: data.name,
+        email: data.email
+      })
+    }).catch((err) => {console.log(err)});
+  }
+
+  function consoleIt(){
+    console.log('It works!')
+  }
+
+  function handleLogout(){
+    console.log('logout works!');
+
+    localStorage.removeItem('jwt');
+    // setLoggedIn(false);
+    history.push('/login');
+    return;
+  }
+
+  useEffect(() => {
+    function checkToken(){
+      if (localStorage.getItem('jwt')){
+        auth.getContent(localStorage.getItem('jwt'))
+        .then((data)=>{
+          
+          setCurrentUserData({
+            name: data.name,
+            email: data.email
+          })
+          //console.log(data);  
+          history.push('/movies');
+        })
+        .catch((err) => { console.log(err) });
+      }
+    }
+    checkToken()
+  }, [history]);
+
 
   return (
     <div className="App">
@@ -121,16 +178,16 @@ function App() {
             onOpenOverlayMenu={handleOpenOverlayMenuClick}
           />
           <Account 
-            userName={currentUser.name}
-            userEmail={currentUser.email}
-            onEditProfile={functions.editProfile}
-            handleLogout={functions.logout}
+            userName={currenUserData.name}
+            userEmail={currenUserData.email}
+            onEditProfile={updateUser}
+            logout={consoleIt}
           />
         </Route>
 
         <Route exact path="/login">
             <Login 
-              onLoginUser={functions.login}
+              onLoginUser={login}
             />
         </Route>
 
@@ -152,3 +209,10 @@ function App() {
 }
 
 export default App;
+
+/*
+Добрый день!
+До проповеди: 344:1-2
+После проповеди: 344:3-4
+
+*/

@@ -4,9 +4,11 @@ function register(name, email, password){
     auth.register(name, email, password)
     .then((res) =>{
         console.log(`Register sucesfull: ${res}`);
+        console.log(res);
     })
     .catch((err)=> console.log(err));
 }
+
 
 function login(email, password){
     auth.login(email, password)
@@ -15,7 +17,6 @@ function login(email, password){
     })
     .catch((err)=> console.log(err));
 }
-
 
 
 function editProfile(name, email){

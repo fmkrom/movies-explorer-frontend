@@ -23,6 +23,11 @@ function Account(props){
     e.preventDefault();
     props.onEditProfile(editProfileUserName, editProfileUserEmail)
   }
+
+  function handleUserLogout(){
+    console.log('Logout works!');
+    props.logout()
+  }
   
   return (
     <ContentBlockMain>
@@ -32,11 +37,11 @@ function Account(props){
           onSubmit={handleEditProfileSubmit}
           buttonSaveProfileText="Редактировать профиль"
           buttonLogoutText="Выйти из аккаунта"
-          handleLogout={props.handleLogout}
+          handleLogout={handleUserLogout}
         >
           <FormInput
             isHorizontal={true} 
-            inputTitle="E-mail"
+            inputTitle="Имя"
             inputValue={editProfileUserName} 
             handleSubmit={handleEditProfileUserNameSubmit} 
             placeholder={props.userName}
@@ -48,7 +53,7 @@ function Account(props){
           />
           <FormInput 
             isHorizontal={true} 
-            inputTitle="Пароль"
+            inputTitle="E-mail"
             inputValue={editProfileUserEmail} 
             handleSubmit={handleEditProfileUserEmailSubmit} 
             placeholder={props.userEmail}
