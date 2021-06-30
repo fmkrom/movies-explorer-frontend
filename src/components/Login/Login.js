@@ -32,9 +32,9 @@ function Login(props){
                     formName='form__login'
                     onSubmit={handleLoginUserSubmit}
                     buttonText='Войти'
-                    formSubtitleText='Еще не зарегистрированы?'
+                    formSubtitleText='Еще не зарегистрированы? '
                     formSubtitleLinkRoute='/register'
-                    formSubtitleLinkTetx='Регистрация'
+                    formSubtitleLinkText='Регистрация'
                 >
                     <FormInput
                         isHorizontal={false} 

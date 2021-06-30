@@ -43,6 +43,7 @@
 .techs__icons-grid{
     width:max-content;
     height: max-content;
+    margin-bottom: 100px;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     grid-template-rows: repeat(1, 1fr);

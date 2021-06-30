@@ -13,7 +13,6 @@ import Footer from './components/Footer/Footer';
 
 import SearchForm from './components/SearchForm/SearchForm';
 import MoviesCardList from './components/MoviesCardList/MoviesCardList';
-// import BeatFilmMoviesCardList from './components/MoviesCardListBeatfilm/BeatFilmMoviesCardList';
 
 import Login from './components/Login/Login';
 import Register from './components/Register/Register';
@@ -21,8 +20,11 @@ import Register from './components/Register/Register';
 import Account from './components/Account/Account';
 import OverlayMenu from './components/OverlayMenu/OverlayMenu';
 
+// import Movies from './components/Movies/Movies';
+
 import PageNotFound from './components/PageNotFound/PageNotFound';
 
+import defaultUser from './utils/data';
 import moviesArray from './utils/movies';
 import savedMoviesArray from './utils/savedMovies';
 
@@ -30,14 +32,20 @@ import functions from './utils/utils';
 
 import auth from './utils/Api/Auth';
 import mainApi from './utils/Api/MainApi';
+import moviesApi from './utils/Api/MoviesApi';  
 
+// import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
+// import CurrentUserContext from './contexts/CurrentUserContext';
 // import moviesApi from './utils/Api/MoviesApi';
 
 function App() {
 
+  const [ movies, setMovies ] =  useState([]);
   const [ isOverlayMenuOpen, handleOpenOverlayMenuClick ] = useState(false);
-  const [ currenUserData, setCurrentUserData ] = useState({});
 
+  // const [ currenUserData, setCurrentUserData ] = useState({});
+  
+  const [ userLoggedIn, setUserLoggedIn] = useState(false);
   const history = useHistory();
 
   //console.log(history);
@@ -47,7 +55,7 @@ function App() {
   }
 
   functions.regulateArrayLength(moviesArray, 10);
-  // functions.regulateArrayLength(beatFilmMovies, 13);
+  functions.regulateArrayLength(movies, 13);
 
   function addMoviesToPage(){
     functions.increaseArrayLength(moviesArray);
@@ -56,11 +64,12 @@ function App() {
   function login(email, password){
     auth.login(email, password)
       .then((res)=>{
-        console.log(res);
+          // console.log(res);
           if (localStorage.getItem('jwt') === res){
-          // setLoggedIn(true);
-          // setCurrentUserEmail(email);
-            history.push('/movies');
+            // console.log(res)
+            setUserLoggedIn(true);
+            console.log(`Login sucesfull! ${userLoggedIn}`);
+            history.push('/');
             return res;
         }
       }).catch((err)=>{console.log(`Ошибка входа: ${err}. Тип ошибки: ${err.name}`)});
@@ -70,10 +79,11 @@ function App() {
     const token = localStorage.getItem('jwt');
     mainApi.setUser(name, email, token)
     .then((data)=>{
-      setCurrentUserData({
+      console.log(data)
+      /*setCurrentUserData({
         name: data.name,
         email: data.email
-      })
+      })*/
     }).catch((err) => {console.log(err)});
   }
 
@@ -81,26 +91,24 @@ function App() {
     console.log('It works!')
   }
 
-  function handleLogout(){
+  /*function handleLogout(){
     console.log('logout works!');
-
     localStorage.removeItem('jwt');
-    // setLoggedIn(false);
+    setUserLoggedIn(false);
     history.push('/login');
     return;
-  }
+  }*/
 
   useEffect(() => {
     function checkToken(){
       if (localStorage.getItem('jwt')){
         auth.getContent(localStorage.getItem('jwt'))
         .then((data)=>{
-          
-          setCurrentUserData({
+          console.log(data)
+          /*setCurrentUserData({
             name: data.name,
             email: data.email
-          })
-          //console.log(data);  
+          })*/
           history.push('/movies');
         })
         .catch((err) => { console.log(err) });
@@ -109,110 +117,119 @@ function App() {
     checkToken()
   }, [history]);
 
+  useEffect(()=>{
+    if(userLoggedIn) {
+      Promise.all([
+        moviesApi.getMovies()
+      ]).then(([moviesData])=>{
+        // setCurrentUser(userData.user);
+        setMovies(moviesData);
+      }).catch((err)=>{
+        console.log(err);
+      });
+    }
+  }, [userLoggedIn]);
+
+  // console.log(userLoggedIn);
+  // console.log(movies);
 
   return (
-    <div className="App">
-      <BrowserRouter>
-          <OverlayMenu 
-            isOpen={isOverlayMenuOpen}
-            isClosed={closeAllpopups}
-          />
-
-        <Route exact path="/">
-          <Header 
-            isLoggedIn={false}
-          />
-          <Promo />
-          <AboutProject />
-          <Techs />
-          <AboutMe />
-          <Footer />
-        </Route>
-        
-        <Route exact path="/movies">
-          <Header 
-            isLoggedIn={true}
-            onOpenOverlayMenu={handleOpenOverlayMenuClick}
-          />
-          <SearchForm />
-          <MoviesCardList 
-            data={moviesArray}
-            addFilmsToPage={addMoviesToPage}
-          />
-          <Footer />
-        </Route>
-
-        <Route exact path="/saved-movies">
-          <Header 
-            isLoggedIn={true}
-            onOpenOverlayMenu={handleOpenOverlayMenuClick}
-          />
-          <SearchForm />
-          <MoviesCardList 
-            data={savedMoviesArray}
-            addFilmsToPage={addMoviesToPage}
-          />
-          <Footer />
-        </Route>
-
-        {/*
-        
-        <Route exact path="/beatfilm-movies">
-          <Header 
-            isLoggedIn={true}
-            onOpenOverlayMenu={handleOpenOverlayMenuClick}
-          />
-          <SearchForm />
-          <BeatFilmMoviesCardList 
-            data={beatFilmMovies}
-            addFilmsToPage={addMoviesToPage}
-          />
-          <Footer />
-        </Route>
-
-        */}
-        
-        <Route exact path="/account">
-          <Header
-            isLoggedIn={true}
-            onOpenOverlayMenu={handleOpenOverlayMenuClick}
-          />
-          <Account 
-            userName={currenUserData.name}
-            userEmail={currenUserData.email}
-            onEditProfile={updateUser}
-            logout={consoleIt}
-          />
-        </Route>
-
-        <Route exact path="/login">
-            <Login 
-              onLoginUser={login}
+    //<CurrentUserContext.Provider value={currenUserData}>
+      <div className="App">
+        <BrowserRouter>
+            <OverlayMenu 
+              isOpen={isOverlayMenuOpen}
+              isClosed={closeAllpopups}
             />
-        </Route>
 
-        <Route exact path="/register">
-            <Register
-              onRegisterUser={functions.register}
+          <Route exact path="/">
+            <Header 
+              isLoggedIn={true}
             />
-        </Route>
+            <Promo />
+            <AboutProject />
+            <Techs />
+            <AboutMe />
+            <Footer />
+          </Route>
 
-        <Route exact path="/not-found">
-            <PageNotFound 
-              notFoundLinkRoute='./movies'
+          <Route exact path="/movies">
+            <Header 
+              isLoggedIn={true}
+              onOpenOverlayMenu={handleOpenOverlayMenuClick}
             />
-        </Route>
+            <SearchForm />
+            <MoviesCardList 
+              data={moviesArray}
+              addFilmsToPage={addMoviesToPage}
+            />
+            <Footer />
+          </Route>
+          
+          <Route exact path="/saved-movies">
+            <Header 
+              isLoggedIn={true}
+              onOpenOverlayMenu={handleOpenOverlayMenuClick}
+            />
+            <SearchForm />
+            <MoviesCardList 
+              data={savedMoviesArray}
+              addFilmsToPage={addMoviesToPage}
+            />
+            <Footer />
+          </Route>
+  
+          <Route exact path="/account">
+            <Header
+              isLoggedIn={true}
+              onOpenOverlayMenu={handleOpenOverlayMenuClick}
+            />
+            <Account 
+              userName={defaultUser.name}
+              userEmail={defaultUser.email}
+              onEditProfile={updateUser}
+              logout={consoleIt}
+            />
+          </Route>
 
-      </BrowserRouter>
-    </div>
+          <Route exact path="/login">
+              <Login 
+                onLoginUser={login}
+              />
+          </Route>
+
+          <Route exact path="/register">
+              <Register
+                onRegisterUser={functions.register}
+              />
+          </Route>
+
+          <Route exact path="/not-found">
+              <PageNotFound 
+                notFoundLinkRoute='./movies'
+              />
+          </Route>
+
+        </BrowserRouter>
+      </div>
+    //</CurrentUserContext.Provider>
   );
 }
 
 export default App;
 
 /*
-Добрый день!
-До проповеди: 344:1-2
-После проповеди: 344:3-4
-
+          
+          <Route exact path="/beatfilm-movies">
+            <Header 
+              isLoggedIn={true}
+              onOpenOverlayMenu={handleOpenOverlayMenuClick}
+            />
+            <SearchForm />
+            <BeatFilmMoviesCardList 
+              data={beatFilmMovies}
+              addFilmsToPage={addMoviesToPage}
+            />
+            <Footer />
+          </Route>
 */

@@ -6,19 +6,16 @@ class Api {
       this._token = settings.token;
   }
 
-  //Базовый метод получения результата запроса
-
   getRes(res){
       if (res.ok) {
+        console.log(res);
         return res.json();
       } else {
         return Promise.reject(`Ошибка получения данных с сервера: ${res.status}`);
       }
   };
   
-  //Методы карточек
-
-  getBeatfilmMovies(){
+  getMovies(){
     return fetch(`${this._url}`,
     {
      method: 'GET',
@@ -29,6 +26,7 @@ class Api {
   };
 
   //1. Получить данные карточек
+  
   getCards(token){
     return fetch(`${this._url}/cards`,
     {
@@ -151,6 +149,6 @@ const apiSettings = {
   url: URL.BEATFILM_MOVIES,
 };  
 
-const moviesApi = new Api (apiSettings);
+const moviesApi = new Api(apiSettings);
 
 export default moviesApi;

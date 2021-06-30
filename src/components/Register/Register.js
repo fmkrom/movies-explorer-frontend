@@ -36,7 +36,7 @@ function Register(props){
                     buttonText='Зарегистрироваться'
                     formSubtitleText='Уже зарегистрированы?'
                     formSubtitleLinkRoute='/login'
-                    formSubtitleLinkTetx='Войти'
+                    formSubtitleLinkText=' Войти'
                 >
                     <FormInput
                         isHorizontal={false}
