@@ -109,7 +109,7 @@ function App() {
             name: data.name,
             email: data.email
           })*/
-          history.push('/movies');
+          // history.push('/movies');
         })
         .catch((err) => { console.log(err) });
       }

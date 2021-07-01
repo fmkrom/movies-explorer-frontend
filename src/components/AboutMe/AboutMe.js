@@ -8,7 +8,7 @@ import ContentBlock from '../ContentBlock/ContentBlock';
 function AboutMe(){
 
     return (
-        <section className="about-me">
+        <section className="about-me" id="about-me">
             <ContentBlock
                 isTall={true}
             >

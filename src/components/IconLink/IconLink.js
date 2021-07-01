@@ -5,7 +5,7 @@ function IconLink(props){
 //  <Link to={props.linkRoute} 
 
 return (
-        <div className="icon_link">{props.name}</div>
+        <a href={props.linkRoute} className="icon_link">{props.name}</a>
     )
 };
     

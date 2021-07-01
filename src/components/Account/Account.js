@@ -31,6 +31,7 @@ function Account(props){
   
   return (
     <ContentBlockMain>
+      <div className="account">
         <PageWithFormHorizontal 
           formTitle={`Привет, ${props.userName}!`}
           formName="form__edit-profile"
@@ -64,6 +65,7 @@ function Account(props){
             errorMessage="Что-то пошло не так..."
           />
           </PageWithFormHorizontal>
+        </div>
     </ContentBlockMain>
   )
 } 

@@ -12,7 +12,7 @@ function AboutProject(){
         <ContentBlock
             isTall={true}
         >
-            <section className="about-project">
+            <section className="about-project" id="about-project">
                 <BlockHeadline blockTitle="О проекте" />
                 <div className="about-project__content">
                     <AboutProjectTextBlock 

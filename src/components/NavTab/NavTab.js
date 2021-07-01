@@ -6,9 +6,18 @@ function NavTab(){
 
 return (
     <nav className="navtab">
-        <IconLink name="О проекте" />
-        <IconLink name="Технологии" />
-        <IconLink name="Cтудент" />
+        <IconLink 
+            name="О проекте" 
+            linkRoute='#about-project'
+        />
+        <IconLink 
+            name="Технологии" 
+            linkRoute="#technologies"
+        />
+        <IconLink 
+            name="Cтудент" 
+            linkRoute='#about-me'
+        />
     </nav>
     )
 };

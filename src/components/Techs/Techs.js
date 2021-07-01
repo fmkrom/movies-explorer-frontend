@@ -7,7 +7,7 @@ import ContentBlock from '../ContentBlock/ContentBlock';
 function Techs(){
 
     return (
-        <section className="techs">
+        <section className="techs" id="technologies">
             <ContentBlock
                 isTall={true}
             >
