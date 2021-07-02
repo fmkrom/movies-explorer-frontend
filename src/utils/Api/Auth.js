@@ -35,9 +35,8 @@ export function login(email, password){
     body: JSON.stringify({email, password})
   }).then(checkRes)
   .then((data)=>{
-    const currentJwt = data.jwt;
-    localStorage.setItem('jwt', currentJwt);
-    return currentJwt;
+    localStorage.setItem('jwt', data.jwt);
+    return data.jwt;
   })
 };
 

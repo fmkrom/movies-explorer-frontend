@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 
 import './App.css';
 
+import moviesArray from './utils/movies';
+
 import Header from './components/Header/Header';
 import Promo from './components/Promo/Promo';
 import AboutProject from './components/AboutProject/AboutProject';
@@ -10,49 +12,36 @@ import Techs from './components/Techs/Techs';
 import AboutMe from './components/AboutMe/AboutMe'
 import Footer from './components/Footer/Footer';
 
-import SearchForm from './components/SearchForm/SearchForm';
-import MoviesCardList from './components/MoviesCardList/MoviesCardList';
-
 import Login from './components/Login/Login';
 import Register from './components/Register/Register';
-
-import Account from './components/Account/Account';
 import OverlayMenu from './components/OverlayMenu/OverlayMenu';
 
-// import Movies from './components/Movies/Movies';
-
+import MoviesPage from './components/MoviesPage/MoviesPage';
+import SavedMoviesPage from './components/SavedMoviesPage/SavedMoviesPage';
+import AccountPage from './components/AccountPage/AccountPage';
 import PageNotFound from './components/PageNotFound/PageNotFound';
 
-// import moviesArray from './utils/movies';
-import savedMoviesArray from './utils/savedMovies';
-
-import functions from './utils/utils';
+// import functions from './utils/utils';
 
 import auth from './utils/Api/Auth';
 import mainApi from './utils/Api/MainApi';
-import MoviesApi from './utils/Api/MoviesApi';  
+// import MoviesApi from './utils/Api/MoviesApi';  
 
-// import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import CurrentUserContext from './contexts/CurrentUserContext';
 
 function App() {
 
-  const [ movies, setMovies ] =  useState([]);
-  const [ user, setUser ] = useState({});
-
-  const [ isOverlayMenuOpen, handleOpenOverlayMenuClick ] = useState(false);
+  const isTokenPresent = Boolean(localStorage.getItem('jwt'));
   
-  const [ userLoggedIn, setUserLoggedIn] = useState(false);
-
-  console.log(userLoggedIn);
-
+  const [ user, setUser ] = useState({});
+  const [ isOverlayMenuOpen, handleOpenOverlayMenuClick ] = useState(false);
+  const [ userLoggedIn, setUserLoggedIn] = useState(isTokenPresent);
   const history = useHistory();
   
   function closeAllpopups(){
     handleOpenOverlayMenuClick(false)
   }
-
-  functions.regulateArrayLength(movies, 7);
 
   function register(name, email, password){
     auth.register(name, email, password)
@@ -66,11 +55,11 @@ function App() {
   function login(email, password){
     auth.login(email, password)
       .then((res)=>{
-          if (localStorage.getItem('jwt') === res){
-            setUserLoggedIn(true);
-            console.log(`Login sucesfull! ${userLoggedIn}`);
-            history.push('/');
-            return res;
+        if (localStorage.getItem('jwt') === res.toString()){
+          // setUserLoggedIn(true);
+          // console.log(`Logged In!: ${userLoggedIn}`);
+          history.push('/movies');
+          return;
         }
       }).catch((err)=>{
         console.log(`Ошибка входа: ${err}. Тип ошибки: ${err.name}`);
@@ -89,10 +78,6 @@ function App() {
     }).catch((err) => {console.log(err)});
   }
 
-  function consoleIt(){
-    console.log('It works!')
-  }
-
   function logout(){
     console.log('logout works!');
     localStorage.removeItem('jwt');
@@ -101,10 +86,16 @@ function App() {
     return;
   }
 
+  /*
+  Пока проблема решена так: залогиненность зависит от isTokenPresent!
+  В перспективе это может вызвать глюки!
+  Позже подумать, как это решить при помощи useEffect!
+  */
+
   useEffect(() => {
     function checkToken(){
-      if (localStorage.getItem('jwt')){
-        auth.getContent(localStorage.getItem('jwt'))
+      if (isTokenPresent){
+      auth.getContent(localStorage.getItem('jwt'))
         .then((data)=>{
           setUser({
             name: data.name,
@@ -116,20 +107,24 @@ function App() {
       setUserLoggedIn(true);
     }
     checkToken()
-  }, [history]);
+  }, [isTokenPresent]);
 
-  useEffect(()=>{
+  /*useEffect(()=>{
     if(userLoggedIn) {
       Promise.all([
         MoviesApi.getMovies()
       ]).then(([moviesData])=>{
+
         console.log(moviesData);
-        setMovies(moviesData);
+
+        const currentMoviesArray = functions.regulateArrayLength(moviesData, 7);
+        console.log(currentMoviesArray);
+        setMovies(currentMoviesArray);
       }).catch((err)=>{
         console.log(err);
       });
     }
-  }, [userLoggedIn]);
+  }, [userLoggedIn]);*/
 
   return (
     <CurrentUserContext.Provider value={user}>
@@ -152,56 +147,39 @@ function App() {
             <Footer />
           </Route>
 
-          <Route exact path="/movies">
-            <OverlayMenu 
-              isOpen={isOverlayMenuOpen}
-              isClosed={closeAllpopups}
-            />
-            <Header
-              isLoggedIn={userLoggedIn}
-              onOpenOverlayMenu={handleOpenOverlayMenuClick}
-            />
-            <SearchForm />
-            <MoviesCardList 
-              data={movies}
-            />
-            <Footer />
-          </Route>
+          <ProtectedRoute
+            exact path='/movies'
+            component={MoviesPage}
+            loggedIn={userLoggedIn}
+            isOverlayMenuOpen={isOverlayMenuOpen}
+            isOverlayMenuClosed={closeAllpopups}
+            openOverlayMenu={handleOpenOverlayMenuClick}
+            data={moviesArray}
+          />
+
+          <ProtectedRoute
+            exact path='/saved-movies'
+            component={SavedMoviesPage}
+            loggedIn={userLoggedIn}
+            isOverlayMenuOpen={isOverlayMenuOpen}
+            isOverlayMenuClosed={closeAllpopups}
+            openOverlayMenu={handleOpenOverlayMenuClick}
+            data={moviesArray}
+          />
+
+          <ProtectedRoute
+            exact path='/account'
+            component={AccountPage}
+            loggedIn={userLoggedIn}
+            isOverlayMenuOpen={isOverlayMenuOpen}
+            isOverlayMenuClosed={closeAllpopups}
+            openOverlayMenu={handleOpenOverlayMenuClick}
+            userName={user.name}
+            userEmail={user.email}
+            updateUser={updateUser}
+            logout={logout}
+          />
           
-          <Route exact path="/saved-movies">
-            <OverlayMenu 
-              isOpen={isOverlayMenuOpen}
-              isClosed={closeAllpopups}
-            />
-            <Header
-              isLoggedIn={userLoggedIn}
-              onOpenOverlayMenu={handleOpenOverlayMenuClick}
-            />
-            <SearchForm />
-            <MoviesCardList 
-              data={savedMoviesArray}
-              // addFilmsToPage={addMoviesToPage}
-            />
-            <Footer />
-          </Route>
-
-          <Route exact path="/account">
-            <OverlayMenu 
-              isOpen={isOverlayMenuOpen}
-              isClosed={closeAllpopups}
-            />
-            <Header
-              isLoggedIn={userLoggedIn}
-              onOpenOverlayMenu={handleOpenOverlayMenuClick}
-            />
-            <Account 
-              userName={user.name}
-              userEmail={user.email}
-              onEditProfile={updateUser}
-              logout={logout}
-            />
-          </Route>
-
           <Route exact path="/login">
               <Login 
                 onLoginUser={login}
