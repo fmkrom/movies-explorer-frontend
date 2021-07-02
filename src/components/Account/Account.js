@@ -25,7 +25,6 @@ function Account(props){
   }
 
   function handleUserLogout(){
-    console.log('Logout works!');
     props.logout()
   }
   

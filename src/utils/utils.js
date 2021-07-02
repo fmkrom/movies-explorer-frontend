@@ -9,7 +9,6 @@ function register(name, email, password){
     .catch((err)=> console.log(err));
 }
 
-
 function login(email, password){
     auth.login(email, password)
     .then((res) =>{

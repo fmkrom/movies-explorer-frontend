@@ -1,5 +1,4 @@
-import { Route, } from 'react-router-dom';
-import { BrowserRouter, useHistory } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 import './App.css';
@@ -24,55 +23,58 @@ import OverlayMenu from './components/OverlayMenu/OverlayMenu';
 
 import PageNotFound from './components/PageNotFound/PageNotFound';
 
-import defaultUser from './utils/data';
-import moviesArray from './utils/movies';
+// import moviesArray from './utils/movies';
 import savedMoviesArray from './utils/savedMovies';
 
 import functions from './utils/utils';
 
 import auth from './utils/Api/Auth';
 import mainApi from './utils/Api/MainApi';
-import moviesApi from './utils/Api/MoviesApi';  
+import MoviesApi from './utils/Api/MoviesApi';  
 
 // import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
-// import CurrentUserContext from './contexts/CurrentUserContext';
-// import moviesApi from './utils/Api/MoviesApi';
+import CurrentUserContext from './contexts/CurrentUserContext';
 
 function App() {
 
   const [ movies, setMovies ] =  useState([]);
-  const [ isOverlayMenuOpen, handleOpenOverlayMenuClick ] = useState(false);
+  const [ user, setUser ] = useState({});
 
-  // const [ currenUserData, setCurrentUserData ] = useState({});
+  const [ isOverlayMenuOpen, handleOpenOverlayMenuClick ] = useState(false);
   
   const [ userLoggedIn, setUserLoggedIn] = useState(false);
-  const history = useHistory();
 
-  //console.log(history);
-   
+  console.log(userLoggedIn);
+
+  const history = useHistory();
+  
   function closeAllpopups(){
     handleOpenOverlayMenuClick(false)
   }
 
-  functions.regulateArrayLength(moviesArray, 10);
-  functions.regulateArrayLength(movies, 13);
+  functions.regulateArrayLength(movies, 7);
 
-  function addMoviesToPage(){
-    functions.increaseArrayLength(moviesArray);
+  function register(name, email, password){
+    auth.register(name, email, password)
+    .then((res) =>{
+        history.push('/login');
+        return res;
+    })
+    .catch((err)=> console.log(err));
   }
 
   function login(email, password){
     auth.login(email, password)
       .then((res)=>{
-          // console.log(res);
           if (localStorage.getItem('jwt') === res){
-            // console.log(res)
             setUserLoggedIn(true);
             console.log(`Login sucesfull! ${userLoggedIn}`);
             history.push('/');
             return res;
         }
-      }).catch((err)=>{console.log(`Ошибка входа: ${err}. Тип ошибки: ${err.name}`)});
+      }).catch((err)=>{
+        console.log(`Ошибка входа: ${err}. Тип ошибки: ${err.name}`);
+      });
   }
 
   function updateUser(name, email){
@@ -80,10 +82,10 @@ function App() {
     mainApi.setUser(name, email, token)
     .then((data)=>{
       console.log(data)
-      /*setCurrentUserData({
+      setUser({
         name: data.name,
         email: data.email
-      })*/
+      })
     }).catch((err) => {console.log(err)});
   }
 
@@ -91,28 +93,27 @@ function App() {
     console.log('It works!')
   }
 
-  /*function handleLogout(){
+  function logout(){
     console.log('logout works!');
     localStorage.removeItem('jwt');
     setUserLoggedIn(false);
     history.push('/login');
     return;
-  }*/
+  }
 
   useEffect(() => {
     function checkToken(){
       if (localStorage.getItem('jwt')){
         auth.getContent(localStorage.getItem('jwt'))
         .then((data)=>{
-          console.log(data)
-          /*setCurrentUserData({
+          setUser({
             name: data.name,
             email: data.email
-          })*/
-          // history.push('/movies');
+          })
         })
         .catch((err) => { console.log(err) });
       }
+      setUserLoggedIn(true);
     }
     checkToken()
   }, [history]);
@@ -120,9 +121,9 @@ function App() {
   useEffect(()=>{
     if(userLoggedIn) {
       Promise.all([
-        moviesApi.getMovies()
+        MoviesApi.getMovies()
       ]).then(([moviesData])=>{
-        // setCurrentUser(userData.user);
+        console.log(moviesData);
         setMovies(moviesData);
       }).catch((err)=>{
         console.log(err);
@@ -130,21 +131,19 @@ function App() {
     }
   }, [userLoggedIn]);
 
-  // console.log(userLoggedIn);
-  // console.log(movies);
-
   return (
-    //<CurrentUserContext.Provider value={currenUserData}>
+    <CurrentUserContext.Provider value={user}>
       <div className="App">
-        <BrowserRouter>
+        <Switch>
+
+          <Route exact path="/">
             <OverlayMenu 
               isOpen={isOverlayMenuOpen}
               isClosed={closeAllpopups}
             />
-
-          <Route exact path="/">
-            <Header 
-              isLoggedIn={true}
+            <Header
+              isLoggedIn={userLoggedIn}
+              onOpenOverlayMenu={handleOpenOverlayMenuClick}
             />
             <Promo />
             <AboutProject />
@@ -154,41 +153,52 @@ function App() {
           </Route>
 
           <Route exact path="/movies">
-            <Header 
-              isLoggedIn={true}
+            <OverlayMenu 
+              isOpen={isOverlayMenuOpen}
+              isClosed={closeAllpopups}
+            />
+            <Header
+              isLoggedIn={userLoggedIn}
               onOpenOverlayMenu={handleOpenOverlayMenuClick}
             />
             <SearchForm />
             <MoviesCardList 
-              data={moviesArray}
-              addFilmsToPage={addMoviesToPage}
+              data={movies}
             />
             <Footer />
           </Route>
           
           <Route exact path="/saved-movies">
-            <Header 
-              isLoggedIn={true}
+            <OverlayMenu 
+              isOpen={isOverlayMenuOpen}
+              isClosed={closeAllpopups}
+            />
+            <Header
+              isLoggedIn={userLoggedIn}
               onOpenOverlayMenu={handleOpenOverlayMenuClick}
             />
             <SearchForm />
             <MoviesCardList 
               data={savedMoviesArray}
-              addFilmsToPage={addMoviesToPage}
+              // addFilmsToPage={addMoviesToPage}
             />
             <Footer />
           </Route>
-  
+
           <Route exact path="/account">
+            <OverlayMenu 
+              isOpen={isOverlayMenuOpen}
+              isClosed={closeAllpopups}
+            />
             <Header
-              isLoggedIn={true}
+              isLoggedIn={userLoggedIn}
               onOpenOverlayMenu={handleOpenOverlayMenuClick}
             />
             <Account 
-              userName={defaultUser.name}
-              userEmail={defaultUser.email}
+              userName={user.name}
+              userEmail={user.email}
               onEditProfile={updateUser}
-              logout={consoleIt}
+              logout={logout}
             />
           </Route>
 
@@ -200,7 +210,7 @@ function App() {
 
           <Route exact path="/register">
               <Register
-                onRegisterUser={functions.register}
+                onRegisterUser={register}
               />
           </Route>
 
@@ -210,9 +220,9 @@ function App() {
               />
           </Route>
 
-        </BrowserRouter>
+        </Switch>
       </div>
-    //</CurrentUserContext.Provider>
+    </CurrentUserContext.Provider>
   );
 }
 

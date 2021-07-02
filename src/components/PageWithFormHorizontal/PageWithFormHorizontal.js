@@ -4,6 +4,11 @@ import ButtonSubmit from '../ButtonSubmit/ButtonSubmit';
 import ButtonRegular from '../ButtonRegular/ButtonRegular';
 
 function PageWithFormHorizontal(props){
+   
+   function handleLogout(){
+      props.handleLogout()
+   }
+  
   return (
      <section className="form-horizontal">
                      <FormTitle 
@@ -25,7 +30,7 @@ function PageWithFormHorizontal(props){
                      <ButtonRegular 
                         isColored={false}
                         buttonText={props.buttonLogoutText}
-                        onClick={props.handleLogout}
+                        onButtonClick={handleLogout}
                      />
       </section>
    )

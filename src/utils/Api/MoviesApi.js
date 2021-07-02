@@ -149,6 +149,6 @@ const apiSettings = {
   url: URL.BEATFILM_MOVIES,
 };  
 
-const moviesApi = new Api(apiSettings);
+const MoviesApi = new Api(apiSettings);
 
-export default moviesApi;
+export default MoviesApi;
