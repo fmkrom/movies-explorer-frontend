@@ -21,11 +21,11 @@ import SavedMoviesPage from './components/SavedMoviesPage/SavedMoviesPage';
 import AccountPage from './components/AccountPage/AccountPage';
 import PageNotFound from './components/PageNotFound/PageNotFound';
 
-// import functions from './utils/utils';
+import functions from './utils/utils';
 
 import auth from './utils/Api/Auth';
 import mainApi from './utils/Api/MainApi';
-// import MoviesApi from './utils/Api/MoviesApi';  
+import MoviesApi from './utils/Api/MoviesApi';  
 
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import CurrentUserContext from './contexts/CurrentUserContext';
@@ -35,6 +35,7 @@ function App() {
   const isTokenPresent = Boolean(localStorage.getItem('jwt'));
   
   const [ user, setUser ] = useState({});
+  const [ movies, setMovies ] = useState([])
   const [ isOverlayMenuOpen, handleOpenOverlayMenuClick ] = useState(false);
   const [ userLoggedIn, setUserLoggedIn] = useState(isTokenPresent);
   const history = useHistory();
@@ -109,22 +110,17 @@ function App() {
     checkToken()
   }, [isTokenPresent]);
 
-  /*useEffect(()=>{
+  useEffect(()=>{
     if(userLoggedIn) {
       Promise.all([
         MoviesApi.getMovies()
       ]).then(([moviesData])=>{
-
-        console.log(moviesData);
-
-        const currentMoviesArray = functions.regulateArrayLength(moviesData, 7);
-        console.log(currentMoviesArray);
-        setMovies(currentMoviesArray);
+        setMovies(moviesData)
       }).catch((err)=>{
         console.log(err);
       });
     }
-  }, [userLoggedIn]);*/
+  }, [userLoggedIn]);
 
   return (
     <CurrentUserContext.Provider value={user}>
@@ -154,7 +150,7 @@ function App() {
             isOverlayMenuOpen={isOverlayMenuOpen}
             isOverlayMenuClosed={closeAllpopups}
             openOverlayMenu={handleOpenOverlayMenuClick}
-            data={moviesArray}
+            data={movies}
           />
 
           <ProtectedRoute
@@ -164,7 +160,7 @@ function App() {
             isOverlayMenuOpen={isOverlayMenuOpen}
             isOverlayMenuClosed={closeAllpopups}
             openOverlayMenu={handleOpenOverlayMenuClick}
-            data={moviesArray}
+            data={movies}
           />
 
           <ProtectedRoute
