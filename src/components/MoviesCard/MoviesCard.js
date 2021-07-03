@@ -6,15 +6,16 @@ import MoviesCardTitleBlock from '../MoviesCardTitleBlock/MoviesCardTitleBlock';
 
 function MoviesCard(props){
       
-      const [ movieStatusIsSaved, setMoviesStatusIsSaved ] = useState(false);
+      // const [ movieStatusIsSaved, setMoviesStatusIsSaved ] = useState(false);
 
-      function handleSaveMovie(){
+      /*function handleSaveMovie(){
+            props.saveMovie();
             if (movieStatusIsSaved === false){
                   setMoviesStatusIsSaved(true);
             } else if (movieStatusIsSaved === true){
                   setMoviesStatusIsSaved(false);
             }
-      }
+      }*/
     
 return (
       <div className="movies-card">
@@ -23,8 +24,8 @@ return (
             />
             <MoviesCardTitleBlock
                   name={props.movieName}
-                  handleSaveMovie={handleSaveMovie}
-                  isMovieSaved={movieStatusIsSaved}
+                  handleSaveMovie={()=>props.saveMovie()}
+                  // isMovieSaved={movieStatusIsSaved}
                   duration={props.movieDuration}
             />
       </div>

@@ -19,6 +19,7 @@ function SavedMoviesPage(props){
         <MoviesCardList 
             data={props.data}
             addFilmsToPage={props.addFilms}
+            isOnSaveMoviesPage={true}
         />
         <Footer />
     </>   

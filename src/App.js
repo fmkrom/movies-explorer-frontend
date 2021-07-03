@@ -35,7 +35,8 @@ function App() {
   const isTokenPresent = Boolean(localStorage.getItem('jwt'));
   
   const [ user, setUser ] = useState({});
-  const [ movies, setMovies ] = useState([])
+  const [ movies, setMovies ] = useState([]);
+  const [ mySavedMovies, setMySavedMovies ] = useState([]);
   const [ isOverlayMenuOpen, handleOpenOverlayMenuClick ] = useState(false);
   const [ userLoggedIn, setUserLoggedIn] = useState(isTokenPresent);
   const history = useHistory();
@@ -93,6 +94,17 @@ function App() {
   Позже подумать, как это решить при помощи useEffect!
   */
 
+  function saveMovie(data){
+    console.log(data);
+    mainApi.saveMovie(data)
+      .then((movie)=>{
+        return movie
+      })
+      .catch((err)=>{
+        console.log(err);
+      })
+  }
+
   useEffect(() => {
     function checkToken(){
       if (isTokenPresent){
@@ -113,9 +125,11 @@ function App() {
   useEffect(()=>{
     if(userLoggedIn) {
       Promise.all([
-        MoviesApi.getMovies()
-      ]).then(([moviesData])=>{
-        setMovies(moviesData)
+        MoviesApi.getMovies(),
+        mainApi.getMySavedMovies(localStorage.getItem('jwt'))
+      ]).then(([moviesData, savedMoviesData])=>{
+        setMovies(moviesData);
+        setMySavedMovies(savedMoviesData);
       }).catch((err)=>{
         console.log(err);
       });
@@ -151,6 +165,7 @@ function App() {
             isOverlayMenuClosed={closeAllpopups}
             openOverlayMenu={handleOpenOverlayMenuClick}
             data={movies}
+            handleSaveMovie={saveMovie}
           />
 
           <ProtectedRoute
@@ -160,7 +175,7 @@ function App() {
             isOverlayMenuOpen={isOverlayMenuOpen}
             isOverlayMenuClosed={closeAllpopups}
             openOverlayMenu={handleOpenOverlayMenuClick}
-            data={movies}
+            data={mySavedMovies}
           />
 
           <ProtectedRoute

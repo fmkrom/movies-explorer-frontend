@@ -8,7 +8,7 @@ class Api {
 
   getRes(res){
       if (res.ok) {
-        console.log(res);
+        // console.log(res);
         return res.json();
       } else {
         return Promise.reject(`Ошибка получения данных с сервера: ${res.status}`);

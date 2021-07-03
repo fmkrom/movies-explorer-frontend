@@ -5,6 +5,11 @@ import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import Footer from "../Footer/Footer";
 
 function MoviesPage(props){
+    
+    function saveMovie(){
+        props.saveMovie();
+    }
+    
     return(
     <>
         <OverlayMenu 
@@ -19,6 +24,9 @@ function MoviesPage(props){
         <MoviesCardList 
             data={props.data}
             addFilmsToPage={props.addFilms}
+            saveMovie={saveMovie}
+            savedMoviedata={props.data}
+            isOnSaveMoviesPage={false}
         />
         <Footer />
     </>   
