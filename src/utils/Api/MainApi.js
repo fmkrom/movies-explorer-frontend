@@ -2,7 +2,7 @@ import  URL from '../constants';
 
 function checkRes(res) {
     if (res.ok) {
-        console.log(res);
+        // console.log(res);
         return res.json();
     } else {
       // console.log(res);
@@ -49,6 +49,17 @@ function saveMovie(movie, token){
       }).then(checkRes);
 };
 
+function deleteSavedMovie(movie, token){
+  return fetch(`${URL.MY_BASE}/movies/${movie._id}`,
+      {
+        method: 'POST',
+        headers: {
+          authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+      }).then(checkRes); 
+}
+
 function getMySavedMovies(token){
   return fetch(`${URL.MY_BASE}/movies`,
   {
@@ -63,7 +74,8 @@ function getMySavedMovies(token){
 const mainApi = {
     setUser,
     saveMovie,
-    getMySavedMovies
+    getMySavedMovies,
+    deleteSavedMovie
 }
 
 export default mainApi;

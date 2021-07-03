@@ -3,8 +3,6 @@ import { useState, useEffect } from 'react';
 
 import './App.css';
 
-import moviesArray from './utils/movies';
-
 import Header from './components/Header/Header';
 import Promo from './components/Promo/Promo';
 import AboutProject from './components/AboutProject/AboutProject';
@@ -20,8 +18,6 @@ import MoviesPage from './components/MoviesPage/MoviesPage';
 import SavedMoviesPage from './components/SavedMoviesPage/SavedMoviesPage';
 import AccountPage from './components/AccountPage/AccountPage';
 import PageNotFound from './components/PageNotFound/PageNotFound';
-
-import functions from './utils/utils';
 
 import auth from './utils/Api/Auth';
 import mainApi from './utils/Api/MainApi';
@@ -94,16 +90,24 @@ function App() {
   Позже подумать, как это решить при помощи useEffect!
   */
 
-  function saveMovie(data){
-    console.log(data);
-    mainApi.saveMovie(data)
-      .then((movie)=>{
-        return movie
-      })
-      .catch((err)=>{
-        console.log(err);
-      })
-  }
+  function saveMovie(movie){
+    const token = localStorage.getItem('jwt');
+    
+    /*
+    ВАЖНО! Сейчас - при такой фукнции - сохраненный фильм появляется на странице только после перезагрузки фильма!
+    Позже - подмумать, как исправить этот баг!
+    */
+
+    mainApi.saveMovie(movie, token)
+    .then((savedMovie)=>{
+      setMySavedMovies([savedMovie, ...mySavedMovies])
+      console.log(movie);
+      return savedMovie;
+    })
+    .catch((err)=>{
+      console.log(err);
+    })    
+  }    
 
   useEffect(() => {
     function checkToken(){
@@ -165,7 +169,7 @@ function App() {
             isOverlayMenuClosed={closeAllpopups}
             openOverlayMenu={handleOpenOverlayMenuClick}
             data={movies}
-            handleSaveMovie={saveMovie}
+            saveMovie={(movie)=> {saveMovie(movie)}}
           />
 
           <ProtectedRoute
