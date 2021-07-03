@@ -15,7 +15,9 @@ function SavedMoviesPage(props){
             isLoggedIn={props.loggedIn}
             onOpenOverlayMenu={props.openOverlayMenu}
         />
-        <SearchForm />
+        <SearchForm 
+            onSubmitSearchForm={(input)=> {props.submitSearchForm(input)}}
+        />
         <MoviesCardList 
             data={props.data}
             addFilmsToPage={props.addFilms}

@@ -93,11 +93,6 @@ function App() {
   function saveMovie(movie){
     const token = localStorage.getItem('jwt');
     
-    /*
-    ВАЖНО! Сейчас - при такой фукнции - сохраненный фильм появляется на странице только после перезагрузки фильма!
-    Позже - подмумать, как исправить этот баг!
-    */
-
     mainApi.saveMovie(movie, token)
     .then((savedMovie)=>{
       setMySavedMovies([savedMovie, ...mySavedMovies])
@@ -107,7 +102,35 @@ function App() {
     .catch((err)=>{
       console.log(err);
     })    
-  }    
+  };
+  
+  function deleteSavedMovie(movieForDeletion){
+    const token = localStorage.getItem('jwt');
+
+    mainApi.deleteSavedMovie(movieForDeletion, token)
+    .then((movie)=>{
+      return movie;
+    })
+    .catch((err)=>{
+      console.log(err);
+    })
+  }
+
+  function searchMovies (input){
+    const newMoviesArray = movies.filter((movie) => 
+      movie.nameRU.toLowerCase().includes(input.toLowerCase())
+    )
+    setMovies(newMoviesArray);
+  }
+
+  function searchSavedMovies(input){
+    const newSavedMoviesArray = mySavedMovies.filter((movie) => 
+      movie.nameRU.toLowerCase().includes(input.toLowerCase())
+    )
+    setMySavedMovies(newSavedMoviesArray);
+  }
+
+
 
   useEffect(() => {
     function checkToken(){
@@ -170,6 +193,7 @@ function App() {
             openOverlayMenu={handleOpenOverlayMenuClick}
             data={movies}
             saveMovie={(movie)=> {saveMovie(movie)}}
+            submitSearchForm={(input) => searchMovies(input)}
           />
 
           <ProtectedRoute
@@ -180,6 +204,8 @@ function App() {
             isOverlayMenuClosed={closeAllpopups}
             openOverlayMenu={handleOpenOverlayMenuClick}
             data={mySavedMovies}
+            saveMovie={(movie)=> {deleteSavedMovie(movie)}}
+            submitSearchForm={(input) => searchSavedMovies(input)}
           />
 
           <ProtectedRoute

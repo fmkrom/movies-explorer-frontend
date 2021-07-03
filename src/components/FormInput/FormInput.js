@@ -2,6 +2,13 @@ import "./FormInput.css";
 import FormError from '../FormError/FormError';
 
 function FormInput(props){
+    
+    function validateInput(){
+        console.log(props.inputValue.validationMessage)
+    }
+    validateInput();
+
+    
     return (
         <div className={`form-input__block
             ${props.isHorizontal ? 'form-input__block_horizontal' : 'form-input__block_regular'}
