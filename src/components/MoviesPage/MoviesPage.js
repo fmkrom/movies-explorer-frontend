@@ -21,12 +21,12 @@ function MoviesPage(props){
         />
         <MoviesCardList 
             data={props.data}
-            addFilmsToPage={props.addFilms}
             saveMovie={(movie)=>{
                 props.saveMovie(movie);
             }}
             savedMoviedata={props.data}
             isOnSaveMoviesPage={false}
+            addFilms={()=> {props.addFilmsToPage()}}
         />
         <Footer />
     </>   

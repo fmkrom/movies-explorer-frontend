@@ -29,7 +29,7 @@ return (
             </div>
             <ButtonLong 
                 buttonText="Еще"
-                onClick={props.addFilmsToPage}
+                onClick={()=> {props.addFilms()}}
             />
     </ContentBlockMain>
     )

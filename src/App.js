@@ -35,6 +35,8 @@ function App() {
   const [ mySavedMovies, setMySavedMovies ] = useState([]);
   const [ isOverlayMenuOpen, handleOpenOverlayMenuClick ] = useState(false);
   const [ userLoggedIn, setUserLoggedIn] = useState(isTokenPresent);
+  const [ moviesCountOnPage, setMoviesCountOnPage ] = useState(4);
+
   const history = useHistory();
   
   function closeAllpopups(){
@@ -131,6 +133,18 @@ function App() {
   }
 
 
+  /*Функция добавления фильмов на страницу в зависимости от ширины экрана
+    Она в зачаточном состоянии, позже переписать ее по-нормальному!
+    Хук зависимости - выше!
+  */
+  function addMoviesToPage(){
+    if (window.innerWidth < 1281 && window.innerWidth > 768){
+        setMoviesCountOnPage(moviesCountOnPage + 4);
+        console.log(moviesCountOnPage);
+    } else if (window.innerWidth < 767 && window.innerWidth > 320){
+      setMoviesCountOnPage(moviesCountOnPage + 1);
+    } 
+  }
 
   useEffect(() => {
     function checkToken(){
@@ -155,13 +169,15 @@ function App() {
         MoviesApi.getMovies(),
         mainApi.getMySavedMovies(localStorage.getItem('jwt'))
       ]).then(([moviesData, savedMoviesData])=>{
-        setMovies(moviesData);
+        const slicedMoviesArray = moviesData.slice(0, moviesCountOnPage);
+        setMovies(slicedMoviesArray);
+
         setMySavedMovies(savedMoviesData);
       }).catch((err)=>{
         console.log(err);
       });
     }
-  }, [userLoggedIn]);
+  }, [userLoggedIn, moviesCountOnPage]);
 
   return (
     <CurrentUserContext.Provider value={user}>
@@ -194,6 +210,7 @@ function App() {
             data={movies}
             saveMovie={(movie)=> {saveMovie(movie)}}
             submitSearchForm={(input) => searchMovies(input)}
+            addFilmsToPage={()=> addMoviesToPage()}
           />
 
           <ProtectedRoute
