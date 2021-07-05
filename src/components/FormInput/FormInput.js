@@ -4,7 +4,7 @@ import FormError from '../FormError/FormError';
 function FormInput(props){
     
     function validateInput(){
-        console.log(props.inputValue.validationMessage)
+        // console.log(props.inputValue.validationMessage)
     }
     validateInput();
 
@@ -25,7 +25,8 @@ function FormInput(props){
                         }`
                     }
                     value={props.inputValue} 
-                    onChange={props.handleSubmit} 
+                    onChange={props.onChange}
+                    onBlur={props.onBlur}
                     required 
                     placeholder={props.placeholder}
                     type={props.type}

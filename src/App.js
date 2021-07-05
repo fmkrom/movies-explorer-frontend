@@ -133,18 +133,25 @@ function App() {
   }
 
 
+  function regulateMoviesCountOnPage(i){
+    setMoviesCountOnPage(moviesCountOnPage + i);
+  }
+
   /*Функция добавления фильмов на страницу в зависимости от ширины экрана
     Она в зачаточном состоянии, позже переписать ее по-нормальному!
     Хук зависимости - выше!
   */
-  function addMoviesToPage(){
-    if (window.innerWidth < 1281 && window.innerWidth > 768){
-        setMoviesCountOnPage(moviesCountOnPage + 4);
-        console.log(moviesCountOnPage);
-    } else if (window.innerWidth < 767 && window.innerWidth > 320){
-      setMoviesCountOnPage(moviesCountOnPage + 1);
-    } 
-  }
+  
+    function addMoviesToPage(){
+      if (window.innerWidth < 1281 && window.innerWidth > 768){
+          regulateMoviesCountOnPage(4);
+          console.log(moviesCountOnPage);
+      } else if (window.innerWidth < 999 && window.innerWidth > 669){
+          regulateMoviesCountOnPage(3);
+      } else if (window.innerWidth < 767 && window.innerWidth > 320){
+        regulateMoviesCountOnPage(2);
+      }
+    }
 
   useEffect(() => {
     function checkToken(){
