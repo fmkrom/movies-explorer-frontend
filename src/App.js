@@ -87,66 +87,30 @@ function App() {
   }
 
   /*
-  Пока проблема решена так: залогиненность зависит от isTokenPresent!
-  В перспективе это может вызвать глюки!
-  Позже подумать, как это решить при помощи useEffect!
-  */
-  /*
-  function determineIdPresence(array, movie){
-      if (array.includes(movie.id)){
-        return true
-      } else {
-        return false
-      }
-  }
-  */
-  
-  /*function determineMoviesSavedStatus(movie){
-    mainApi.getMySavedMovies(localStorage.getItem('jwt'))
-    .then((savedMovies)=>{
-      const idPresent = savedMovies.map((mySavedMovie) => {return mySavedMovie.movieId})
-        determineIdPresence(idPresent, movie)
-      }).catch((err)=>console.log(err))
-  };
-  
-  */
-  
-  /*async function determineMoviesSavedStatus(movie){
-    try {
-      const allMySavedMovies = await mainApi.getMySavedMovies(localStorage.getItem('jwt'));
-      const allMySavedMoviesIds = allMySavedMovies.map((mySavedMovie)=> { return mySavedMovie.movieId });
-
-      const idIsPresent= Boolean(determineIdPresence(allMySavedMoviesIds, movie));
-      console.log('ID is present', idIsPresent);
-      return idIsPresent;
-    } catch (err) {
-      console.log(err)
-    } 
-  }
+  ВАЖНО!  Пока в этой функции баг:
+  Сохраненный фильм появляется на странице не сразу!
+  В перспективе - исправить это!
   */
 
   function saveMovie(movie){
     const token = localStorage.getItem('jwt');
     mainApi.saveMovie(movie, token)
-    .then((savedMovie)=>{
-      setMySavedMovies([savedMovie, ...mySavedMovies])
-      return savedMovie;
-    })
-    .catch((err)=>{
+    .then((currentSavedMovie)=>{
+      console.log(currentSavedMovie);
+      setMySavedMovies([currentSavedMovie, ...mySavedMovies])
+      return currentSavedMovie;
+    }).catch((err)=>{
       console.log(err);
-    })    
-  };
+    })
+  }
 
-  //ВАЖНО! Пока все работает, но данные обновляются только после перезагрузки страницы!
-  
   function deleteSavedMovie(movieId){
     const token = localStorage.getItem('jwt');
     mainApi.deleteSavedMovie(movieId, token)
-    .then((movie)=>{
-      setMySavedMovies(mySavedMovies.filter(movie => movie._id === movieId));
-      return movie;
-    })
-    .catch((err)=>{
+    .then((res)=>{
+      setMySavedMovies(mySavedMovies.filter((movie) => !(movie._id === movieId)))
+      return res.deletedMovie;
+    }).catch((err)=>{
       console.log(err);
     })
   };
@@ -165,7 +129,6 @@ function App() {
   }
   
 
-
   //Поиск
   function searchMovies (input){
     const newMoviesArray = movies.filter((movie) => 
@@ -173,6 +136,10 @@ function App() {
     )
     setMovies(newMoviesArray);
   }
+
+  /*ВАЖНО! Поиск пока работает только по элементам на странице!
+    Исправить это!
+  */
 
   function searchSavedMovies(input){
     const newSavedMoviesArray = mySavedMovies.filter((movie) => 

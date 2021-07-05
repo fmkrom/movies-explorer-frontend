@@ -21,7 +21,10 @@ return (
                                 movieName={currentMovie.nameRU}
                                 movieDuration={currentMovie.duration}
                                 // isMovieSaved={props.isSaved(currentMovie)}
-                                key={currentMovie.id}
+                                key={props.isOnSaveMoviesPage?
+                                    currentMovie._id :
+                                    currentMovie.id
+                                }
                                 saveMovie={()=>{props.saveMovie(currentMovie)}
                             }
                         />
