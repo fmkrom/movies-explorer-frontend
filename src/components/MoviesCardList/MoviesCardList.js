@@ -14,7 +14,7 @@ return (
                 {
                         props.data.map((currentMovie) => {
                         
-                        // console.log(currentMovie);        
+                        console.log(currentMovie);
 
                         // setMoviesSavedStatus(currentMovie)
                         return (
@@ -25,6 +25,7 @@ return (
                                     currentMovie.image :   
                                     `https://api.nomoreparties.co${currentMovie.image.url}`
                                 }
+                                trailer={currentMovie.trailerLink}
                                 movieName={currentMovie.nameRU}
                                 movieDuration={currentMovie.duration}
                                 key={props.isOnSaveMoviesPage? currentMovie._id : currentMovie.id }

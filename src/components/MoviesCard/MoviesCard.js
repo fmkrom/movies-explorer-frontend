@@ -9,6 +9,7 @@ return (
             <div className="movies-card">
                   <MoviesCardImage 
                         image={props.moviesCardImage}
+                        linkToTrailer={props.trailer}
                   />
                   <MoviesCardTitleBlock
                         isOnSavedMoviesPage={props.isOnSavedMoviesPage}

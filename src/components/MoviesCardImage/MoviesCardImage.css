@@ -4,6 +4,13 @@
     background-color: gainsboro;
 }
 
+.movies-card__link-to-trailer{
+    width:100%;
+    height: 100%;
+    background-color: transparent;
+    text-decoration: none;
+}
+
 @media screen and (max-width: 1278px){
     .movies-card__image{
         height: 190px;
