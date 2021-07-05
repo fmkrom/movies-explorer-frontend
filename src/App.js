@@ -32,6 +32,7 @@ function App() {
   
   const [ user, setUser ] = useState({});
   const [ movies, setMovies ] = useState([]);
+  const [ allBeatFilmMovies, setAllBeatFilmMovies ] = useState([]);
   const [ mySavedMovies, setMySavedMovies ] = useState([]);
   const [ mySavedMoviesIDs, setMySavedMoviesIDs ] = useState([]);
 
@@ -147,7 +148,7 @@ function App() {
 
   //Поиск
   function searchMovies(input){
-    const newMoviesArray = movies.filter((movie) => 
+    const newMoviesArray = allBeatFilmMovies.filter((movie) => 
       movie.nameRU.toLowerCase().includes(input.toLowerCase())
     )
     setMovies(newMoviesArray);
@@ -205,6 +206,7 @@ function App() {
         mainApi.getMySavedMovies(localStorage.getItem('jwt'))
       ]).then(([moviesData, savedMoviesData])=>{
         const slicedMoviesArray = moviesData.slice(0, moviesCountOnPage);
+        setAllBeatFilmMovies(moviesData)
         setMovies(slicedMoviesArray);
         getSavedMoviesIDs(savedMoviesData);
         setMySavedMovies(savedMoviesData.reverse());
@@ -300,45 +302,3 @@ function App() {
 }
 
 export default App;
-
-/*
-          
-          <Route exact path="/beatfilm-movies">
-            <Header 
-              isLoggedIn={true}
-              onOpenOverlayMenu={handleOpenOverlayMenuClick}
-            />
-            <SearchForm />
-            <BeatFilmMoviesCardList 
-              data={beatFilmMovies}
-              addFilmsToPage={addMoviesToPage}
-            />
-            <Footer />
-          </Route>
-
-          function toggleMoviesSavedStatus(movie){
-    mainApi.getMySavedMovies(localStorage.getItem('jwt'))
-    .then((savedMovies)=>{
-      const savedMoviesIds = savedMovies.map((mySavedMovie) => {return mySavedMovie.movieId})
-        if (!savedMoviesIds.includes(movie.id)){
-          saveMovie(movie);
-        } else if (savedMoviesIds.includes(movie.id)){
-          const currentSavedMovie = savedMovies.find((currentMovie)=> currentMovie.movieId === movie.id);
-          deleteSavedMovie(currentSavedMovie._id);
-        }
-      })
-    .catch((err)=>console.log(err));
-
-    async function setMoviesSavedStatus(movie){
-    try{
-      const savedMovies = await mainApi.getMySavedMovies(localStorage.getItem('jwt'));
-      const savedMoviesIds = savedMovies.map((mySavedMovie) => {return mySavedMovie.movieId});
-      const movieSavedStatus = Boolean(savedMoviesIds.includes(movie.id));
-      
-      return movieSavedStatus;
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  }
-*/
