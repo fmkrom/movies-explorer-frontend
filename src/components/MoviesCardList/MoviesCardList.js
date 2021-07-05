@@ -10,6 +10,7 @@ return (
         <div className="movies-cards-list">
                     {
                         props.data.map((currentMovie) => {
+                        // console.log(currentMovie);
                         return (
                         <MoviesCard
                             moviesCardImage={
@@ -19,9 +20,9 @@ return (
                             }
                                 movieName={currentMovie.nameRU}
                                 movieDuration={currentMovie.duration}
-                                isSaved={props.isSaved}
+                                // isMovieSaved={props.isSaved(currentMovie)}
                                 key={currentMovie.id}
-                                saveMovie={()=>{ props.saveMovie(currentMovie) } 
+                                saveMovie={()=>{props.saveMovie(currentMovie)}
                             }
                         />
                     )

@@ -13,6 +13,7 @@ return (
             <MoviesCardTitleBlock
                   name={props.movieName}
                   handleSaveMovie={()=>props.saveMovie()}
+                  isMovieSaved={props.isMovieSaved}
                   duration={props.movieDuration}
             />
       </div>

@@ -91,33 +91,82 @@ function App() {
   В перспективе это может вызвать глюки!
   Позже подумать, как это решить при помощи useEffect!
   */
+  /*
+  function determineIdPresence(array, movie){
+      if (array.includes(movie.id)){
+        return true
+      } else {
+        return false
+      }
+  }
+  */
+  
+  /*function determineMoviesSavedStatus(movie){
+    mainApi.getMySavedMovies(localStorage.getItem('jwt'))
+    .then((savedMovies)=>{
+      const idPresent = savedMovies.map((mySavedMovie) => {return mySavedMovie.movieId})
+        determineIdPresence(idPresent, movie)
+      }).catch((err)=>console.log(err))
+  };
+  
+  */
+  
+  /*async function determineMoviesSavedStatus(movie){
+    try {
+      const allMySavedMovies = await mainApi.getMySavedMovies(localStorage.getItem('jwt'));
+      const allMySavedMoviesIds = allMySavedMovies.map((mySavedMovie)=> { return mySavedMovie.movieId });
+
+      const idIsPresent= Boolean(determineIdPresence(allMySavedMoviesIds, movie));
+      console.log('ID is present', idIsPresent);
+      return idIsPresent;
+    } catch (err) {
+      console.log(err)
+    } 
+  }
+  */
 
   function saveMovie(movie){
     const token = localStorage.getItem('jwt');
-    
     mainApi.saveMovie(movie, token)
     .then((savedMovie)=>{
       setMySavedMovies([savedMovie, ...mySavedMovies])
-      console.log(movie);
       return savedMovie;
     })
     .catch((err)=>{
       console.log(err);
     })    
   };
-  
-  function deleteSavedMovie(movieForDeletion){
-    const token = localStorage.getItem('jwt');
 
-    mainApi.deleteSavedMovie(movieForDeletion, token)
+  //ВАЖНО! Пока все работает, но данные обновляются только после перезагрузки страницы!
+  
+  function deleteSavedMovie(movieId){
+    const token = localStorage.getItem('jwt');
+    mainApi.deleteSavedMovie(movieId, token)
     .then((movie)=>{
+      setMySavedMovies(mySavedMovies.filter(movie => movie._id === movieId));
       return movie;
     })
     .catch((err)=>{
       console.log(err);
     })
-  }
+  };
 
+  function toggleMoviesSavedStatus(movie){
+    mainApi.getMySavedMovies(localStorage.getItem('jwt'))
+    .then((savedMovies)=>{
+      const savedMoviesIds = savedMovies.map((mySavedMovie) => {return mySavedMovie.movieId})
+        if (!savedMoviesIds.includes(movie.id)){
+          saveMovie(movie);
+        } else if (savedMoviesIds.includes(movie.id)){
+          const currentSavedMovie = savedMovies.find((currentMovie)=> currentMovie.movieId === movie.id);
+          deleteSavedMovie(currentSavedMovie._id);
+        }
+      }).catch((err)=>console.log(err));
+  }
+  
+
+
+  //Поиск
   function searchMovies (input){
     const newMoviesArray = movies.filter((movie) => 
       movie.nameRU.toLowerCase().includes(input.toLowerCase())
@@ -145,7 +194,7 @@ function App() {
     function addMoviesToPage(){
       if (window.innerWidth < 1281 && window.innerWidth > 768){
           regulateMoviesCountOnPage(4);
-          console.log(moviesCountOnPage);
+          // console.log(moviesCountOnPage);
       } else if (window.innerWidth < 999 && window.innerWidth > 669){
           regulateMoviesCountOnPage(3);
       } else if (window.innerWidth < 767 && window.innerWidth > 320){
@@ -215,7 +264,8 @@ function App() {
             isOverlayMenuClosed={closeAllpopups}
             openOverlayMenu={handleOpenOverlayMenuClick}
             data={movies}
-            saveMovie={(movie)=> {saveMovie(movie)}}
+            // setMoviesSavedStatus={false}
+            saveMovie={(movie)=> {toggleMoviesSavedStatus(movie)}}
             submitSearchForm={(input) => searchMovies(input)}
             addFilmsToPage={()=> addMoviesToPage()}
           />
@@ -228,7 +278,8 @@ function App() {
             isOverlayMenuClosed={closeAllpopups}
             openOverlayMenu={handleOpenOverlayMenuClick}
             data={mySavedMovies}
-            saveMovie={(movie)=> {deleteSavedMovie(movie)}}
+            // setMoviesSavedStatus={false}
+            saveMovie={(movie)=> {deleteSavedMovie(movie._id)}}
             submitSearchForm={(input) => searchSavedMovies(input)}
           />
 

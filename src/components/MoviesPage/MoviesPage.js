@@ -21,9 +21,8 @@ function MoviesPage(props){
         />
         <MoviesCardList 
             data={props.data}
-            saveMovie={(movie)=>{
-                props.saveMovie(movie);
-            }}
+            // isSaved={props.setMoviesSavedStatus}
+            saveMovie={(movie)=>{props.saveMovie(movie)}}
             savedMoviedata={props.data}
             isOnSaveMoviesPage={false}
             addFilms={()=> {props.addFilmsToPage()}}

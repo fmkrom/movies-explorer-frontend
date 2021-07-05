@@ -49,10 +49,10 @@ function saveMovie(movie, token){
       }).then(checkRes);
 };
 
-function deleteSavedMovie(movie, token){
-  return fetch(`${URL.MY_BASE}/movies/${movie._id}`,
+function deleteSavedMovie(movieId, token){
+  return fetch(`${URL.MY_BASE}/movies/${movieId}`,
       {
-        method: 'POST',
+        method: 'DELETE',
         headers: {
           authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -60,7 +60,13 @@ function deleteSavedMovie(movie, token){
       }).then(checkRes); 
 }
 
-
+function toggleMoviesSavedStatus(status, movie, token){
+    if (status === false){
+      saveMovie(movie, token)
+    } else if (status === true) {
+      deleteSavedMovie(movie, token)
+    }
+}
 
 function getMySavedMovies(token){
   return fetch(`${URL.MY_BASE}/movies`,
@@ -77,7 +83,8 @@ const mainApi = {
     setUser,
     saveMovie,
     getMySavedMovies,
-    deleteSavedMovie
+    deleteSavedMovie,
+    toggleMoviesSavedStatus
 }
 
 export default mainApi;
