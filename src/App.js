@@ -33,6 +33,8 @@ function App() {
   const [ user, setUser ] = useState({});
   const [ movies, setMovies ] = useState([]);
   const [ mySavedMovies, setMySavedMovies ] = useState([]);
+  const [ mySavedMoviesIDs, setMySavedMoviesIDs ] = useState([]);
+
   const [ isOverlayMenuOpen, handleOpenOverlayMenuClick ] = useState(false);
   const [ userLoggedIn, setUserLoggedIn] = useState(isTokenPresent);
   const [ moviesCountOnPage, setMoviesCountOnPage ] = useState(4);
@@ -93,12 +95,12 @@ function App() {
   */
 
   function saveMovie(movie){
+    console.log(movie);
     const token = localStorage.getItem('jwt');
     mainApi.saveMovie(movie, token)
-    .then((currentSavedMovie)=>{
-      console.log(currentSavedMovie);
-      setMySavedMovies([currentSavedMovie, ...mySavedMovies])
-      return currentSavedMovie;
+    .then((data)=>{
+      setMySavedMovies([data.savedMovie, ...mySavedMovies])
+      return data.savedMovie;
     }).catch((err)=>{
       console.log(err);
     })
@@ -115,31 +117,41 @@ function App() {
     })
   };
 
+  function getSavedMoviesIDs(savedMovies){
+    const IdsArray = savedMovies.map((mySavedMovie)=>{return mySavedMovie.movieId})
+    setMySavedMoviesIDs(IdsArray);
+  };
+
   function toggleMoviesSavedStatus(movie){
-    mainApi.getMySavedMovies(localStorage.getItem('jwt'))
-    .then((savedMovies)=>{
-      const savedMoviesIds = savedMovies.map((mySavedMovie) => {return mySavedMovie.movieId})
-        if (!savedMoviesIds.includes(movie.id)){
-          saveMovie(movie);
-        } else if (savedMoviesIds.includes(movie.id)){
-          const currentSavedMovie = savedMovies.find((currentMovie)=> currentMovie.movieId === movie.id);
-          deleteSavedMovie(currentSavedMovie._id);
-        }
-      }).catch((err)=>console.log(err));
+    if (!mySavedMoviesIDs.includes(movie.id)){
+      saveMovie(movie);
+    } else if (mySavedMoviesIDs.includes(movie.id)){
+      const currentSavedMovie = mySavedMovies.find((currentMovie)=> currentMovie.movieId === movie.id);
+      deleteSavedMovie(currentSavedMovie._id);
+    }
   }
-  
+
+  /*
+    ВАЖНО! Все работает, но пока только после перезагрузки страницы. 
+    Исправить этот баг!
+  */
+
+  function setMoviesSavedStatus(movie){
+    if (!mySavedMoviesIDs.includes(movie.id)){
+      return true;
+    } else {
+      return false;
+    }
+  };
+ 
 
   //Поиск
-  function searchMovies (input){
+  function searchMovies(input){
     const newMoviesArray = movies.filter((movie) => 
       movie.nameRU.toLowerCase().includes(input.toLowerCase())
     )
     setMovies(newMoviesArray);
   }
-
-  /*ВАЖНО! Поиск пока работает только по элементам на странице!
-    Исправить это!
-  */
 
   function searchSavedMovies(input){
     const newSavedMoviesArray = mySavedMovies.filter((movie) => 
@@ -159,15 +171,15 @@ function App() {
   */
   
     function addMoviesToPage(){
-      if (window.innerWidth < 1281 && window.innerWidth > 768){
+      if (window.innerWidth < 1280 && window.innerWidth > 768){
           regulateMoviesCountOnPage(4);
-          // console.log(moviesCountOnPage);
       } else if (window.innerWidth < 999 && window.innerWidth > 669){
           regulateMoviesCountOnPage(3);
       } else if (window.innerWidth < 767 && window.innerWidth > 320){
         regulateMoviesCountOnPage(2);
       }
     }
+  
 
   useEffect(() => {
     function checkToken(){
@@ -194,8 +206,8 @@ function App() {
       ]).then(([moviesData, savedMoviesData])=>{
         const slicedMoviesArray = moviesData.slice(0, moviesCountOnPage);
         setMovies(slicedMoviesArray);
-
-        setMySavedMovies(savedMoviesData);
+        getSavedMoviesIDs(savedMoviesData);
+        setMySavedMovies(savedMoviesData.reverse());
       }).catch((err)=>{
         console.log(err);
       });
@@ -231,8 +243,8 @@ function App() {
             isOverlayMenuClosed={closeAllpopups}
             openOverlayMenu={handleOpenOverlayMenuClick}
             data={movies}
-            // setMoviesSavedStatus={false}
-            saveMovie={(movie)=> {toggleMoviesSavedStatus(movie)}}
+            isSaved={setMoviesSavedStatus}
+            saveMovie={(movie)=>{toggleMoviesSavedStatus(movie)}}
             submitSearchForm={(input) => searchMovies(input)}
             addFilmsToPage={()=> addMoviesToPage()}
           />
@@ -245,7 +257,7 @@ function App() {
             isOverlayMenuClosed={closeAllpopups}
             openOverlayMenu={handleOpenOverlayMenuClick}
             data={mySavedMovies}
-            // setMoviesSavedStatus={false}
+            isSaved={setMoviesSavedStatus}
             saveMovie={(movie)=> {deleteSavedMovie(movie._id)}}
             submitSearchForm={(input) => searchSavedMovies(input)}
           />
@@ -303,4 +315,30 @@ export default App;
             />
             <Footer />
           </Route>
+
+          function toggleMoviesSavedStatus(movie){
+    mainApi.getMySavedMovies(localStorage.getItem('jwt'))
+    .then((savedMovies)=>{
+      const savedMoviesIds = savedMovies.map((mySavedMovie) => {return mySavedMovie.movieId})
+        if (!savedMoviesIds.includes(movie.id)){
+          saveMovie(movie);
+        } else if (savedMoviesIds.includes(movie.id)){
+          const currentSavedMovie = savedMovies.find((currentMovie)=> currentMovie.movieId === movie.id);
+          deleteSavedMovie(currentSavedMovie._id);
+        }
+      })
+    .catch((err)=>console.log(err));
+
+    async function setMoviesSavedStatus(movie){
+    try{
+      const savedMovies = await mainApi.getMySavedMovies(localStorage.getItem('jwt'));
+      const savedMoviesIds = savedMovies.map((mySavedMovie) => {return mySavedMovie.movieId});
+      const movieSavedStatus = Boolean(savedMoviesIds.includes(movie.id));
+      
+      return movieSavedStatus;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  }
 */

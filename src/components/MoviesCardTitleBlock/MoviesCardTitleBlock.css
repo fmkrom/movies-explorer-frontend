@@ -28,6 +28,16 @@
     background-color: #F5F5F5;
 }
 
+.movies-card__like-button_regular:hover{
+    background-image: url('../../images/like-button_active.png');
+}
+
+.movies-card__like-button_on-saved-movies-page:hover{
+    background-image: url('../../images/close-button.png');
+    background-position: center;
+    background-size: 2vh;
+}
+
 .movies-card__like-button_inactive{
     background-image: url('../../images/like-button_inactive.png');
 }

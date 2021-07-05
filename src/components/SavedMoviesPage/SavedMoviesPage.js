@@ -22,8 +22,8 @@ function SavedMoviesPage(props){
             data={props.data}
             addFilmsToPage={props.addFilms}
             saveMovie={(movie)=>{props.saveMovie(movie)}}
-            // isSaved={props.setMoviesSavedStatus}
             isOnSaveMoviesPage={true}
+            isSaved={props.isSaved}
         />
         <Footer />
     </>   

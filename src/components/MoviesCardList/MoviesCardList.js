@@ -1,40 +1,44 @@
+import { useState } from 'react';
+
 import '../MoviesCardList/MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
 import ContentBlockMain from '../ContentBlockMain/ContentBlockMain';
-import ButtonLong from '../ButtonLong/ButtonLong';
 
 function MoviesCardList(props){
+
+// console.log(props.isMovieSaved);
 
 return (
     <ContentBlockMain>
         <div className="movies-cards-list">
-                    {
+                {
                         props.data.map((currentMovie) => {
-                        // console.log(currentMovie);
+                        
+                        // console.log(currentMovie);        
+
+                        // setMoviesSavedStatus(currentMovie)
                         return (
-                        <MoviesCard
-                            moviesCardImage={
-                                props.isOnSaveMoviesPage ? 
-                                currentMovie.image :   
-                                `https://api.nomoreparties.co${currentMovie.image.url}`
-                            }
+                            <MoviesCard
+                                isOnSavedMoviesPage={props.isOnSaveMoviesPage}
+                                moviesCardImage={
+                                    props.isOnSaveMoviesPage ? 
+                                    currentMovie.image :   
+                                    `https://api.nomoreparties.co${currentMovie.image.url}`
+                                }
                                 movieName={currentMovie.nameRU}
                                 movieDuration={currentMovie.duration}
-                                // isMovieSaved={props.isSaved(currentMovie)}
-                                key={props.isOnSaveMoviesPage?
-                                    currentMovie._id :
-                                    currentMovie.id
+                                key={props.isOnSaveMoviesPage? currentMovie._id : currentMovie.id }
+                                saveMovie={()=>{props.saveMovie(currentMovie)}}
+                                isMovieSaved={
+                                    props.isOnSaveMoviesPage ?
+                                    false :
+                                    props.isSaved(currentMovie)
                                 }
-                                saveMovie={()=>{props.saveMovie(currentMovie)}
-                            }
-                        />
-                    )
-                })}
+                            />
+                        )
+                    })
+                }
             </div>
-            <ButtonLong 
-                buttonText="Еще"
-                onClick={()=> {props.addFilms()}}
-            />
     </ContentBlockMain>
     )
 };
