@@ -22,6 +22,7 @@ import PageNotFound from './components/PageNotFound/PageNotFound';
 import auth from './utils/Api/Auth';
 import mainApi from './utils/Api/MainApi';
 import MoviesApi from './utils/Api/MoviesApi';  
+import Preloader from './components/Preloader/Preloader';
 
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import CurrentUserContext from './contexts/CurrentUserContext';
@@ -35,6 +36,7 @@ function App() {
   const [ allBeatFilmMovies, setAllBeatFilmMovies ] = useState([]);
   const [ mySavedMovies, setMySavedMovies ] = useState([]);
   const [ mySavedMoviesIDs, setMySavedMoviesIDs ] = useState([]);
+  const [ isPreloaderShown, setPreloaderShown ] = useState(false);
 
   const [ isOverlayMenuOpen, handleOpenOverlayMenuClick ] = useState(false);
   const [ userLoggedIn, setUserLoggedIn] = useState(isTokenPresent);
@@ -201,6 +203,7 @@ function App() {
   }, [isTokenPresent]);
 
   useEffect(()=>{
+    setPreloaderShown(true)
     if(userLoggedIn) {
       Promise.all([
         MoviesApi.getMovies(),
@@ -215,6 +218,7 @@ function App() {
         console.log(err);
       });
     }
+    setPreloaderShown(false)
   }, [userLoggedIn, moviesCountOnPage]);
 
   return (
@@ -242,6 +246,7 @@ function App() {
             exact path='/movies'
             component={MoviesPage}
             loggedIn={userLoggedIn}
+            preloaderIsShown={isPreloaderShown}
             isOverlayMenuOpen={isOverlayMenuOpen}
             isOverlayMenuClosed={closeAllpopups}
             openOverlayMenu={handleOpenOverlayMenuClick}
@@ -256,6 +261,7 @@ function App() {
             exact path='/saved-movies'
             component={SavedMoviesPage}
             loggedIn={userLoggedIn}
+            preloaderIsShown={isPreloaderShown}
             isOverlayMenuOpen={isOverlayMenuOpen}
             isOverlayMenuClosed={closeAllpopups}
             openOverlayMenu={handleOpenOverlayMenuClick}

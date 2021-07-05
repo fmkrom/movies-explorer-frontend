@@ -4,6 +4,7 @@ import SearchForm from "../SearchForm/SearchForm";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import Footer from "../Footer/Footer";
 import ButtonLong from "../ButtonLong/ButtonLong";
+import Preloader from "../Preloader/Preloader";
 
 function MoviesPage(props){
     
@@ -21,6 +22,9 @@ function MoviesPage(props){
         />
         <SearchForm 
             onSubmitSearchForm={(input)=> {props.submitSearchForm(input)}}
+        />
+        <Preloader
+            isShown={props.preloaderIsShown}
         />
         <MoviesCardList 
             data={props.data}

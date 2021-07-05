@@ -2,6 +2,7 @@ import Header from "../Header/Header";
 import OverlayMenu from "../OverlayMenu/OverlayMenu";
 import SearchForm from "../SearchForm/SearchForm";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
+import Preloader from "../Preloader/Preloader";
 import Footer from "../Footer/Footer";
 
 function SavedMoviesPage(props){
@@ -17,6 +18,9 @@ function SavedMoviesPage(props){
         />
         <SearchForm 
             onSubmitSearchForm={(input)=> {props.submitSearchForm(input)}}
+        />
+        <Preloader
+            isShown={props.preloaderIsShown}
         />
         <MoviesCardList 
             data={props.data}
