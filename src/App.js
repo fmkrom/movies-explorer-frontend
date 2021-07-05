@@ -59,7 +59,7 @@ function App() {
     auth.login(email, password)
       .then((res)=>{
         if (localStorage.getItem('jwt') === res.toString()){
-          // setUserLoggedIn(true);
+          setUserLoggedIn(true);
           // console.log(`Logged In!: ${userLoggedIn}`);
           history.push('/movies');
           return;
@@ -145,7 +145,6 @@ function App() {
     }
   };
  
-
   //Поиск
   function searchMovies(input){
     const newMoviesArray = allBeatFilmMovies.filter((movie) => 
@@ -185,6 +184,7 @@ function App() {
   useEffect(() => {
     function checkToken(){
       if (isTokenPresent){
+      setUserLoggedIn(true);
       auth.getContent(localStorage.getItem('jwt'))
         .then((data)=>{
           setUser({
@@ -193,8 +193,9 @@ function App() {
           })
         })
         .catch((err) => { console.log(err) });
+      } else if (!isTokenPresent){
+        setUserLoggedIn(false);
       }
-      setUserLoggedIn(true);
     }
     checkToken()
   }, [isTokenPresent]);
