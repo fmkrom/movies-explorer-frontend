@@ -1,14 +1,16 @@
 import '../PageWithForm/PageWithForm.css';
 
-import useInput from '../../utils/inputValidation';
+import useInputValidation from '../../utils/customHooks/useInputValidation';
 
 import PageWithForm from '../PageWithForm/PageWithForm';
 import FormInput from '../FormInput/FormInput';
 
 function Login(props){
     
-    const email = useInput('', { isEmpty: true, minLengthError: 3 });
-    const password = useInput('', { isEmpty: true, minLengthError: 8 });
+    const email = useInputValidation('', { isEmpty: true, minLength: 3, });
+    const password = useInputValidation('', { isEmpty: true, minLength: 8, });
+
+    const buttonDisabled = Boolean(!email.inputValid || !password.inputValid);
 
     function handleLoginUserSubmit(e){
         e.preventDefault();
@@ -24,32 +26,33 @@ function Login(props){
                     formSubtitleText='Еще не зарегистрированы? '
                     formSubtitleLinkRoute='/register'
                     formSubtitleLinkText='Регистрация'
+                    buttonDisabled={buttonDisabled}
                 >
                     <FormInput
                         isHorizontal={false} 
                         inputTitle="E-mail"
                         inputValue={email.value} 
-                        onChange={(e)=> email.onChange(e)}
-                        onBlur={(e)=> email.onBlur(e)} 
+                        onChange={e=> email.onChange(e)}
+                        onBlur={e=> email.onBlur(e)} 
                         placeholder="Введите Ваш e-mail"
                         type="text"
                         minLength="2"
                         maxLength="40"
-                        isErrorShown={(email.isDirty) ? true : false}
-                        errorMessage="Введите корректный e-mail"
+                        isErrorShown={(email.isEmpty && email.isDirty) ? true : false}
+                        errorMessage={"Введите корректный e-mail"}
                     />
-                    { /* {(email.isDirty && email.isEmpty) && <div>ОШИБКА!</div>}*/ }
+
                     <FormInput 
                         isHorizontal={false} 
                         inputTitle="Пароль"
                         inputValue={password.value}
-                        onChange={(e)=> password.onChange(e)} 
-                        onBlur={(e)=> password.onBlur(e)}
+                        onChange={e=> password.onChange(e)} 
+                        onBlur={e=> password.onBlur(e)}
                         placeholder="Введите пароль"
                         type="password"
                         minLength="2"
                         maxLength="200"
-                        isErrorShown={(password.isDirty && password.isEmpty) ? true : false}
+                        isErrorShown={(password.isEmpty && password.isDirty) ? true : false}
                         errorMessage="Введите корректный пароль"
                     />
             </PageWithForm>
@@ -69,5 +72,7 @@ export default Login;
     function handleloginUserPasswordSubmit(e){
         // console.log(e.target.value);
         setLoginUserPassword(e.target.value);
-    }    
+    } 
+    
+    {(email.isDirty && email.isEmpty) && <div style={{color:'red'}}>ОШИБКА!</div>} 
     */

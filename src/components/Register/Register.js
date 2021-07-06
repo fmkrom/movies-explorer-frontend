@@ -5,9 +5,15 @@ import { useState } from 'react';
 import PageWithForm from '../PageWithForm/PageWithForm';
 import FormInput from '../FormInput/FormInput';
 
+import useInputValidation from '../../utils/customHooks/useInputValidation';
+
 function Register(props){
 
-    const [registerUserName, setRegisterUserName] = useState('');
+    const name = useInputValidation('', { isEmpty: true, minLengthError: 2 });
+    const email = useInputValidation('', { isEmpty: true, minLengthError: 5 });
+    const password = useInputValidation('', { isEmpty: true, minLengthError: 8 });
+
+    /*const [registerUserName, setRegisterUserName] = useState('');
     const [registerUserEmail, setRegisterUserEmail] = useState('');
     const [registerUserPassword, setRegisterUserPassword] = useState('');
 
@@ -22,10 +28,11 @@ function Register(props){
     function handleRegisterUserPasswordSubmit(e){
         setRegisterUserPassword(e.target.value);
     }    
+    */
 
     function handleRegisterUserSubmit(e){
         e.preventDefault();
-        props.onRegisterUser(registerUserName, registerUserEmail, registerUserPassword)
+        props.onRegisterUser(name.value, email.value, password.value)
     }
     
     return (
@@ -41,37 +48,44 @@ function Register(props){
                     <FormInput
                         isHorizontal={false}
                         inputTitle="Имя"
-                        inputValue={registerUserName} 
-                        handleSubmit={handleRegisterUserNameSubmit} 
+                        inputValue={name.value} 
+                        onChange={e=> name.onChange(e)}
+                        onBlur={e=> name.onBlur(e)} 
+                        // handleSubmit={handleRegisterUserNameSubmit} 
                         placeholder="Введите имя"
                         type="text"
                         minLength="2"
                         maxLength="40"
-                        isErrorShown={false}
-                        errorMessage="Что-то пошло не так..."
+                        isErrorShown={(email.isDirty || name.isEmpty) ? true : false}
+                        errorMessage="Введите корректное имя"
                     />
                     <FormInput 
                         isHorizontal={false}
                         inputTitle="E-mail"
-                        inputValue={registerUserEmail} 
-                        handleSubmit={handleRegisterUserEmailSubmit} 
+                        inputValue={email.value} 
+                        onChange={e=> email.onChange(e)}
+                        onBlur={e=> email.onBlur(e)} 
+
+                        //handleSubmit={handleRegisterUserEmailSubmit} 
                         placeholder="Введите e-mail"
                         type="email"
                         minLength="2"
                         maxLength="40"
-                        isErrorShown={false}
-                        errorMessage="Что-то пошло не так..."
+                        isErrorShown={(email.isDirty || name.isEmpty) ? true : false}
+                        errorMessage="Введите корректный e-mail"
                     />
                     <FormInput 
                         isHorizontal={false}
-                        inputValue={registerUserPassword} 
-                        handleSubmit={handleRegisterUserPasswordSubmit} 
+                        inputValue={password.value} 
+                        onChange={((e)=> password.onChange(e))}
+                        onBlur={(e)=> password.onBlur(e)} 
+                        //handleSubmit={handleRegisterUserPasswordSubmit} 
                         placeholder="Введите пароль"
                         type="password"
                         minLength="2"
                         maxLength="200"
-                        isErrorShown={false}
-                        errorMessage="Что-то пошло не так..."
+                        isErrorShown={(password.isDirty || password.isEmpty) ? true : false}
+                        errorMessage="Введите корректный пароль"
                     />
                 </PageWithForm>
         )

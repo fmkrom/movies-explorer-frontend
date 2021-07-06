@@ -173,8 +173,8 @@ function App() {
   */
   
     function addMoviesToPage(){
-      if (window.innerWidth < 1280 && window.innerWidth > 768){
-          regulateMoviesCountOnPage(4);
+      if (window.innerWidth > 1300 && window.innerWidth < 768){
+          regulateMoviesCountOnPage(12);
       } else if (window.innerWidth < 999 && window.innerWidth > 669){
           regulateMoviesCountOnPage(3);
       } else if (window.innerWidth < 767 && window.innerWidth > 320){

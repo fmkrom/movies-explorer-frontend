@@ -7,6 +7,7 @@ function ButtonSubmit(props){
                 ${props.isColored ? "button_colored button_text-white" : "button_plain button_text-auto"}
             `}
             type="submit"
+            disabled={props.buttonDisabled}
         >{props.buttonText}</button>    
     )
 }

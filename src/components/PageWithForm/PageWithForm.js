@@ -1,6 +1,6 @@
 import './PageWithForm.css';
 import FormTitle from '../FormTitle/FormTitle';
-import ButtonSubmit from '../ButtonSubmit/ButtonSubmit';
+import ButtonSubmitColored from '../ButtonSubmitColored/ButtonSubmitColored';
 import FormSubtitle from '../FormSubtitle/FormSubtitle';
 
 function PageWithForm(props){
@@ -17,10 +17,10 @@ function PageWithForm(props){
                            noValidate
                         >
                            {props.children}
-                           <ButtonSubmit 
-                              isColored={true}
-                              buttonText={props.buttonText}
-                           />
+                        <ButtonSubmitColored 
+                           buttonText={props.buttonText}
+                           isDisabled={props.buttonDisabled}
+                        />
                         </form>
                         <FormSubtitle
                            subtitleText={props.formSubtitleText}
