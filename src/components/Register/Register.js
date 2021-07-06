@@ -1,11 +1,10 @@
 import '../PageWithForm/PageWithForm.css';
 
-import { useState } from 'react';
-
 import PageWithForm from '../PageWithForm/PageWithForm';
 import FormInput from '../FormInput/FormInput';
 
 import useInputValidation from '../../utils/customHooks/useInputValidation';
+import functions from '../../utils/utils';
 
 function Register(props){
 
@@ -13,22 +12,8 @@ function Register(props){
     const email = useInputValidation('', { isEmpty: true, minLengthError: 5 });
     const password = useInputValidation('', { isEmpty: true, minLengthError: 8 });
 
-    /*const [registerUserName, setRegisterUserName] = useState('');
-    const [registerUserEmail, setRegisterUserEmail] = useState('');
-    const [registerUserPassword, setRegisterUserPassword] = useState('');
-
-    function handleRegisterUserNameSubmit(e){
-        setRegisterUserName(e.target.value);
-    }
-
-    function handleRegisterUserEmailSubmit(e){
-        setRegisterUserEmail(e.target.value);
-    }
-
-    function handleRegisterUserPasswordSubmit(e){
-        setRegisterUserPassword(e.target.value);
-    }    
-    */
+    const buttonDisabled = Boolean(name.inputValid || email.inputValid || password.inputValid);
+    console.log('button Disabled status: ', buttonDisabled)
 
     function handleRegisterUserSubmit(e){
         e.preventDefault();
@@ -44,6 +29,8 @@ function Register(props){
                     formSubtitleText='Уже зарегистрированы?'
                     formSubtitleLinkRoute='/login'
                     formSubtitleLinkText=' Войти'
+                    buttonDisabled={buttonDisabled}
+                    errorMessageText={props.errorMessageText}
                 >
                     <FormInput
                         isHorizontal={false}
@@ -51,12 +38,11 @@ function Register(props){
                         inputValue={name.value} 
                         onChange={e=> name.onChange(e)}
                         onBlur={e=> name.onBlur(e)} 
-                        // handleSubmit={handleRegisterUserNameSubmit} 
                         placeholder="Введите имя"
                         type="text"
                         minLength="2"
                         maxLength="40"
-                        isErrorShown={(email.isDirty || name.isEmpty) ? true : false}
+                        isErrorShown={functions.validateNameInput(name)}
                         errorMessage="Введите корректное имя"
                     />
                     <FormInput 
@@ -65,13 +51,11 @@ function Register(props){
                         inputValue={email.value} 
                         onChange={e=> email.onChange(e)}
                         onBlur={e=> email.onBlur(e)} 
-
-                        //handleSubmit={handleRegisterUserEmailSubmit} 
                         placeholder="Введите e-mail"
                         type="email"
                         minLength="2"
                         maxLength="40"
-                        isErrorShown={(email.isDirty || name.isEmpty) ? true : false}
+                        isErrorShown={functions.validateEmailInput(email)}
                         errorMessage="Введите корректный e-mail"
                     />
                     <FormInput 
@@ -79,12 +63,11 @@ function Register(props){
                         inputValue={password.value} 
                         onChange={((e)=> password.onChange(e))}
                         onBlur={(e)=> password.onBlur(e)} 
-                        //handleSubmit={handleRegisterUserPasswordSubmit} 
                         placeholder="Введите пароль"
                         type="password"
                         minLength="2"
                         maxLength="200"
-                        isErrorShown={(password.isDirty || password.isEmpty) ? true : false}
+                        isErrorShown={functions.validatePasswordInput(password)}
                         errorMessage="Введите корректный пароль"
                     />
                 </PageWithForm>

@@ -8,7 +8,7 @@ import FormInput from '../FormInput/FormInput';
 
 function Login(props){
     
-    const email = useInputValidation('', { isEmpty: true, minLength: 3, });
+    const email = useInputValidation('', { isEmpty: true, minLength: 5, });
     const password = useInputValidation('', { isEmpty: true, minLength: 8, });
 
     const buttonDisabled = Boolean(!email.inputValid || !password.inputValid);
@@ -28,6 +28,7 @@ function Login(props){
                     formSubtitleLinkRoute='/register'
                     formSubtitleLinkText='Регистрация'
                     buttonDisabled={buttonDisabled}
+                    errorMessageText={props.errorMessageText}
                 >
                     <FormInput
                         isHorizontal={false} 

@@ -13,10 +13,8 @@ return (
         <div className="movies-cards-list">
                 {
                         props.data.map((currentMovie) => {
-                        
-                        console.log(currentMovie);
-
-                        // setMoviesSavedStatus(currentMovie)
+                        // console.log(currentMovie);
+                        // setMoviesSavedStatus(currentMovie);
                         return (
                             <MoviesCard
                                 isOnSavedMoviesPage={props.isOnSaveMoviesPage}

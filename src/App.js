@@ -42,54 +42,97 @@ function App() {
   const [ userLoggedIn, setUserLoggedIn] = useState(isTokenPresent);
   const [ moviesCountOnPage, setMoviesCountOnPage ] = useState(4);
 
+  const [errorMessageTextLogin, setErrorMessageTextLogin] = useState('');
+  const [errorMessageTextRegister, setErrorMessageTextRegister] = useState('');
+  const [ errorMessageUpdateUser, setErrorMessageUpdateUser ] = useState('')
+
   const history = useHistory();
   
   function closeAllpopups(){
     handleOpenOverlayMenuClick(false)
   }
 
-  function register(name, email, password){
-    auth.register(name, email, password)
-    .then((res) =>{
+  async function register(name, email, password){
+    try {
+      const res = await auth.register(name, email, password)
+      if (res.ok){
         history.push('/login');
         return res;
-    })
-    .catch((err)=> console.log(err));
+      } else if (!res.ok) {
+        console.log(res) 
+        if (res === 409) {
+          setErrorMessageTextRegister('Пользователь с таким e-mail уже существует')
+        } else if (res === 500){
+          setErrorMessageTextLogin('При регистрации пользователя произошла ошибка');
+        } else if (!res){
+          setErrorMessageTextLogin('Неизвестная ошибка');
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
 
-  function login(email, password){
-    auth.login(email, password)
-      .then((res)=>{
-        if (localStorage.getItem('jwt') === res.toString()){
+  async function login(email, password){
+    try {
+      const res = await auth.login(email, password);
+      if (localStorage.getItem('jwt') === res.toString()) {
           setUserLoggedIn(true);
-          // console.log(`Logged In!: ${userLoggedIn}`);
           history.push('/movies');
           return;
-        }
-      }).catch((err)=>{
-        console.log(`Ошибка входа: ${err}. Тип ошибки: ${err.name}`);
-      });
+      } else {
+        console.log(res);
+        if (res === 401){
+          setErrorMessageTextLogin('Вы ввели неправильный логин или пароль');
+        } else if (res === 500){
+          setErrorMessageTextLogin('На сервере произошла ошибка');
+        } else if (!res) {
+          setErrorMessageTextLogin('При авторизации произошла ошибка. Токен не передан или передан не в том формате');
+        } 
+        return res;
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
 
-  function updateUser(name, email){
-    const token = localStorage.getItem('jwt');
-    mainApi.setUser(name, email, token)
-    .then((data)=>{
-      console.log(data)
-      setUser({
-        name: data.name,
-        email: data.email
-      })
-    }).catch((err) => {console.log(err)});
-  }
+/*
+  важно! Я переписал бэк так чтобы он возвращал id пользователя
+  Надо фильтровать сохраненные фильмы по этому id!!
 
-  function logout(){
-    console.log('logout works!');
-    localStorage.removeItem('jwt');
-    setUserLoggedIn(false);
-    history.push('/login');
-    return;
+  ВАЖНО! Еще сделать переход на страницу 404!!
+
+*/
+
+async function updateUser(name, email){
+  const token = localStorage.getItem('jwt');
+  try{
+    const res = await mainApi.setUser(name, email, token);
+    if (res) {
+      setUser({ name: res.name, email: res.email });
+      return;
+    } else {
+      console.log(res);
+      if (res === 409) {
+        setErrorMessageUpdateUser('Пользователь с таким e-mail уже существует')
+      } else if (res === 500){
+        setErrorMessageUpdateUser('При обновлении профиля произошла ошибка');
+      } else if (!res){
+        setErrorMessageUpdateUser('Неизвестная ошибка');
+      }
+    }
+  } catch (err) {
+    console.log(err);
   }
+}
+
+function logout(){
+  console.log('logout works!');
+  localStorage.removeItem('jwt');
+  setUserLoggedIn(false);
+  history.push('/login');
+  return;
+}
 
   /*
   ВАЖНО!  Пока в этой функции баг:
@@ -282,17 +325,21 @@ function App() {
             userEmail={user.email}
             updateUser={updateUser}
             logout={logout}
+            errorMessageText='Здесь ошибка!'
+            // errorMessageText={errorMessageUpdateUser}
           />
           
           <Route exact path="/login">
               <Login 
                 onLoginUser={login}
+                errorMessageText={errorMessageTextLogin}
               />
           </Route>
 
           <Route exact path="/register">
               <Register
                 onRegisterUser={register}
+                errorMessageText={errorMessageTextRegister}
               />
           </Route>
 
@@ -309,3 +356,47 @@ function App() {
 }
 
 export default App;
+
+
+
+  /*
+  function register(name, email, password){
+    auth.register(name, email, password)
+    .then((res) =>{
+        history.push('/login');
+        return res;
+    })
+    .catch((err)=> console.log(err));
+  }
+
+  /*
+function updateUser(name, email){
+    const token = localStorage.getItem('jwt');
+    mainApi.setUser(name, email, token)
+    .then((data)=>{
+      console.log(data)
+      setUser({
+        name: data.name,
+        email: data.email
+      })
+    }).catch((err) => {console.log(err)});
+  }
+
+function login(email, password){
+    auth.login(email, password)
+      .then((res)=>{
+        if (localStorage.getItem('jwt') === res.toString()){
+          setUserLoggedIn(true);
+          history.push('/movies');
+          return;
+        }
+      }).catch((err)=>{
+        console.log(err);
+        if(err.status === 401){
+          setErrorMessageTextLogin('Ошибка авторизации: введите правильный логин и пароль');
+        } else {
+          console.log(`Ошибка входа: ${err}. Тип ошибки: ${err.name}`);
+        }
+      });
+  }
+  */

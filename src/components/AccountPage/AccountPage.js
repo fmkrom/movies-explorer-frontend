@@ -26,6 +26,7 @@ function AccountPage(props){
             userEmail={props.userEmail}
             onEditProfile={editProfile}
             logout={handleLogout}
+            errorMessageText={props.errorMessageText}
         />
     </>   
     )

@@ -43,7 +43,7 @@
 
 .button-submit-colored_disabled{
     background-color: #F8F8F8;
-    color:auto;
+    color:black;
 }
 
 @media screen and (max-width:764px){

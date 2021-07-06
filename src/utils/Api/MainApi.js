@@ -10,19 +10,30 @@ function checkRes(res) {
     }
 }
 
-function setUser(name, email, token){
-    return fetch(`${URL.MY_BASE}/users/me`,
-      {
+async function setUser(email, name, token){
+  try {
+      const result = fetch(`${URL.MY_BASE}/users/me`, {
         method: 'PATCH',
         headers: {
           authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
         }, 
         body: JSON.stringify({
-          name: name,
-          email: email
+          email: email,
+          name: name
         })
-    }).then(checkRes);
+      })
+    
+      if (result.ok){
+        const res = await result.json();
+        console.log(res)
+        return res;
+      } else if (!result.ok){
+        return result.status
+      }
+    } catch (err) {
+      console.log(err);
+    }
 };
 
 function saveMovie(movie, token){

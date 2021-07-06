@@ -2,6 +2,7 @@ import './PageWithFormHorizontal.css';
 import FormTitle from '../FormTitle/FormTitle';
 import ButtonSubmit from '../ButtonSubmit/ButtonSubmit';
 import ButtonRegular from '../ButtonRegular/ButtonRegular';
+import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
 function PageWithFormHorizontal(props){
    
@@ -22,6 +23,9 @@ function PageWithFormHorizontal(props){
                            noValidate
                      >
                      {props.children}
+                     <ErrorMessage
+                        messageText={props.errorMessageText}
+                     />
                      <ButtonSubmit 
                         isColored={false}
                         buttonText={props.buttonSaveProfileText}

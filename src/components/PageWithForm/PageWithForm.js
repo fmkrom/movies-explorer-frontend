@@ -2,6 +2,7 @@ import './PageWithForm.css';
 import FormTitle from '../FormTitle/FormTitle';
 import ButtonSubmitColored from '../ButtonSubmitColored/ButtonSubmitColored';
 import FormSubtitle from '../FormSubtitle/FormSubtitle';
+import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
 function PageWithForm(props){
   return (
@@ -17,6 +18,9 @@ function PageWithForm(props){
                            noValidate
                         >
                            {props.children}
+                        <ErrorMessage
+                           messageText={props.errorMessageText}
+                        />
                         <ButtonSubmitColored 
                            buttonText={props.buttonText}
                            isDisabled={props.buttonDisabled}
