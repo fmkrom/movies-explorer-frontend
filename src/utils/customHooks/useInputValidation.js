@@ -11,12 +11,12 @@ function useValidation(value, validationParameters){
             switch (validation) {
                 
                 case 'minLength': 
-                    console.log('case minLengthError');
+                    // console.log('case minLengthError');
                     value.length < validationParameters[validation] ? setMinLengthEror(true) : setMinLengthEror(false)
                 break;
 
                 case 'isEmpty': 
-                    console.log('isEmpty');
+                    // console.log('isEmpty');
                     value ? setEmpty(false) : setEmpty(true)
                 break;
 
@@ -51,13 +51,15 @@ function useInputValidation(initialValue, validationParameters){
     const valid = useValidation(value, validationParameters);
 
     function onChange(e){
-        console.log('Value in onChange: ', e.target.value);
+        // console.log('Value in onChange: ', e.target.value);
         setValue(e.target.value);
     }
 
     function onBlur(e){
         setDirty(true);
     }
+
+
 
     return {
         value,

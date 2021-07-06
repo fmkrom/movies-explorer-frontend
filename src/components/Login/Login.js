@@ -1,6 +1,7 @@
 import '../PageWithForm/PageWithForm.css';
 
 import useInputValidation from '../../utils/customHooks/useInputValidation';
+import functions from '../../utils/utils';
 
 import PageWithForm from '../PageWithForm/PageWithForm';
 import FormInput from '../FormInput/FormInput';
@@ -38,7 +39,7 @@ function Login(props){
                         type="text"
                         minLength="2"
                         maxLength="40"
-                        isErrorShown={(email.isEmpty && email.isDirty) ? true : false}
+                        isErrorShown={functions.validateEmailInput(email)}
                         errorMessage={"Введите корректный e-mail"}
                     />
 
@@ -52,7 +53,7 @@ function Login(props){
                         type="password"
                         minLength="2"
                         maxLength="200"
-                        isErrorShown={(password.isEmpty && password.isDirty) ? true : false}
+                        isErrorShown={functions.validatePasswordInput(password)}
                         errorMessage="Введите корректный пароль"
                     />
             </PageWithForm>
