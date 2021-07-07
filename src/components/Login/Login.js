@@ -10,7 +10,7 @@ import FormInput from '../FormInput/FormInput';
 
 function Login(props){
 
-    const email = useInputValidation('', { isEmpty: true, minLength: 6, });
+    const email = useInputValidation('', { isEmpty: true, minLength: 6, isEmail: true });
     const password = useInputValidation('', { isEmpty: true, minLength: 8, });
 
     const buttonDisabled = Boolean(!email.inputValid || !password.inputValid);

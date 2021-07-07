@@ -5,19 +5,23 @@ function useValidation(value, validationParameters){
     const [ isEmpty, setEmpty ] = useState(true);
     const [ minLength, setMinLengthEror ] = useState(true);
     const [ inputValid, setInputValid ] = useState(false);
+    const [ emailError, setEmailError ] = useState(true);
     
     useEffect(()=>{
         for (const validation in validationParameters){
             switch (validation) {
                 
                 case 'minLength': 
-                    // console.log('Validation Error minLengthError: email too short', value.length);
                     value.length < validationParameters[validation] ? setMinLengthEror(true) : setMinLengthEror(false)
                 break;
 
                 case 'isEmpty': 
-                    // console.log('Validation Error isEmpty: email field empty', value);
                     value ? setEmpty(false) : setEmpty(true)
+                break;
+
+                case 'isEmail': 
+                    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                    re.test(String(value).toLowerCase()) ? setEmailError(false) : setEmailError(true) 
                 break;
 
                 default: 
@@ -40,7 +44,8 @@ function useValidation(value, validationParameters){
     return {
         isEmpty,
         minLength,
-        inputValid
+        inputValid, 
+        emailError
     }
 }
 
@@ -51,8 +56,8 @@ function useInputValidation(initialValue, validationParameters){
     const valid = useValidation(value, validationParameters);
 
     function onChange(e){
-        console.log('Value in onChange: ', e.target.value);
-        
+        // console.log('Value in onChange: ', e.target.value);
+
         /*ВАЖНО! Я сделал так: вызываю onBlur в onChange 
         Тогда валидация становится "живой!"*/
         onBlur(e);

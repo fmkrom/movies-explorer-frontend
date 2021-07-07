@@ -43,8 +43,10 @@ function increaseArrayLength(array){
 
 function validateEmailInput(input){
     const emailInputIsEmpty = Boolean(input.isEmpty && input.isDirty);
+    const emailIncorrect = Boolean(input.emailError && input.isDirty);
     const emailTooShort = Boolean(input.isDirty && input.minLength);
-    const emailIsInValid = Boolean(emailTooShort || emailInputIsEmpty);
+    
+    const emailIsInValid = Boolean(emailTooShort || emailInputIsEmpty || emailIncorrect);
     return emailIsInValid;
 }
 
