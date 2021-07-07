@@ -1,4 +1,4 @@
-.button{
+.button-submit-colored{
     margin: 0 auto;
     margin-top: 0;
     margin-bottom:0;
@@ -13,27 +13,33 @@
     text-align: center;
 
     cursor: pointer;
-}
-
-@media screen and (max-width:764px){
-    .button{
-        font-size: 12px;
-        line-height: 15px;
-    }
-}
-
-.button:hover{
-    opacity:0.8;
-    cursor:pointer;
-}
-
-.button-submit-colored{
+    
     border-radius: 2px;
     border:0;
     margin-top: 69px;
     margin-bottom: 16px;
     width: 396px;
     height: 45px;
+}
+
+.button-submit-colored_shown{
+    display: block;
+}
+
+.button-submit-colored_hidden{
+    display:none;
+}
+
+@media screen and (max-width:764px){
+    .button-submit-colored{
+        font-size: 12px;
+        line-height: 15px;
+    }
+}
+
+.button-submit-colored:hover{
+    opacity:0.8;
+    cursor:pointer;
 }
 
 .button-submit-colored_enabled{

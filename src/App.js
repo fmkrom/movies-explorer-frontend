@@ -44,7 +44,13 @@ function App() {
 
   const [errorMessageTextLogin, setErrorMessageTextLogin] = useState('');
   const [errorMessageTextRegister, setErrorMessageTextRegister] = useState('');
-  const [ errorMessageUpdateUser, setErrorMessageUpdateUser ] = useState('')
+  const [ errorMessageUpdateUser, setErrorMessageUpdateUser ] = useState('');
+  
+  const [ editProfileButtonShown, setEditProfileButtonShown ] = useState(true);
+  const [ saveProfileButtonShown, setSaveProfileButtonShown ] = useState(false); 
+
+  console.log('Edit profile button displayed: ', editProfileButtonShown);
+  console.log('Saved profile button displayed: ', saveProfileButtonShown);
 
   const history = useHistory();
   
@@ -77,12 +83,15 @@ function App() {
     try {
       const res = await auth.login(email, password);
       if (localStorage.getItem('jwt') === res.toString()) {
+          setErrorMessageTextLogin('');
           setUserLoggedIn(true);
           history.push('/movies');
           return;
       } else {
         console.log(res);
-        if (res === 401){
+        if (res === 400){
+          setErrorMessageTextLogin('Вы ввели некорректные данные');
+        } else if (res === 401){
           setErrorMessageTextLogin('Вы ввели неправильный логин или пароль');
         } else if (res === 500){
           setErrorMessageTextLogin('На сервере произошла ошибка');
@@ -96,24 +105,30 @@ function App() {
     }
   }
 
-/*
-  важно! Я переписал бэк так чтобы он возвращал id пользователя
+/*важно! Я переписал бэк так чтобы он возвращал id пользователя
   Надо фильтровать сохраненные фильмы по этому id!!
-
-  ВАЖНО! Еще сделать переход на страницу 404!!
-
 */
+
+function showSaveProfileButton(){
+  setSaveProfileButtonShown(true);
+  setEditProfileButtonShown(false);
+}
 
 async function updateUser(name, email){
   const token = localStorage.getItem('jwt');
   try{
     const res = await mainApi.setUser(name, email, token);
     if (res) {
+      console.log(res.name, res.email);
       setUser({ name: res.name, email: res.email });
+      setSaveProfileButtonShown(false);
+      setEditProfileButtonShown(true);
       return;
     } else {
       console.log(res);
-      if (res === 409) {
+      if (res === 400) {
+        setErrorMessageUpdateUser('Введите корректные данные!');
+      } else if (res === 409) {
         setErrorMessageUpdateUser('Пользователь с таким e-mail уже существует')
       } else if (res === 500){
         setErrorMessageUpdateUser('При обновлении профиля произошла ошибка');
@@ -324,8 +339,12 @@ function logout(){
             userName={user.name}
             userEmail={user.email}
             updateUser={updateUser}
-            logout={logout}
+            logout={()=>{logout()}}
             errorMessageText='Здесь ошибка!'
+            showSaveProfileButton={()=> {showSaveProfileButton()}}
+            editProfileButtonDisplayed={editProfileButtonShown}
+            saveProfileButtonDisplayed={saveProfileButtonShown}
+
             // errorMessageText={errorMessageUpdateUser}
           />
           
@@ -343,7 +362,7 @@ function logout(){
               />
           </Route>
 
-          <Route exact path="/not-found">
+          <Route exact path="*">
               <PageNotFound 
                 notFoundLinkRoute='./movies'
               />

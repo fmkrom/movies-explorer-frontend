@@ -20,6 +20,14 @@
     cursor: pointer;
 }
 
+.button-regular_shown{
+    display: block;
+}
+
+.button-regular_hidden{
+    display: none
+}
+
 @media screen and (max-width:764px){
     .button-regular{
         margin-bottom: 16px;
@@ -29,6 +37,10 @@
         font-size: 12px;
         line-height: 15px;
     }
+}
+
+.button-regular_black{
+    color: black;
 }
 
 .button-regular_red{

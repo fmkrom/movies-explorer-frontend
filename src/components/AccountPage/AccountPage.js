@@ -7,10 +7,6 @@ function AccountPage(props){
         props.updateUser();
     }
 
-    function handleLogout(){
-        props.logout();
-    }
-    
     return(
     <>
         <OverlayMenu 
@@ -25,8 +21,11 @@ function AccountPage(props){
             userName={props.userName}
             userEmail={props.userEmail}
             onEditProfile={editProfile}
-            logout={handleLogout}
+            logout={()=>{props.logout()}}
             errorMessageText={props.errorMessageText}
+            editProfileButtonShown={props.editProfileButtonDisplayed}
+            saveProfileButtonShown={props.saveProfileButtonDisplayed}
+            showSaveProfileButton={()=>{props.showSaveProfileButton()}}
         />
     </>   
     )

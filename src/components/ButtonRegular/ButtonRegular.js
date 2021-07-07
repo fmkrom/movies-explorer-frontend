@@ -3,9 +3,12 @@ import './ButtonRegular.css';
 function ButtonRegular(props){
     return(
         <button 
-            className='button-regular button-regular_red'
+            className={`button-regular 
+                ${props.isShown? 'button-regular_shown' : 'button-regular_hidden'}
+                ${props.isRed? 'button-regular_red' : 'button-regular_black'}    
+            `}
             type="button"
-            onClick={props.onButtonClick}
+            onClick={()=>{props.onButtonClick()}}
         >{props.buttonText}</button>    
     )
 }

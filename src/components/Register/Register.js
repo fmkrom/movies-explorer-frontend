@@ -12,9 +12,8 @@ function Register(props){
     const email = useInputValidation('', { isEmpty: true, minLengthError: 5 });
     const password = useInputValidation('', { isEmpty: true, minLengthError: 8 });
 
-    const buttonDisabled = Boolean(name.inputValid || email.inputValid || password.inputValid);
-    console.log('button Disabled status: ', buttonDisabled)
-
+    const buttonDisabled = Boolean(!name.inputValid || !email.inputValid || !password.inputValid);
+    
     function handleRegisterUserSubmit(e){
         e.preventDefault();
         props.onRegisterUser(name.value, email.value, password.value)

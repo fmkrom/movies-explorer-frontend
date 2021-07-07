@@ -5,10 +5,12 @@ import functions from '../../utils/utils';
 
 import PageWithForm from '../PageWithForm/PageWithForm';
 import FormInput from '../FormInput/FormInput';
+// import { useHistory } from 'react-router-dom';
+//import { useState } from 'react';
 
 function Login(props){
-    
-    const email = useInputValidation('', { isEmpty: true, minLength: 5, });
+
+    const email = useInputValidation('', { isEmpty: true, minLength: 6, });
     const password = useInputValidation('', { isEmpty: true, minLength: 8, });
 
     const buttonDisabled = Boolean(!email.inputValid || !password.inputValid);
@@ -35,7 +37,7 @@ function Login(props){
                         inputTitle="E-mail"
                         inputValue={email.value} 
                         onChange={e=> email.onChange(e)}
-                        onBlur={e=> email.onBlur(e)} 
+                        onBlur={e=> email.onBlur(e)}
                         placeholder="Введите Ваш e-mail"
                         type="text"
                         minLength="2"
@@ -62,19 +64,3 @@ function Login(props){
 }
 
 export default Login;
-
-    /*
-    const [loginUserEmail, setLoginUserEmail] = useState('');
-    const [loginUserPassword, setLoginUserPassword] = useState('');
-
-    function handleLoginUserEmailSubmit(e){
-        setLoginUserEmail(targetValue);
-    }
-
-    function handleloginUserPasswordSubmit(e){
-        // console.log(e.target.value);
-        setLoginUserPassword(e.target.value);
-    } 
-    
-    {(email.isDirty && email.isEmpty) && <div style={{color:'red'}}>ОШИБКА!</div>} 
-    */

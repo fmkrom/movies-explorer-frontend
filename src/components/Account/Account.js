@@ -3,31 +3,19 @@ import './Account.css';
 import PageWithFormHorizontal from '../PageWithFormHorizontal/PageWithFormHorizontal';
 import ContentBlockMain from '../ContentBlockMain/ContentBlockMain';
 import FormInput from '../FormInput/FormInput';
-
-import { useState } from 'react';
+import useInputValidation from '../../utils/customHooks/useInputValidation';
+import functions from '../../utils/utils';
 
 function Account(props){
   
-  const [editProfileUserName, setEditProfileUserName] = useState('');
-  const [editProfileUserEmail, setEditProfileUserEmail] = useState('');
+  const name = useInputValidation('', { isEmpty: true, minLength: 2, });
+  const email = useInputValidation('', { isEmpty: true, minLength: 6, });
   
-  function handleEditProfileUserNameSubmit(e){
-    setEditProfileUserName(e.target.value);
-  }
-
-  function handleEditProfileUserEmailSubmit(e){
-    setEditProfileUserEmail(e.target.value);
-  }    
-
   function handleEditProfileSubmit(e){
     e.preventDefault();
-    props.onEditProfile(editProfileUserName, editProfileUserEmail)
+    props.onEditProfile(name.value, email.value);
   }
 
-  function handleUserLogout(){
-    props.logout()
-  }
-  
   return (
     <ContentBlockMain>
       <div className="account">
@@ -35,33 +23,38 @@ function Account(props){
           formTitle={`Привет, ${props.userName}!`}
           formName="form__edit-profile"
           onSubmit={handleEditProfileSubmit}
-          buttonSaveProfileText="Редактировать профиль"
+          buttonEditProfileText="Редактировать профиль"
           buttonLogoutText="Выйти из аккаунта"
-          handleLogout={handleUserLogout}
+          handleLogout={()=>{props.logout()}}
+          showSaveProfileButton={()=>{props.showSaveProfileButton()}}
+          isEditProfileButtonShown={props.editProfileButtonShown}
+          isSaveProfileButtonShown={props.saveProfileButtonShown}
         >
           <FormInput
             isHorizontal={true} 
             inputTitle="Имя"
-            inputValue={editProfileUserName} 
-            handleSubmit={handleEditProfileUserNameSubmit} 
+            onChange={e=> name.onChange(e)}
+            onBlur={e=> name.onBlur(e)} 
+            inputValue={name.value} 
             placeholder={props.userName}
             type="text"
             minLength="2"
             maxLength="40"
-            isErrorShown={false}
-            errorMessage="Что-то пошло не так..."
+            isErrorShown={functions.validateNameInput(name)}
+            errorMessage="Введите корректное имя"
           />
           <FormInput 
             isHorizontal={true} 
             inputTitle="E-mail"
-            inputValue={editProfileUserEmail} 
-            handleSubmit={handleEditProfileUserEmailSubmit} 
+            onChange={e=> email.onChange(e)}
+            onBlur={e=> email.onBlur(e)} 
+            inputValue={email.value}
             placeholder={props.userEmail}
             type="email"
             minLength="2"
             maxLength="40"
-            isErrorShown={false}
-            errorMessage="Что-то пошло не так..."
+            isErrorShown={functions.validateEmailInput(email)}
+            errorMessage="Введите корректный e-mail"
           />
           </PageWithFormHorizontal>
         </div>

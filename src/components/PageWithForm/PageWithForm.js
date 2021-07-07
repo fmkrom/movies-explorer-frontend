@@ -22,6 +22,7 @@ function PageWithForm(props){
                            messageText={props.errorMessageText}
                         />
                         <ButtonSubmitColored 
+                           isShown={true}
                            buttonText={props.buttonText}
                            isDisabled={props.buttonDisabled}
                         />

@@ -44,8 +44,7 @@ function increaseArrayLength(array){
 function validateEmailInput(input){
     const emailInputIsEmpty = Boolean(input.isEmpty && input.isDirty);
     const emailTooShort = Boolean(input.isDirty && input.minLength);
-    const emailIsInValid = Boolean(emailInputIsEmpty || emailTooShort);
-    console.log('Email validity: ', emailIsInValid);
+    const emailIsInValid = Boolean(emailTooShort || emailInputIsEmpty);
     return emailIsInValid;
 }
 
@@ -53,7 +52,6 @@ function validatePasswordInput(input){
     const passwordInputIsEmpty = Boolean(input.isEmpty && input.isDirty);
     const passwordTooShort = Boolean(input.isDirty && input.minLength);
     const passwordIsInvalid = Boolean(passwordInputIsEmpty || passwordTooShort);
-    console.log('Password validity:', passwordIsInvalid);
     return passwordIsInvalid;
 }
 
@@ -61,7 +59,6 @@ function validateNameInput(input){
     const nameInputIsEmpty = Boolean(input.isEmpty && input.isDirty);
     const nameTooShort = Boolean(input.isDirty && input.minLength);
     const nameIsInvalid = Boolean(nameInputIsEmpty || nameTooShort);
-    console.log('Name validity:', nameIsInvalid);
     return nameIsInvalid;
 }
 
