@@ -3,9 +3,13 @@ import OverlayMenu from "../OverlayMenu/OverlayMenu";
 import Account from "../Account/Account";
 
 function AccountPage(props){
-    function editProfile(){
+    
+    /*function editProfile(){
         props.updateUser();
-    }
+    }*/
+
+    //console.log(props.userName)
+    // console.log(props.userEmail)
 
     return(
     <>
@@ -20,11 +24,12 @@ function AccountPage(props){
         <Account 
             userName={props.userName}
             userEmail={props.userEmail}
-            onEditProfile={editProfile}
+            onEditProfile={(name, email)=>{props.editUserProfile(name, email)}}
             logout={()=>{props.logout()}}
             errorMessageText={props.errorMessageText}
             editProfileButtonShown={props.editProfileButtonDisplayed}
             saveProfileButtonShown={props.saveProfileButtonDisplayed}
+            isSaveProfileButtonDisabled={props.isSaveProfileButtonDisabled}
             showSaveProfileButton={()=>{props.showSaveProfileButton()}}
         />
     </>   

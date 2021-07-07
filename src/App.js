@@ -117,13 +117,11 @@ async function updateUser(name, email){
   try{
     const res = await mainApi.setUser(name, email, token);
     if (res) {
-      console.log(res.name, res.email);
       setUser({ name: res.name, email: res.email });
       setSaveProfileButtonShown(false);
       setEditProfileButtonShown(true);
       return;
     } else {
-      console.log(res);
       if (res === 400) {
         setErrorMessageUpdateUser('Введите корректные данные!');
       } else if (res === 409) {
@@ -142,6 +140,7 @@ async function updateUser(name, email){
 function logout(){
   localStorage.removeItem('jwt');
   setUserLoggedIn(false);
+  setUser({});
   history.push('/login');
   return;
 }
@@ -252,6 +251,7 @@ function logout(){
         .catch((err) => { console.log(err) });
       } else if (!isTokenPresent){
         setUserLoggedIn(false);
+        setUser({});
       }
     }
     checkToken()
@@ -335,8 +335,8 @@ function logout(){
             openOverlayMenu={handleOpenOverlayMenuClick}
             userName={user.name}
             userEmail={user.email}
-            updateUser={updateUser}
-            logout={()=>{logout()}}
+            editUserProfile={(name, email)=>{updateUser(name, email)}}
+            logout={()=>{console.log('Does logout work???'); logout()}}
             errorMessageText={errorMessageUpdateUser}
             showSaveProfileButton={()=> {showSaveProfileButton()}}
             editProfileButtonDisplayed={editProfileButtonShown}

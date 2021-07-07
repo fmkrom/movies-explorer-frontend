@@ -8,10 +8,17 @@ import functions from '../../utils/utils';
 
 function Account(props){
   
-  const name = useInputValidation('', { isEmpty: true, minLength: 2, });
-  const email = useInputValidation('', { isEmpty: true, minLength: 6, });
+  const name = useInputValidation('', { isEmpty: true, minLength: 2, isName: true});
+  const email = useInputValidation('', { isEmpty: true, minLength: 6, isEmail: true });
+
+  //console.log(name.value);
+  //console.log(email.value);
   
+  const buttonDisabled = Boolean(!email.inputValid || !name.inputValid);
+
   function handleEditProfileSubmit(e){
+    // console.log(e);
+    // console.log(name.value, email.value);
     e.preventDefault();
     props.onEditProfile(name.value, email.value);
   }
@@ -22,11 +29,13 @@ function Account(props){
         <PageWithFormHorizontal 
           formTitle={`Привет, ${props.userName}!`}
           formName="form__edit-profile"
-          onSubmit={handleEditProfileSubmit}
+          onSubmit={(e)=> {handleEditProfileSubmit(e)}}
           buttonEditProfileText="Редактировать профиль"
           buttonLogoutText="Выйти из аккаунта"
           handleLogout={()=>{props.logout()}}
           showSaveProfileButton={()=>{props.showSaveProfileButton()}}
+          errorMessageText={props.errorMessageText}
+          isSaveProfileButtonDisabled={buttonDisabled}
           isEditProfileButtonShown={props.editProfileButtonShown}
           isSaveProfileButtonShown={props.saveProfileButtonShown}
         >

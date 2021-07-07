@@ -30,7 +30,7 @@ function PageWithFormHorizontal(props){
                         <ButtonSubmitColored 
                            buttonText="Сохранить"
                            isShown={props.isSaveProfileButtonShown}
-                           isDisabled={props.isDisabled} 
+                           isDisabled={props.isSaveProfileButtonDisabled} 
                         />
                      </form>
                      <div className="account__bottom-buttons">

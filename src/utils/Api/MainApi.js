@@ -10,27 +10,26 @@ function checkRes(res) {
     }
 }
 
-async function setUser(email, name, token){
+async function setUser(userName, userEmail, token){
   try {
-      const result = fetch(`${URL.MY_BASE}/users/me`, {
+      const result = await fetch(`${URL.MY_BASE}/users/me`, {
         method: 'PATCH',
         headers: {
           authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
         }, 
         body: JSON.stringify({
-          email: email,
-          name: name
+          email: userEmail, 
+          name: userName
         })
       })
-    
       if (result.ok){
         const res = await result.json();
-        console.log(res)
         return res;
       } else if (!result.ok){
         return result.status
       }
+      return result;
     } catch (err) {
       console.log(err);
     }

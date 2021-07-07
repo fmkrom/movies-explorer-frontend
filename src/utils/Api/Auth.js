@@ -1,37 +1,5 @@
 import  URL from '../constants';
 
-/*function checkRes(res) {
-    if (res.ok) {
-        console.log(`Res in checkRes: ${res}`);
-        console.log(res);
-        return res.json();
-    } else {
-      console.log(res);  
-      // console.log(`Ошибка: ${res}`);  
-      Promise.reject(`Ошибка: ${res.statusText}`);
-      return res.json();
-    }
-}*/
-
-/*export function register(name, email, password){  
-  return fetch(`${URL.MY_BASE}/signup`,{
-    method: 'POST',
-    headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-    },
-    body: JSON.stringify({name, email, password})
-  }).then((res)=>{
-    if (res.ok) {
-      return res.json();
-    } 
-  }).catch((err)=>{
-    console.log(err);
-    return err;
-  })
-};*/
-
 async function register(name, email, password){
   try {
       const result = await fetch(`${URL.MY_BASE}/signup`, {
@@ -107,6 +75,8 @@ const auth = {
 export default auth;
 
 /*
+Старые варианты функций:
+
 export function login(email, password){
     fetch(`${URL.MY_BASE}/signin`, {
       method: 'POST',
@@ -136,3 +106,36 @@ export function login(email, password){
     return data.jwt;
   })
 };*/
+
+/*function checkRes(res) {
+    if (res.ok) {
+        console.log(`Res in checkRes: ${res}`);
+        console.log(res);
+        return res.json();
+    } else {
+      console.log(res);  
+      // console.log(`Ошибка: ${res}`);  
+      Promise.reject(`Ошибка: ${res.statusText}`);
+      return res.json();
+    }
+}*/
+
+/*export function register(name, email, password){  
+  return fetch(`${URL.MY_BASE}/signup`,{
+    method: 'POST',
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    },
+    body: JSON.stringify({name, email, password})
+  }).then((res)=>{
+    if (res.ok) {
+      return res.json();
+    } 
+  }).catch((err)=>{
+    console.log(err);
+    return err;
+  })
+};*/
+
