@@ -1,6 +1,6 @@
 import  URL from '../constants';
 
-function checkRes(res) {
+/*function checkRes(res) {
     if (res.ok) {
         console.log(`Res in checkRes: ${res}`);
         console.log(res);
@@ -11,7 +11,7 @@ function checkRes(res) {
       Promise.reject(`Ошибка: ${res.statusText}`);
       return res.json();
     }
-}
+}*/
 
 /*export function register(name, email, password){  
   return fetch(`${URL.MY_BASE}/signup`,{

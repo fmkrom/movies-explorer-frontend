@@ -8,9 +8,12 @@ import functions from '../../utils/utils';
 
 function Register(props){
 
-    const name = useInputValidation('', { isEmpty: true, minLengthError: 2 });
-    const email = useInputValidation('', { isEmpty: true, minLengthError: 5 });
-    const password = useInputValidation('', { isEmpty: true, minLengthError: 8 });
+    const name = useInputValidation('', { isEmpty: true, minLength: 2, isName: true });
+    const email = useInputValidation('', { isEmpty: true, minLength: 5, isEmail: true });
+    const password = useInputValidation('', { isEmpty: true, minLength: 8 });
+
+    // console.log('Name input: ', name)
+    // console.log('Name input: ', name.inputValid);
 
     const buttonDisabled = Boolean(!name.inputValid || !email.inputValid || !password.inputValid);
     
@@ -60,8 +63,8 @@ function Register(props){
                     <FormInput 
                         isHorizontal={false}
                         inputValue={password.value} 
-                        onChange={((e)=> password.onChange(e))}
-                        onBlur={(e)=> password.onBlur(e)} 
+                        onChange={e=> password.onChange(e)}
+                        onBlur={e=> password.onBlur(e)} 
                         placeholder="Введите пароль"
                         type="password"
                         minLength="2"

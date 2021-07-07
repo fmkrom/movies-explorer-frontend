@@ -1,6 +1,6 @@
 import './PageWithFormHorizontal.css';
 import FormTitle from '../FormTitle/FormTitle';
-import ButtonSubmit from '../ButtonSubmit/ButtonSubmit';
+// import ButtonSubmit from '../ButtonSubmit/ButtonSubmit';
 import ButtonRegular from '../ButtonRegular/ButtonRegular';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import ButtonSubmitColored from '../ButtonSubmitColored/ButtonSubmitColored';

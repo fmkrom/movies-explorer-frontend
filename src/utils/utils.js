@@ -45,7 +45,7 @@ function validateEmailInput(input){
     const emailInputIsEmpty = Boolean(input.isEmpty && input.isDirty);
     const emailIncorrect = Boolean(input.emailError && input.isDirty);
     const emailTooShort = Boolean(input.isDirty && input.minLength);
-    
+
     const emailIsInValid = Boolean(emailTooShort || emailInputIsEmpty || emailIncorrect);
     return emailIsInValid;
 }
@@ -53,14 +53,17 @@ function validateEmailInput(input){
 function validatePasswordInput(input){
     const passwordInputIsEmpty = Boolean(input.isEmpty && input.isDirty);
     const passwordTooShort = Boolean(input.isDirty && input.minLength);
+    
     const passwordIsInvalid = Boolean(passwordInputIsEmpty || passwordTooShort);
     return passwordIsInvalid;
 }
 
 function validateNameInput(input){
+    const nameInputIsInvalid = (input.nameError && input.isDirty);
     const nameInputIsEmpty = Boolean(input.isEmpty && input.isDirty);
     const nameTooShort = Boolean(input.isDirty && input.minLength);
-    const nameIsInvalid = Boolean(nameInputIsEmpty || nameTooShort);
+    
+    const nameIsInvalid = Boolean(nameInputIsEmpty || nameTooShort || nameInputIsInvalid);
     return nameIsInvalid;
 }
 

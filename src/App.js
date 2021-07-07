@@ -22,7 +22,7 @@ import PageNotFound from './components/PageNotFound/PageNotFound';
 import auth from './utils/Api/Auth';
 import mainApi from './utils/Api/MainApi';
 import MoviesApi from './utils/Api/MoviesApi';  
-import Preloader from './components/Preloader/Preloader';
+// import Preloader from './components/Preloader/Preloader';
 
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import CurrentUserContext from './contexts/CurrentUserContext';
@@ -49,9 +49,6 @@ function App() {
   const [ editProfileButtonShown, setEditProfileButtonShown ] = useState(true);
   const [ saveProfileButtonShown, setSaveProfileButtonShown ] = useState(false); 
 
-  console.log('Edit profile button displayed: ', editProfileButtonShown);
-  console.log('Saved profile button displayed: ', saveProfileButtonShown);
-
   const history = useHistory();
   
   function closeAllpopups(){
@@ -60,12 +57,12 @@ function App() {
 
   async function register(name, email, password){
     try {
-      const res = await auth.register(name, email, password)
-      if (res.ok){
+      const res = await auth.register(name, email, password);
+      if (res){
         history.push('/login');
-        return res;
-      } else if (!res.ok) {
-        console.log(res) 
+        setErrorMessageTextRegister('');
+        return;
+      } else {
         if (res === 409) {
           setErrorMessageTextRegister('Пользователь с таким e-mail уже существует')
         } else if (res === 500){
@@ -73,6 +70,7 @@ function App() {
         } else if (!res){
           setErrorMessageTextLogin('Неизвестная ошибка');
         }
+        return res;
       }
     } catch (err) {
       console.log(err);
@@ -88,7 +86,7 @@ function App() {
           history.push('/movies');
           return;
       } else {
-        console.log(res);
+      //console.log(res);
         if (res === 400){
           setErrorMessageTextLogin('Вы ввели некорректные данные');
         } else if (res === 401){
@@ -142,7 +140,6 @@ async function updateUser(name, email){
 }
 
 function logout(){
-  console.log('logout works!');
   localStorage.removeItem('jwt');
   setUserLoggedIn(false);
   history.push('/login');
@@ -340,7 +337,7 @@ function logout(){
             userEmail={user.email}
             updateUser={updateUser}
             logout={()=>{logout()}}
-            errorMessageText='Здесь ошибка!'
+            errorMessageText={errorMessageUpdateUser}
             showSaveProfileButton={()=> {showSaveProfileButton()}}
             editProfileButtonDisplayed={editProfileButtonShown}
             saveProfileButtonDisplayed={saveProfileButtonShown}

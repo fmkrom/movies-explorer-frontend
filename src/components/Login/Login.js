@@ -5,8 +5,6 @@ import functions from '../../utils/utils';
 
 import PageWithForm from '../PageWithForm/PageWithForm';
 import FormInput from '../FormInput/FormInput';
-// import { useHistory } from 'react-router-dom';
-//import { useState } from 'react';
 
 function Login(props){
 
