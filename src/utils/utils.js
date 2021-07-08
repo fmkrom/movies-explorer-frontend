@@ -67,6 +67,11 @@ function validateNameInput(input){
     return nameIsInvalid;
 }
 
+function filterMoviesByOwner(user, movies){
+    const moviesFilteredByOwner = movies.filter((movie)=> movie.owner === user.id);
+    return moviesFilteredByOwner;
+}
+
 const functions = {
     login, 
     register,
@@ -79,6 +84,7 @@ const functions = {
     validateEmailInput,
     validatePasswordInput,
     validateNameInput,
+    filterMoviesByOwner
 }
 
 export default functions;

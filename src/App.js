@@ -22,7 +22,7 @@ import PageNotFound from './components/PageNotFound/PageNotFound';
 import auth from './utils/Api/Auth';
 import mainApi from './utils/Api/MainApi';
 import MoviesApi from './utils/Api/MoviesApi';  
-// import Preloader from './components/Preloader/Preloader';
+import functions from './utils/utils';
 
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import CurrentUserContext from './contexts/CurrentUserContext';
@@ -32,8 +32,11 @@ function App() {
   const isTokenPresent = Boolean(localStorage.getItem('jwt'));
   
   const [ user, setUser ] = useState({});
+  
   const [ movies, setMovies ] = useState([]);
+  
   const [ allBeatFilmMovies, setAllBeatFilmMovies ] = useState([]);
+
   const [ mySavedMovies, setMySavedMovies ] = useState([]);
   const [ mySavedMoviesIDs, setMySavedMoviesIDs ] = useState([]);
   const [ isPreloaderShown, setPreloaderShown ] = useState(false);
@@ -48,6 +51,8 @@ function App() {
   
   const [ editProfileButtonShown, setEditProfileButtonShown ] = useState(true);
   const [ saveProfileButtonShown, setSaveProfileButtonShown ] = useState(false); 
+
+  const [ shortFilmsFiltered, setShortFilmsFiltered] = useState(false);
 
   const history = useHistory();
   
@@ -163,6 +168,21 @@ function logout(){
     })
   }
 
+  async function getUsersSavedMovies(token, currentUser){
+    try{
+      const allSavedMovies = await mainApi.getAllSavedMovies(token);
+      const usersSavedMovies = functions.filterMoviesByOwner(currentUser, allSavedMovies);
+      
+      console.log(user)
+      console.log('ALL saved movies: ', allSavedMovies);
+      console.log('Users saved movies: ', usersSavedMovies);
+      
+      return usersSavedMovies;
+    } catch(err){
+      console.log(err);
+    }
+  }
+
   function deleteSavedMovie(movieId){
     const token = localStorage.getItem('jwt');
     mainApi.deleteSavedMovie(movieId, token)
@@ -201,41 +221,63 @@ function logout(){
     }
   };
  
-  //Поиск
-  function searchMovies(input){
-    const newMoviesArray = allBeatFilmMovies.filter((movie) => 
-      movie.nameRU.toLowerCase().includes(input.toLowerCase())
-    )
-    setMovies(newMoviesArray);
+  function filterMoviesByDuration(moviesArrayForSearch){
+    if (shortFilmsFiltered === false){   
+        setShortFilmsFiltered(true);
+        const moviesFilteredByDuration = moviesArrayForSearch.filter((movie)=> movie.duration < 40);
+        setMovies(moviesFilteredByDuration);
+        return moviesFilteredByDuration;
+    } else if (shortFilmsFiltered === true){
+        setShortFilmsFiltered(false);
+        setMovies(moviesArrayForSearch);
+        return moviesArrayForSearch;
+    }
   }
 
-  function searchSavedMovies(input){
-    const newSavedMoviesArray = mySavedMovies.filter((movie) => 
-      movie.nameRU.toLowerCase().includes(input.toLowerCase())
-    )
-    setMySavedMovies(newSavedMoviesArray);
+  function filterMySavedMoviesByDuration(moviesArrayForSearch){
+    if (shortFilmsFiltered === false){   
+        setShortFilmsFiltered(true);
+        const moviesFilteredByDuration = moviesArrayForSearch.filter((movie)=> movie.duration < 40);
+        setMySavedMovies(moviesFilteredByDuration);
+        return moviesFilteredByDuration;
+    } else if (shortFilmsFiltered === true){
+        setShortFilmsFiltered(false);
+        setMySavedMovies(moviesArrayForSearch);
+        return moviesArrayForSearch;
+    }
   }
 
+  function filterAndSearchMovies(input, moviesArray){
+    if (shortFilmsFiltered === false){
+      const foundMovies = moviesArray.filter((movie)=> movie.nameRU.toLowerCase().includes(input.toLowerCase()));
+      setMovies(foundMovies);
+      setShortFilmsFiltered(true)   
+    } else if (shortFilmsFiltered === true){
+      const moviesArrayForSearch = filterMoviesByDuration(moviesArray);
+      const foundShortMovies = moviesArrayForSearch.filter((movie)=> movie.nameRU.toLowerCase().includes(input.toLowerCase()));
+      setMovies(foundShortMovies);
+      setShortFilmsFiltered(false);
+    }
+  };
 
   function regulateMoviesCountOnPage(i){
     setMoviesCountOnPage(moviesCountOnPage + i);
-  }
+  };
 
   /*Функция добавления фильмов на страницу в зависимости от ширины экрана
     Она в зачаточном состоянии, позже переписать ее по-нормальному!
     Хук зависимости - выше!
   */
   
-    function addMoviesToPage(){
-      if (window.innerWidth > 1300 && window.innerWidth < 768){
-          regulateMoviesCountOnPage(12);
-      } else if (window.innerWidth < 999 && window.innerWidth > 669){
-          regulateMoviesCountOnPage(3);
-      } else if (window.innerWidth < 767 && window.innerWidth > 320){
-        regulateMoviesCountOnPage(2);
-      }
+  function addMoviesToPage(){
+    if (window.innerWidth > 1300 && window.innerWidth < 768){
+      regulateMoviesCountOnPage(12);
+    } else if (window.innerWidth < 999 && window.innerWidth > 669){
+      regulateMoviesCountOnPage(3);
+    } else if (window.innerWidth < 767 && window.innerWidth > 320){
+      regulateMoviesCountOnPage(2);
     }
-  
+  }
 
   useEffect(() => {
     function checkToken(){
@@ -244,6 +286,7 @@ function logout(){
       auth.getContent(localStorage.getItem('jwt'))
         .then((data)=>{
           setUser({
+            id: data.id,
             name: data.name,
             email: data.email
           })
@@ -258,11 +301,13 @@ function logout(){
   }, [isTokenPresent]);
 
   useEffect(()=>{
+    const token = localStorage.getItem('jwt');
+
     setPreloaderShown(true)
     if(userLoggedIn) {
       Promise.all([
         MoviesApi.getMovies(),
-        mainApi.getMySavedMovies(localStorage.getItem('jwt'))
+        getUsersSavedMovies(token, user)
       ]).then(([moviesData, savedMoviesData])=>{
         const slicedMoviesArray = moviesData.slice(0, moviesCountOnPage);
         setAllBeatFilmMovies(moviesData)
@@ -274,7 +319,7 @@ function logout(){
       });
     }
     setPreloaderShown(false)
-  }, [userLoggedIn, moviesCountOnPage]);
+  }, [userLoggedIn, moviesCountOnPage, user]);
 
   return (
     <CurrentUserContext.Provider value={user}>
@@ -308,7 +353,9 @@ function logout(){
             data={movies}
             isSaved={setMoviesSavedStatus}
             saveMovie={(movie)=>{toggleMoviesSavedStatus(movie)}}
-            submitSearchForm={(input) => searchMovies(input)}
+            submitSearchForm={(input) => {filterAndSearchMovies(input, allBeatFilmMovies)}}
+            filterShortFilms={()=>{filterMoviesByDuration(allBeatFilmMovies)}}
+            filterShortFilmsOn={shortFilmsFiltered}
             addFilmsToPage={()=> addMoviesToPage()}
           />
 
@@ -323,7 +370,8 @@ function logout(){
             data={mySavedMovies}
             isSaved={setMoviesSavedStatus}
             saveMovie={(movie)=> {deleteSavedMovie(movie._id)}}
-            submitSearchForm={(input) => searchSavedMovies(input)}
+            filterShortFilms={()=>{filterMySavedMoviesByDuration(mySavedMovies)}}
+            //submitSearchForm={(input) => searchSavedMovies(input)}
           />
 
           <ProtectedRoute

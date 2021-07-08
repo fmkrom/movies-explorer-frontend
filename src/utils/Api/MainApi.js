@@ -78,7 +78,7 @@ function toggleMoviesSavedStatus(status, movie, token){
     }
 }
 
-function getMySavedMovies(token){
+function getAllSavedMovies(token){
   return fetch(`${URL.MY_BASE}/movies`,
   {
    method: 'GET',
@@ -92,7 +92,7 @@ function getMySavedMovies(token){
 const mainApi = {
     setUser,
     saveMovie,
-    getMySavedMovies,
+    getAllSavedMovies,
     deleteSavedMovie,
     toggleMoviesSavedStatus
 }

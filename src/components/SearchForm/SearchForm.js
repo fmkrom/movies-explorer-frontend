@@ -37,7 +37,10 @@ function SearchForm(props){
                     /> 
                     <button className="search-form__button"></button>
                 </div>
-                <FilterCheckbox />
+                <FilterCheckbox 
+                  filterShortFilms={()=>{props.filterShortFilms()}}
+                  filterShortFilmsOn={props.filterShortFilmsOn}
+                />
         </form>
       </ContentBlockMain>  
   )
