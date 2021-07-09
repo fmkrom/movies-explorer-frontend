@@ -23,6 +23,8 @@ function SavedMoviesPage(props){
         />
         <SearchForm 
             onSubmitSearchForm={(input)=> {props.submitSearchForm(input)}}
+            filterShortFilms={()=>{props.filterShortFilms()}}
+            filterShortFilmsOn={props.filterShortFilmsOn}
         />
         <Preloader
             isShown={props.preloaderIsShown}

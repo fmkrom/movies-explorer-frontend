@@ -359,7 +359,8 @@ function logout(){
             // isSaved={setMoviesSavedStatus}
             saveMovie={(movie)=> {deleteSavedMovie(movie._id)}}
             filterShortFilms={()=>{filterMySavedMoviesByDuration(mySavedMovies)}}
-            //submitSearchForm={(input) => searchSavedMovies(input)}
+            filterShortFilmsOn={shortFilmsFiltered}
+            //submitSearchForm={(input) => filterAndSearchMySavedMovies(input, mySavedMovies)}
           />
 
           <ProtectedRoute
