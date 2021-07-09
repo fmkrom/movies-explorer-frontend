@@ -174,17 +174,17 @@ function logout(){
     })
   };
 
-  console.log('IDs array: ', mySavedMoviesIDs);
+  //console.log('IDs array: ', mySavedMoviesIDs);
 
   function toggleMoviesSavedStatus(movie){
     if (!mySavedMoviesIDs.includes(movie.id)){
       saveMovie(movie);
-      console.log(movie);
-      console.log('My saved movies: ', mySavedMovies);
+      // console.log(movie);
+      // console.log('My saved movies: ', mySavedMovies);
     } else if (mySavedMoviesIDs.includes(movie.id)){
       const currentSavedMovie = mySavedMovies.find((currentMovie)=> currentMovie.movieId === movie.id);
-      console.log(currentSavedMovie);
-      console.log('Movie to delete: ', currentSavedMovie);
+      //console.log(currentSavedMovie);
+      //console.log('Movie to delete: ', currentSavedMovie);
       setMySavedMoviesIDs(mySavedMoviesIDs.filter((id)=> !(id === currentSavedMovie.movieId)));
       deleteSavedMovie(currentSavedMovie._id);
     }
@@ -192,10 +192,10 @@ function logout(){
 
   function setMoviesSavedStatus(movie){
     if (mySavedMoviesIDs.includes(movie.id)){
-      console.log(movie.nameRU, ' saved!');
+    //  console.log(movie.nameRU, ' saved!');
       return true;
     } else if (mySavedMoviesIDs === null || mySavedMoviesIDs === undefined) {
-      console.log('Not saved');
+      //console.log('Not saved');
       return false;
     } else {
       return false;
@@ -339,10 +339,8 @@ function logout(){
             isOverlayMenuClosed={closeAllpopups}
             openOverlayMenu={handleOpenOverlayMenuClick}
             data={movies}
-            
-            isSaved={(movie)=> setMoviesSavedStatus(movie)}
+            isSaved={movie=> Boolean(mySavedMoviesIDs.includes(movie.id))}
             saveMovie={(movie)=>{toggleMoviesSavedStatus(movie)}}
-
             submitSearchForm={(input) => {filterAndSearchMovies(input, allBeatFilmMovies)}}
             filterShortFilms={()=>{filterMoviesByDuration(allBeatFilmMovies)}}
             filterShortFilmsOn={shortFilmsFiltered}
@@ -358,7 +356,7 @@ function logout(){
             isOverlayMenuClosed={closeAllpopups}
             openOverlayMenu={handleOpenOverlayMenuClick}
             data={mySavedMovies}
-            isSaved={setMoviesSavedStatus}
+            // isSaved={setMoviesSavedStatus}
             saveMovie={(movie)=> {deleteSavedMovie(movie._id)}}
             filterShortFilms={()=>{filterMySavedMoviesByDuration(mySavedMovies)}}
             //submitSearchForm={(input) => searchSavedMovies(input)}

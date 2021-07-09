@@ -11,10 +11,6 @@ return (
                 <button 
                     onClick={props.handleSaveMovie}
                     className={`movies-card__like-button
-                       ${props.isOnSavedMoviesPage ? 
-                            'movies-card__like-button_on-saved-movies-page' : 
-                            'movies-card__like-button_regular'
-                        }
                        ${props.isMovieSaved ? 
                             'movies-card__like-button_active' : 
                             'movies-card__like-button_inactive'

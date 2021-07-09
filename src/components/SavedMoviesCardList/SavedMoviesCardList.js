@@ -1,12 +1,12 @@
 // import { useState } from 'react';
 
 import '../SavedMoviesCardList/SavedMoviesCardList.css';
-import MoviesCard from '../MoviesCard/MoviesCard';
+import SavedMoviesCard from '../SavedMoviesCard/SavedMoviesCard';
 import ContentBlockMain from '../ContentBlockMain/ContentBlockMain';
 
 function SavedMoviesCardList(props){
 
-// console.log(props.isMovieSaved);
+console.log(props);
 
 return (
     <ContentBlockMain>
@@ -14,15 +14,13 @@ return (
                 {
                         props.data.map((currentMovie) => {
                         return (
-                            <MoviesCard
-                                isOnSavedMoviesPage={true}
+                            <SavedMoviesCard
                                 moviesCardImage={currentMovie.image}
                                 trailer={currentMovie.trailerLink}
                                 movieName={currentMovie.nameRU}
                                 movieDuration={currentMovie.duration}
                                 key={currentMovie._id}
                                 saveMovie={()=>{props.saveMovie(currentMovie)}}
-                                isMovieSaved={false}
                             />
                         )
                     })
@@ -33,3 +31,13 @@ return (
 };
    
 export default SavedMoviesCardList;
+
+/*
+moviesCardImage={currentMovie.image}
+                                trailer={currentMovie.trailerLink}
+                                movieName={currentMovie.nameRU}
+                                movieDuration={currentMovie.duration}
+                                key={currentMovie._id}
+                                saveMovie={()=>{props.saveMovie(currentMovie)}}
+
+*/

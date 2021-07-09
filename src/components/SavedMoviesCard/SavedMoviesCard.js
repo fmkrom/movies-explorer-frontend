@@ -1,25 +1,33 @@
-import './MoviesCard.css';
+import './SavedMoviesCard.css';
 
 import MoviesCardImage from '../MoviesCardImage/MoviesCardImage';
-import MoviesCardTitleBlock from '../MoviesCardTitleBlock/MoviesCardTitleBlock';
+import SavedMoviesCardTitleBlock from '../SavedMoviesCardTitleBlock/SavedMoviesCardTitleBlock';
 
 function SavedMoviesCard(props){
+
+console.log(props);
 
 return (
             <div className="movies-card">
                   <MoviesCardImage 
-                        image={props.moviesCardImage}
-                        linkToTrailer={props.trailer}
+                    image={props.moviesCardImage}
+                    linkToTrailer={props.trailer}
                   />
-                  <MoviesCardTitleBlock
-                        isOnSavedMoviesPage={props.isOnSavedMoviesPage}
-                        name={props.movieName}
-                        handleSaveMovie={()=>props.saveMovie()}
-                        isMovieSaved={!props.isMovieSaved}
-                        duration={props.movieDuration}
+                  <SavedMoviesCardTitleBlock
+                    name={props.movieName}
+                    handleSaveMovie={()=>props.saveMovie()}
+                    duration={props.movieDuration}
                   />
             </div>
       )
 };
 
 export default SavedMoviesCard;
+
+/*
+<SavedMoviesCardTitleBlock
+                        name={props.movieName}
+                        handleSaveMovie={()=>props.saveMovie()}
+                        duration={props.movieDuration}
+                  />
+*/

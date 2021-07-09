@@ -6,7 +6,11 @@ import SavedMoviesCardList from "../SavedMoviesCardList/SavedMoviesCardList";
 import Preloader from "../Preloader/Preloader";
 import Footer from "../Footer/Footer";
 
+import moviesArray from '../../utils/movies';
+
 function SavedMoviesPage(props){
+    console.log(props);
+    
     return(
     <>
         <OverlayMenu 
@@ -27,8 +31,6 @@ function SavedMoviesPage(props){
             data={props.data}
             addFilmsToPage={props.addFilms}
             saveMovie={(movie)=>{props.saveMovie(movie)}}
-            isOnSaveMoviesPage={true}
-            isSaved={props.isSaved}
         />
         <Footer />
     </>   
@@ -38,8 +40,16 @@ function SavedMoviesPage(props){
 export default SavedMoviesPage;
 
 /*
+<SearchForm 
+            onSubmitSearchForm={(input)=> {props.submitSearchForm(input)}}
+        />
+
+
 <MoviesCardList 
-            data={props.data}
+            
+
+
+data={props.data}
             addFilmsToPage={props.addFilms}
             saveMovie={(movie)=>{props.saveMovie(movie)}}
             isOnSaveMoviesPage={true}

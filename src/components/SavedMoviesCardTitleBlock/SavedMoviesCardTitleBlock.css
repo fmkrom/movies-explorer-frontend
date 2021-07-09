@@ -1,4 +1,4 @@
-.movies-card__title-block{
+.saved-movies-card__title-block{    
     width:100%;
     height: 64px;
     
@@ -8,7 +8,7 @@
     align-items: center;
 }
 
-.movies-card__name-block{
+.saved-movies-card__name-block{
     width:100%;
     height: 26px;
     padding: 0;
@@ -18,6 +18,7 @@
     align-items: center;
 }
 
+/*
 .movies-card__like-button{
     width:24px;
     height: 24px;
@@ -27,55 +28,52 @@
     border:0;
     background-color: #F5F5F5;
 }
-
-.movies-card__like-button_active{
-    background-image: url('../../images/like-button_active.png');
-    background-position: center;
-    background-size: 10px;
-    cursor: pointer;
-}
-
-.movies-card__like-button_inactive{
-    background-image: url('../../images/like-button_active.png');
-    background-position: center;
-    background-size: 10px;
-    cursor: pointer;
-}
-
-
-/*
-
-.movies-card__like-button_regular:hover{
-    background-image: url('../../images/like-button_active.png');
-}
-
-.movies-card__like-button_on-saved-movies-page{
-    background-image: url('../../images/like-button_inactive.png');
-}
-
-.movies-card__like-button_on-saved-movies-page:hover{
-    background-image: url('../../images/close-button.png');
-    background-position: center;
-    background-size: 2vh;
-}
-
-.movies-card__like-button_inactive{
-    background-image: url('../../images/like-button_inactive.png');
-}
-
-.movies-card__like-button_active{
-    background-image: url('../../images/like-button_active.png');
-}
-
-.movies-card__like-button_active:hover{
-    background-image: url('../../images/close-button.png');
-    background-position: center;
-    background-size: 2vh;
-}
-
 */
 
-.movies-card__title{
+.saved-movies-card__like-button{
+    width:30px;
+    height: 30px;
+
+    width:24px;
+    height: 24px;
+    border-radius: 36px;
+    background-repeat: no-repeat;
+    background-position: center;
+    border:0;
+  
+    background-image: url('../../images/like-button_inactive.png');
+    cursor: pointer;
+}
+
+.saved-movies-card__like-button:hover{
+    background-image: url('../../images/close-button.png');
+}
+
+
+
+
+/*.saved-movies-card_button{
+    width:24px;
+    height: 24px;
+    border-radius: 36px;
+    background-repeat: no-repeat;
+    background-position: center;
+    border:0;
+  
+    /*background-image: url('../../images/like-button_inactive.png');
+    border: 3px solid red;
+    cursor: pointer;
+    background-color: blue;
+}
+
+.saved-movies-card__like-button:hover{
+    background-image: url('../../images/close-button.png');
+    background-position: center;
+    background-size: 2vh;
+}
+*/
+
+.saved-movies-card__title{
     height: 16px;
     width: 226px;
 
@@ -90,7 +88,7 @@
     text-align: left;
 }
 
-.movies-card__duration{
+.saved-movies-card__duration{
     padding-top: 6px;
     border-top:1px solid #E8E8E8;
     display: inline-block;

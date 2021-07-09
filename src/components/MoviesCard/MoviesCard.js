@@ -15,7 +15,7 @@ return (
                         isOnSavedMoviesPage={props.isOnSavedMoviesPage}
                         name={props.movieName}
                         handleSaveMovie={()=>props.saveMovie()}
-                        isMovieSaved={!props.isMovieSaved}
+                        isMovieSaved={props.isMovieSaved}
                         duration={props.movieDuration}
                   />
             </div>
