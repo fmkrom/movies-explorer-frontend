@@ -34,7 +34,7 @@ function MoviesPage(props){
             savedMoviedata={props.data}
             isOnSaveMoviesPage={false}
             addFilms={()=> {props.addFilmsToPage()}}
-            isSaved={props.isSaved}
+            isSaved={(movie)=>props.isSaved(movie)}
         />
         <ButtonLong 
                 buttonText="Еще"

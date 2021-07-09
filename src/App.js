@@ -150,37 +150,17 @@ function logout(){
   return;
 }
 
-  /*
-  ВАЖНО!  Пока в этой функции баг:
-  Сохраненный фильм появляется на странице не сразу!
-  В перспективе - исправить это!
-  */
-
   function saveMovie(movie){
-    console.log(movie);
     const token = localStorage.getItem('jwt');
     mainApi.saveMovie(movie, token)
     .then((data)=>{
-      setMySavedMovies([data.savedMovie, ...mySavedMovies])
+      console.log(data);
+      setMySavedMovies([data.savedMovie, ...mySavedMovies]);
+      setMySavedMoviesIDs([data.savedMovie.movieId, ...mySavedMoviesIDs]);
       return data.savedMovie;
     }).catch((err)=>{
       console.log(err);
     })
-  }
-
-  async function getUsersSavedMovies(token, currentUser){
-    try{
-      const allSavedMovies = await mainApi.getAllSavedMovies(token);
-      const usersSavedMovies = functions.filterMoviesByOwner(currentUser, allSavedMovies);
-      
-      console.log(user)
-      console.log('ALL saved movies: ', allSavedMovies);
-      console.log('Users saved movies: ', usersSavedMovies);
-      
-      return usersSavedMovies;
-    } catch(err){
-      console.log(err);
-    }
   }
 
   function deleteSavedMovie(movieId){
@@ -194,33 +174,35 @@ function logout(){
     })
   };
 
-  function getSavedMoviesIDs(savedMovies){
-    const IdsArray = savedMovies.map((mySavedMovie)=>{return mySavedMovie.movieId})
-    setMySavedMoviesIDs(IdsArray);
-  };
+  console.log('IDs array: ', mySavedMoviesIDs);
 
   function toggleMoviesSavedStatus(movie){
     if (!mySavedMoviesIDs.includes(movie.id)){
       saveMovie(movie);
+      console.log(movie);
+      console.log('My saved movies: ', mySavedMovies);
     } else if (mySavedMoviesIDs.includes(movie.id)){
       const currentSavedMovie = mySavedMovies.find((currentMovie)=> currentMovie.movieId === movie.id);
+      console.log(currentSavedMovie);
+      console.log('Movie to delete: ', currentSavedMovie);
+      setMySavedMoviesIDs(mySavedMoviesIDs.filter((id)=> !(id === currentSavedMovie.movieId)));
       deleteSavedMovie(currentSavedMovie._id);
     }
   }
 
-  /*
-    ВАЖНО! Все работает, но пока только после перезагрузки страницы. 
-    Исправить этот баг!
-  */
-
   function setMoviesSavedStatus(movie){
-    if (!mySavedMoviesIDs.includes(movie.id)){
+    if (mySavedMoviesIDs.includes(movie.id)){
+      console.log(movie.nameRU, ' saved!');
       return true;
+    } else if (mySavedMoviesIDs === null || mySavedMoviesIDs === undefined) {
+      console.log('Not saved');
+      return false;
     } else {
       return false;
     }
   };
- 
+  
+
   function filterMoviesByDuration(moviesArrayForSearch){
     if (shortFilmsFiltered === false){   
         setShortFilmsFiltered(true);
@@ -307,19 +289,25 @@ function logout(){
     if(userLoggedIn) {
       Promise.all([
         MoviesApi.getMovies(),
-        getUsersSavedMovies(token, user)
-      ]).then(([moviesData, savedMoviesData])=>{
+        mainApi.getUsersSavedMovies(token, user)
+      ]).then(([moviesData, usersSavedMovies])=>{
         const slicedMoviesArray = moviesData.slice(0, moviesCountOnPage);
         setAllBeatFilmMovies(moviesData)
         setMovies(slicedMoviesArray);
-        getSavedMoviesIDs(savedMoviesData);
-        setMySavedMovies(savedMoviesData.reverse());
+        
+       const currentIdsArray = usersSavedMovies.map((mySavedMovie)=>{return mySavedMovie.movieId})
+       // console.log(currentIdsArray);
+       setMySavedMoviesIDs(currentIdsArray);
+       setMySavedMovies(usersSavedMovies.reverse());
+
       }).catch((err)=>{
         console.log(err);
       });
     }
     setPreloaderShown(false)
   }, [userLoggedIn, moviesCountOnPage, user]);
+
+  
 
   return (
     <CurrentUserContext.Provider value={user}>
@@ -351,8 +339,10 @@ function logout(){
             isOverlayMenuClosed={closeAllpopups}
             openOverlayMenu={handleOpenOverlayMenuClick}
             data={movies}
-            isSaved={setMoviesSavedStatus}
+            
+            isSaved={(movie)=> setMoviesSavedStatus(movie)}
             saveMovie={(movie)=>{toggleMoviesSavedStatus(movie)}}
+
             submitSearchForm={(input) => {filterAndSearchMovies(input, allBeatFilmMovies)}}
             filterShortFilms={()=>{filterMoviesByDuration(allBeatFilmMovies)}}
             filterShortFilmsOn={shortFilmsFiltered}
@@ -421,46 +411,49 @@ function logout(){
 
 export default App;
 
-
-
-  /*
-  function register(name, email, password){
-    auth.register(name, email, password)
-    .then((res) =>{
-        history.push('/login');
-        return res;
-    })
-    .catch((err)=> console.log(err));
+/*
+function toggleMoviesSavedStatus(movie){
+    //console.log('IDs array: ', mySavedMoviesIDs);
+    // console.log('This movie: ', movie.nameRU, 'ID: ', movie.id);
+    // const movieIsSaved = Boolean(mySavedMoviesIDs.includes(movie.id));
+    //console.log('This movie: ', movie.nameRU, 'IS SAVED: ', movieIsSaved);
+    if (!mySavedMoviesIDs.includes(movie.id)){
+      // console.log('This movie: ', movie.nameRU, 'IS SAVED! saved data: ', movie, 'IDs Array: ', mySavedMoviesIDs);
+      saveMovie(movie);
+      //setMySavedMoviesIDs(mySavedMoviesIDs.push(movie.id));
+      // console.log('Movies IDs afther SAVING: ', mySavedMoviesIDs);
+    } else if (mySavedMoviesIDs.includes(movie.id)){
+      const currentSavedMovie = mySavedMovies.find((currentMovie)=> currentMovie.movieId === movie.id);
+      console.log(currentSavedMovie);
+      //console.log('Movie to delete: ', currentSavedMovie._id);
+      // console.log('Movie to delete: ', currentSavedMovie.movieId);
+      setMySavedMoviesIDs(mySavedMoviesIDs.filter((id)=> !(id === currentSavedMovie.movieId)));
+      deleteSavedMovie(currentSavedMovie._id);
+      //setMySavedMovies(mySavedMovies.filter((movie) => !(movie._id === movieId)))
+    }
   }
 
-  /*
-function updateUser(name, email){
-    const token = localStorage.getItem('jwt');
-    mainApi.setUser(name, email, token)
-    .then((data)=>{
-      console.log(data)
-      setUser({
-        name: data.name,
-        email: data.email
-      })
-    }).catch((err) => {console.log(err)});
-  }
+  function setMoviesSavedStatus(movie){
+  /*  console.log('Movie ID type:', typeof(movie.id));
+    mySavedMoviesIDs.forEach(id =>{
+      console.log('Array ID type: ', typeof(id));
+    });  
 
-function login(email, password){
-    auth.login(email, password)
-      .then((res)=>{
-        if (localStorage.getItem('jwt') === res.toString()){
-          setUserLoggedIn(true);
-          history.push('/movies');
-          return;
-        }
-      }).catch((err)=>{
-        console.log(err);
-        if(err.status === 401){
-          setErrorMessageTextLogin('Ошибка авторизации: введите правильный логин и пароль');
-        } else {
-          console.log(`Ошибка входа: ${err}. Тип ошибки: ${err.name}`);
-        }
-      });
-  }
-  */
+    console.log(mySavedMoviesIDs);
+    console.log('Type of array: ', typeof(mySavedMoviesIDs));
+
+    const array = Array.from(mySavedMoviesIDs.toString());
+
+    console.log(array);
+  
+    if (mySavedMoviesIDs.includes(movie.id)){
+      console.log(movie.nameRU, ' saved!');
+      return true;
+    } else if (mySavedMoviesIDs === null || mySavedMoviesIDs === undefined) {
+      console.log('Not saved');
+      return false;
+    } else {
+      return false;
+    }
+  };
+*/

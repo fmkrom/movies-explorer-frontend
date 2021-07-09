@@ -2,6 +2,7 @@ import Header from "../Header/Header";
 import OverlayMenu from "../OverlayMenu/OverlayMenu";
 import SearchForm from "../SearchForm/SearchForm";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
+import SavedMoviesCardList from "../SavedMoviesCardList/SavedMoviesCardList";
 import Preloader from "../Preloader/Preloader";
 import Footer from "../Footer/Footer";
 
@@ -22,7 +23,7 @@ function SavedMoviesPage(props){
         <Preloader
             isShown={props.preloaderIsShown}
         />
-        <MoviesCardList 
+        <SavedMoviesCardList 
             data={props.data}
             addFilmsToPage={props.addFilms}
             saveMovie={(movie)=>{props.saveMovie(movie)}}
@@ -35,3 +36,13 @@ function SavedMoviesPage(props){
 }
 
 export default SavedMoviesPage;
+
+/*
+<MoviesCardList 
+            data={props.data}
+            addFilmsToPage={props.addFilms}
+            saveMovie={(movie)=>{props.saveMovie(movie)}}
+            isOnSaveMoviesPage={true}
+            isSaved={props.isSaved}
+        />
+*/

@@ -70,12 +70,37 @@ function deleteSavedMovie(movieId, token){
       }).then(checkRes); 
 }
 
+
+
 function toggleMoviesSavedStatus(status, movie, token){
     if (status === false){
       saveMovie(movie, token)
     } else if (status === true) {
       deleteSavedMovie(movie, token)
     }
+}
+
+async function getUsersSavedMovies(token, user){
+  try {
+    const result = await fetch(`${URL.MY_BASE}/movies`,
+    {
+     method: 'GET',
+     headers: {
+      authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+      },
+    })
+    if (result.ok){
+      const movies = await result.json();
+      const usersSavedMovies = movies.filter((movie)=> movie.owner === user.id);
+      // console.log(usersSavedMovies);
+      return usersSavedMovies;
+    } else if (!result.ok){
+      return result.status
+    }
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 function getAllSavedMovies(token){
@@ -94,7 +119,8 @@ const mainApi = {
     saveMovie,
     getAllSavedMovies,
     deleteSavedMovie,
-    toggleMoviesSavedStatus
+    toggleMoviesSavedStatus,
+    getUsersSavedMovies
 }
 
 export default mainApi;

@@ -1,10 +1,10 @@
 // import { useState } from 'react';
 
-import '../MoviesCardList/MoviesCardList.css';
+import '../SavedMoviesCardList/SavedMoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
 import ContentBlockMain from '../ContentBlockMain/ContentBlockMain';
 
-function MoviesCardList(props){
+function SavedMoviesCardList(props){
 
 // console.log(props.isMovieSaved);
 
@@ -13,18 +13,16 @@ return (
         <div className="movies-cards-list">
                 {
                         props.data.map((currentMovie) => {
-                        // console.log(currentMovie);
-                        // setMoviesSavedStatus(currentMovie);
                         return (
                             <MoviesCard
-                                isOnSavedMoviesPage={false}
-                                moviesCardImage={`https://api.nomoreparties.co${currentMovie.image.url}`}
+                                isOnSavedMoviesPage={true}
+                                moviesCardImage={currentMovie.image}
                                 trailer={currentMovie.trailerLink}
                                 movieName={currentMovie.nameRU}
                                 movieDuration={currentMovie.duration}
-                                key={props.isOnSaveMoviesPage? currentMovie._id : currentMovie.id }
+                                key={currentMovie._id}
                                 saveMovie={()=>{props.saveMovie(currentMovie)}}
-                                isMovieSaved={props.isSaved(currentMovie)}
+                                isMovieSaved={false}
                             />
                         )
                     })
@@ -34,4 +32,4 @@ return (
     )
 };
    
-export default MoviesCardList;
+export default SavedMoviesCardList;
