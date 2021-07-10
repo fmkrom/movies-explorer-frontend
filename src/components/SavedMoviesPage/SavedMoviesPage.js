@@ -1,16 +1,12 @@
 import Header from "../Header/Header";
 import OverlayMenu from "../OverlayMenu/OverlayMenu";
 import SearchForm from "../SearchForm/SearchForm";
-import MoviesCardList from "../MoviesCardList/MoviesCardList";
+// import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import SavedMoviesCardList from "../SavedMoviesCardList/SavedMoviesCardList";
 import Preloader from "../Preloader/Preloader";
 import Footer from "../Footer/Footer";
 
-import moviesArray from '../../utils/movies';
-
 function SavedMoviesPage(props){
-    console.log(props);
-    
     return(
     <>
         <OverlayMenu 

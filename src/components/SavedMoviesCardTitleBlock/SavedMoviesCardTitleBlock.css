@@ -18,18 +18,6 @@
     align-items: center;
 }
 
-/*
-.movies-card__like-button{
-    width:24px;
-    height: 24px;
-    border-radius: 36px;
-    background-repeat: no-repeat;
-    background-position: center;
-    border:0;
-    background-color: #F5F5F5;
-}
-*/
-
 .saved-movies-card__like-button{
     width:30px;
     height: 30px;
@@ -47,6 +35,7 @@
 
 .saved-movies-card__like-button:hover{
     background-image: url('../../images/close-button.png');
+    background-size: 2vh;
 }
 
 

@@ -8,8 +8,6 @@ import Preloader from "../Preloader/Preloader";
 
 function MoviesPage(props){
     
-    // console.log(props.isSaved);
-    
     return(
     <>
         <OverlayMenu 
@@ -29,16 +27,16 @@ function MoviesPage(props){
             isShown={props.preloaderIsShown}
         />
         <MoviesCardList 
+            savedMoviesIds={props.savedMoviesIds}
             data={props.data}
             saveMovie={(movie)=>{props.saveMovie(movie)}}
             savedMoviedata={props.data}
             isOnSaveMoviesPage={false}
             addFilms={()=> {props.addFilmsToPage()}}
-            isSaved={(movie)=>props.isSaved(movie)}
         />
         <ButtonLong 
-                buttonText="Еще"
-                onClick={()=> {props.addFilmsToPage()}}
+            buttonText="Еще"
+            onClick={()=> {props.addFilmsToPage()}}
         />
         <Footer />
     </>   

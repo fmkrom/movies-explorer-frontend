@@ -22,7 +22,7 @@ import PageNotFound from './components/PageNotFound/PageNotFound';
 import auth from './utils/Api/Auth';
 import mainApi from './utils/Api/MainApi';
 import MoviesApi from './utils/Api/MoviesApi';  
-import functions from './utils/utils';
+// import functions from './utils/utils';
 
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import CurrentUserContext from './contexts/CurrentUserContext';
@@ -108,9 +108,6 @@ function App() {
     }
   }
 
-/*важно! Я переписал бэк так чтобы он возвращал id пользователя
-  Надо фильтровать сохраненные фильмы по этому id!!
-*/
 
 function showSaveProfileButton(){
   setSaveProfileButtonShown(true);
@@ -174,34 +171,15 @@ function logout(){
     })
   };
 
-  //console.log('IDs array: ', mySavedMoviesIDs);
-
   function toggleMoviesSavedStatus(movie){
     if (!mySavedMoviesIDs.includes(movie.id)){
       saveMovie(movie);
-      // console.log(movie);
-      // console.log('My saved movies: ', mySavedMovies);
     } else if (mySavedMoviesIDs.includes(movie.id)){
       const currentSavedMovie = mySavedMovies.find((currentMovie)=> currentMovie.movieId === movie.id);
-      //console.log(currentSavedMovie);
-      //console.log('Movie to delete: ', currentSavedMovie);
       setMySavedMoviesIDs(mySavedMoviesIDs.filter((id)=> !(id === currentSavedMovie.movieId)));
       deleteSavedMovie(currentSavedMovie._id);
     }
   }
-
-  function setMoviesSavedStatus(movie){
-    if (mySavedMoviesIDs.includes(movie.id)){
-    //  console.log(movie.nameRU, ' saved!');
-      return true;
-    } else if (mySavedMoviesIDs === null || mySavedMoviesIDs === undefined) {
-      //console.log('Not saved');
-      return false;
-    } else {
-      return false;
-    }
-  };
-  
 
   function filterMoviesByDuration(moviesArrayForSearch){
     if (shortFilmsFiltered === false){   
@@ -331,6 +309,7 @@ function logout(){
           </Route>
 
           <ProtectedRoute
+            savedMoviesIds={mySavedMoviesIDs}
             exact path='/movies'
             component={MoviesPage}
             loggedIn={userLoggedIn}
@@ -339,7 +318,6 @@ function logout(){
             isOverlayMenuClosed={closeAllpopups}
             openOverlayMenu={handleOpenOverlayMenuClick}
             data={movies}
-            isSaved={movie=> Boolean(mySavedMoviesIDs.includes(movie.id))}
             saveMovie={(movie)=>{toggleMoviesSavedStatus(movie)}}
             submitSearchForm={(input) => {filterAndSearchMovies(input, allBeatFilmMovies)}}
             filterShortFilms={()=>{filterMoviesByDuration(allBeatFilmMovies)}}

@@ -6,17 +6,14 @@ import ContentBlockMain from '../ContentBlockMain/ContentBlockMain';
 
 function MoviesCardList(props){
 
-// console.log(props.isMovieSaved);
-
 return (
     <ContentBlockMain>
         <div className="movies-cards-list">
                 {
-                        props.data.map((currentMovie) => {
-                        // console.log(currentMovie);
-                        // setMoviesSavedStatus(currentMovie);
+                    props.data.map((currentMovie) => {
                         return (
                             <MoviesCard
+                                savedMoviesIds={props.savedMoviesIds}
                                 isOnSavedMoviesPage={false}
                                 moviesCardImage={`https://api.nomoreparties.co${currentMovie.image.url}`}
                                 trailer={currentMovie.trailerLink}
@@ -24,7 +21,7 @@ return (
                                 movieDuration={currentMovie.duration}
                                 key={props.isOnSaveMoviesPage? currentMovie._id : currentMovie.id }
                                 saveMovie={()=>{props.saveMovie(currentMovie)}}
-                                isMovieSaved={props.isSaved(currentMovie)}
+                                isMovieSaved={Boolean(props.savedMoviesIds.includes(currentMovie.id))}
                             />
                         )
                     })

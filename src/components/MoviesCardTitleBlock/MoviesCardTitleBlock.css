@@ -36,7 +36,7 @@
 }
 
 .movies-card__like-button_inactive{
-    background-image: url('../../images/like-button_active.png');
+    background-image: url('../../images/like-button_inactive.png');
     background-position: center;
     background-size: 10px;
     cursor: pointer;
