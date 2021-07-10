@@ -170,7 +170,6 @@ function logout(){
     mainApi.deleteSavedMovie(movieId, token)
     .then((res)=>{
       setMySavedMovies(mySavedMovies.filter((movie) => !(movie._id === movieId)))
-      // setMySavedMoviesFilteredByDuration(mySavedMoviesFilteredByDuration.filter((movie) => !(movie._id === movieId)))
       return res.deletedMovie;
     }).catch((err)=>{
       console.log(err);
@@ -190,52 +189,36 @@ function logout(){
   function filterMoviesByDuration(){
     if (shortFilmsFilterOn === false) {
       switchshortFilmsFilterOn(true)
-      // console.log('Filter: ', shortFilmsFilterOn)
     } else if (shortFilmsFilterOn === true) {
       switchshortFilmsFilterOn(false)
-      // console.log('Filter: ', shortFilmsFilterOn)
     }
   }
 
   function filterAndSearchMovies(input, status, moviesArray){
-   // console.log('Filtered status ORIGNAL: ', shortFilmsFilterOn);
     if (status === false){
-     // console.log('Filtered status: ', shortFilmsFilterOn);
-      // console.log('Filtered search input: ', input);
       const foundMovies = moviesArray.filter((movie)=> movie.nameRU.toLowerCase().includes(input.toLowerCase()));
-     // console.log('Movies found: ', foundMovies);
       setAllBeatFilmMovies(foundMovies);
     } else if (status === true){
-     // console.log('Filtered status: ', shortFilmsFilterOn);
-     // console.log('Unfiltered search input: ', input);
       const moviesFilteredByDuration = moviesArray.filter((movie)=> movie.duration < 40)
-     // console.log('Movies filtered by duration: ', moviesFilteredByDuration);
       const foundMovies = moviesFilteredByDuration.filter((movie)=> movie.nameRU.toLowerCase().includes(input.toLowerCase()));
-     // console.log('Filtered movies found: ', foundMovies);
       setAllBeatFilmMovies(foundMovies);
     }
   };
+  
   function filterAndSearchMySavedMovies(input, status, moviesArray){
-    // console.log('Filtered status ORIGNAL: ', shortFilmsFilterOn);
      if (status === false){
-      // console.log('Filtered status: ', shortFilmsFilterOn);
-       // console.log('Filtered search input: ', input);
        const foundMovies = moviesArray.filter((movie)=> movie.nameRU.toLowerCase().includes(input.toLowerCase()));
-      // console.log('Movies found: ', foundMovies);
        setMySavedMovies(foundMovies);
      } else if (status === true){
-      // console.log('Filtered status: ', shortFilmsFilterOn);
-      // console.log('Unfiltered search input: ', input);
        const moviesFilteredByDuration = moviesArray.filter((movie)=> movie.duration < 40)
-      // console.log('Movies filtered by duration: ', moviesFilteredByDuration);
        const foundMovies = moviesFilteredByDuration.filter((movie)=> movie.nameRU.toLowerCase().includes(input.toLowerCase()));
-      // console.log('Filtered movies found: ', foundMovies);
       setMySavedMovies(foundMovies);
      }
    };
 
   function regulateMoviesCountOnPage(i){
     setMoviesCountOnPage(moviesCountOnPage + i);
+    console.log(moviesCountOnPage);
   };
 
   function addMoviesToPage(){
@@ -247,7 +230,7 @@ function logout(){
       regulateMoviesCountOnPage(2);
     }
   }
-
+  
   useEffect(() => {
     function checkToken(){
       if (isTokenPresent){
@@ -278,30 +261,18 @@ function logout(){
         mainApi.getUsersSavedMovies(token, user)
       ]).then(([moviesData, usersSavedMovies])=>{
        setAllBeatFilmMovies(moviesData)
-       setMovies(moviesData);
-       
-      const currentIdsArray = usersSavedMovies.map((mySavedMovie)=>{return mySavedMovie.movieId})
+      console.log(moviesData.slice(0, 6));
+      setAllBeatFilmMovies(moviesData.slice(0, moviesCountOnPage));
 
+      const currentIdsArray = usersSavedMovies.map((mySavedMovie)=>{return mySavedMovie.movieId})
       setMySavedMoviesIDs(currentIdsArray);
       setMySavedMovies(usersSavedMovies.reverse());
-
       }).catch((err)=>{
         console.log(err);
       });
     }
     setPreloaderShown(false)
   }, [userLoggedIn, moviesCountOnPage, user]);
-
-  /*useEffect(()=>{
-    if (shortFilmsFilterOn === true){
-      const moviesFilteredByDuration = mySavedMovies.filter((movie)=> movie.duration < 40);
-      setMySavedMovies(moviesFilteredByDuration) 
-    } else if (shortFilmsFilterOn === false) {
-      setMySavedMovies(mySavedMovies)
-    }
-  },[mySavedMovies, shortFilmsFilterOn]);*/
-
-
 
 
   return (
