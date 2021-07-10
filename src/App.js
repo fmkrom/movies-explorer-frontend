@@ -186,55 +186,58 @@ function logout(){
       deleteSavedMovie(currentSavedMovie._id);
     }
   }
-/*
-  function filterMoviesByDuration(moviesArray){
-    if (shortFilmsFiltered === false){   
-        setShortFilmsFiltered(true);
-        const moviesFilteredByDuration = moviesArray.filter((movie)=> movie.duration < 40);
-        return setMovies(moviesFilteredByDuration);
-        //return moviesFilteredByDuration;
-    } else if (shortFilmsFiltered === true){
-        setShortFilmsFiltered(false);
-        console.log(moviesArray)
-        return setMovies(moviesArray);
-        //return;
-    }
-  }
-  */
 
   function filterMoviesByDuration(){
     if (shortFilmsFilterOn === false) {
       switchshortFilmsFilterOn(true)
-      console.log('Filter: ', shortFilmsFilterOn)
+      // console.log('Filter: ', shortFilmsFilterOn)
     } else if (shortFilmsFilterOn === true) {
       switchshortFilmsFilterOn(false)
-      console.log('Filter: ', shortFilmsFilterOn)
+      // console.log('Filter: ', shortFilmsFilterOn)
     }
   }
 
-  function filterAndSearchMovies(input, moviesArray){
-       
-    if (shortFilmsFiltered === false){
+  function filterAndSearchMovies(input, status, moviesArray){
+   // console.log('Filtered status ORIGNAL: ', shortFilmsFilterOn);
+    if (status === false){
+     // console.log('Filtered status: ', shortFilmsFilterOn);
+      // console.log('Filtered search input: ', input);
       const foundMovies = moviesArray.filter((movie)=> movie.nameRU.toLowerCase().includes(input.toLowerCase()));
-      setMovies(foundMovies);
-      setShortFilmsFiltered(true)   
-    } else if (shortFilmsFiltered === true){
-      const moviesArrayForSearch = filterMoviesByDuration(moviesArray);
-      const foundShortMovies = moviesArrayForSearch.filter((movie)=> movie.nameRU.toLowerCase().includes(input.toLowerCase()));
-      setMovies(foundShortMovies);
-      setShortFilmsFiltered(false);
+     // console.log('Movies found: ', foundMovies);
+      setAllBeatFilmMovies(foundMovies);
+    } else if (status === true){
+     // console.log('Filtered status: ', shortFilmsFilterOn);
+     // console.log('Unfiltered search input: ', input);
+      const moviesFilteredByDuration = moviesArray.filter((movie)=> movie.duration < 40)
+     // console.log('Movies filtered by duration: ', moviesFilteredByDuration);
+      const foundMovies = moviesFilteredByDuration.filter((movie)=> movie.nameRU.toLowerCase().includes(input.toLowerCase()));
+     // console.log('Filtered movies found: ', foundMovies);
+      setAllBeatFilmMovies(foundMovies);
     }
   };
+  function filterAndSearchMySavedMovies(input, status, moviesArray){
+    // console.log('Filtered status ORIGNAL: ', shortFilmsFilterOn);
+     if (status === false){
+      // console.log('Filtered status: ', shortFilmsFilterOn);
+       // console.log('Filtered search input: ', input);
+       const foundMovies = moviesArray.filter((movie)=> movie.nameRU.toLowerCase().includes(input.toLowerCase()));
+      // console.log('Movies found: ', foundMovies);
+       setMySavedMovies(foundMovies);
+     } else if (status === true){
+      // console.log('Filtered status: ', shortFilmsFilterOn);
+      // console.log('Unfiltered search input: ', input);
+       const moviesFilteredByDuration = moviesArray.filter((movie)=> movie.duration < 40)
+      // console.log('Movies filtered by duration: ', moviesFilteredByDuration);
+       const foundMovies = moviesFilteredByDuration.filter((movie)=> movie.nameRU.toLowerCase().includes(input.toLowerCase()));
+      // console.log('Filtered movies found: ', foundMovies);
+      setMySavedMovies(foundMovies);
+     }
+   };
 
   function regulateMoviesCountOnPage(i){
     setMoviesCountOnPage(moviesCountOnPage + i);
   };
 
-  /*Функция добавления фильмов на страницу в зависимости от ширины экрана
-    Она в зачаточном состоянии, позже переписать ее по-нормальному!
-    Хук зависимости - выше!
-  */
-  
   function addMoviesToPage(){
     if (window.innerWidth > 1300 && window.innerWidth < 768){
       regulateMoviesCountOnPage(12);
@@ -244,8 +247,6 @@ function logout(){
       regulateMoviesCountOnPage(2);
     }
   }
-
-
 
   useEffect(() => {
     function checkToken(){
@@ -333,9 +334,9 @@ function logout(){
             isOverlayMenuOpen={isOverlayMenuOpen}
             isOverlayMenuClosed={closeAllpopups}
             openOverlayMenu={handleOpenOverlayMenuClick}
-            data={!shortFilmsFilterOn ? movies : movies.filter((movie)=> movie.duration < 40)}
+            data={!shortFilmsFilterOn ? allBeatFilmMovies : allBeatFilmMovies.filter((movie)=> movie.duration < 40)}
             saveMovie={(movie)=>{toggleMoviesSavedStatus(movie)}}
-            submitSearchForm={(input) => {filterAndSearchMovies(input, allBeatFilmMovies)}}
+            submitSearchForm={(input) => {filterAndSearchMovies(input, shortFilmsFilterOn, allBeatFilmMovies)}}
             filterShortFilms={()=>{filterMoviesByDuration()}}
             filterShortFilmsOn={shortFilmsFilterOn}
             addFilmsToPage={()=> addMoviesToPage()}
@@ -353,7 +354,7 @@ function logout(){
             saveMovie={(movie)=> {deleteSavedMovie(movie._id)}}
             filterShortFilms={()=>{filterMoviesByDuration()}}
             filterShortFilmsOn={shortFilmsFilterOn}
-            //submitSearchForm={(input) => filterAndSearchMySavedMovies(input, mySavedMovies)}
+            submitSearchForm={(input) => filterAndSearchMySavedMovies(input, shortFilmsFilterOn, mySavedMovies)}
           />
 
           <ProtectedRoute
@@ -371,8 +372,6 @@ function logout(){
             showSaveProfileButton={()=> {showSaveProfileButton()}}
             editProfileButtonDisplayed={editProfileButtonShown}
             saveProfileButtonDisplayed={saveProfileButtonShown}
-
-            // errorMessageText={errorMessageUpdateUser}
           />
           
           <Route exact path="/login">
@@ -402,50 +401,3 @@ function logout(){
 }
 
 export default App;
-
-/*
-function toggleMoviesSavedStatus(movie){
-    //console.log('IDs array: ', mySavedMoviesIDs);
-    // console.log('This movie: ', movie.nameRU, 'ID: ', movie.id);
-    // const movieIsSaved = Boolean(mySavedMoviesIDs.includes(movie.id));
-    //console.log('This movie: ', movie.nameRU, 'IS SAVED: ', movieIsSaved);
-    if (!mySavedMoviesIDs.includes(movie.id)){
-      // console.log('This movie: ', movie.nameRU, 'IS SAVED! saved data: ', movie, 'IDs Array: ', mySavedMoviesIDs);
-      saveMovie(movie);
-      //setMySavedMoviesIDs(mySavedMoviesIDs.push(movie.id));
-      // console.log('Movies IDs afther SAVING: ', mySavedMoviesIDs);
-    } else if (mySavedMoviesIDs.includes(movie.id)){
-      const currentSavedMovie = mySavedMovies.find((currentMovie)=> currentMovie.movieId === movie.id);
-      console.log(currentSavedMovie);
-      //console.log('Movie to delete: ', currentSavedMovie._id);
-      // console.log('Movie to delete: ', currentSavedMovie.movieId);
-      setMySavedMoviesIDs(mySavedMoviesIDs.filter((id)=> !(id === currentSavedMovie.movieId)));
-      deleteSavedMovie(currentSavedMovie._id);
-      //setMySavedMovies(mySavedMovies.filter((movie) => !(movie._id === movieId)))
-    }
-  }
-
-  function setMoviesSavedStatus(movie){
-  /*  console.log('Movie ID type:', typeof(movie.id));
-    mySavedMoviesIDs.forEach(id =>{
-      console.log('Array ID type: ', typeof(id));
-    });  
-
-    console.log(mySavedMoviesIDs);
-    console.log('Type of array: ', typeof(mySavedMoviesIDs));
-
-    const array = Array.from(mySavedMoviesIDs.toString());
-
-    console.log(array);
-  
-    if (mySavedMoviesIDs.includes(movie.id)){
-      console.log(movie.nameRU, ' saved!');
-      return true;
-    } else if (mySavedMoviesIDs === null || mySavedMoviesIDs === undefined) {
-      console.log('Not saved');
-      return false;
-    } else {
-      return false;
-    }
-  };
-*/
