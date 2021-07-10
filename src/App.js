@@ -33,9 +33,9 @@ function App() {
   
   const [ user, setUser ] = useState({});
   
-  const [ movies, setMovies ] = useState([]);
-  
   const [ allBeatFilmMovies, setAllBeatFilmMovies ] = useState([]);
+  const [ shortBeatFilmMovies, setShortBeatfilmMovies ] = useState([]);
+  const [ moviesOnPage, setMoviesOnPage ] = useState([]);
 
   const [ mySavedMovies, setMySavedMovies ] = useState([]);
   // const [ mySavedMoviesFilteredByDuration, setMySavedMoviesFilteredByDuration ] = useState([]);
@@ -54,7 +54,7 @@ function App() {
   const [ editProfileButtonShown, setEditProfileButtonShown ] = useState(true);
   const [ saveProfileButtonShown, setSaveProfileButtonShown ] = useState(false); 
 
-  const [ shortFilmsFiltered, setShortFilmsFiltered] = useState(false);
+  // const [ shortFilmsFiltered, setShortFilmsFiltered] = useState(false);
   // const [ mySavedMoviesShortFiltered, setMySavedMoviesShortFiltered] = useState(false);
 
   const [ shortFilmsFilterOn, switchshortFilmsFilterOn ] = useState(false);
@@ -194,14 +194,14 @@ function logout(){
     }
   }
 
-  function filterAndSearchMovies(input, status, moviesArray){
+  function filterAndSearchMovies(input, status, moviesArray, shortMoviesArray){
     if (status === false){
       const foundMovies = moviesArray.filter((movie)=> movie.nameRU.toLowerCase().includes(input.toLowerCase()));
-      setAllBeatFilmMovies(foundMovies);
+      setMoviesOnPage(foundMovies);
     } else if (status === true){
-      const moviesFilteredByDuration = moviesArray.filter((movie)=> movie.duration < 40)
-      const foundMovies = moviesFilteredByDuration.filter((movie)=> movie.nameRU.toLowerCase().includes(input.toLowerCase()));
-      setAllBeatFilmMovies(foundMovies);
+      // const moviesFilteredByDuration = moviesArray.filter((movie)=> movie.duration < 40)
+      const foundMovies = shortMoviesArray.filter((movie)=> movie.nameRU.toLowerCase().includes(input.toLowerCase()));
+      setMoviesOnPage(foundMovies);
     }
   };
   
@@ -257,14 +257,13 @@ function logout(){
     setPreloaderShown(true)
     if(userLoggedIn) {
       Promise.all([
-        MoviesApi.getMovies(),
+        MoviesApi.getAllBeatFilmMovies(),
         mainApi.getUsersSavedMovies(token, user)
       ]).then(([moviesData, usersSavedMovies])=>{
-       setAllBeatFilmMovies(moviesData)
-      console.log(moviesData.slice(0, 6));
-      setAllBeatFilmMovies(moviesData.slice(0, moviesCountOnPage));
-
-      const currentIdsArray = usersSavedMovies.map((mySavedMovie)=>{return mySavedMovie.movieId})
+      setAllBeatFilmMovies(moviesData.beatFilmMovies);
+      setShortBeatfilmMovies(moviesData.beatFilmShortMovies);
+      setMoviesOnPage(!shortFilmsFilterOn ? moviesData.beatFilmMovies.slice(0, 4) : moviesData.beatFilmShortMovies.slice(0, 4));
+      const currentIdsArray = usersSavedMovies.map((mySavedMovie)=>{return mySavedMovie.movieId});
       setMySavedMoviesIDs(currentIdsArray);
       setMySavedMovies(usersSavedMovies.reverse());
       }).catch((err)=>{
@@ -272,7 +271,7 @@ function logout(){
       });
     }
     setPreloaderShown(false)
-  }, [userLoggedIn, moviesCountOnPage, user]);
+  }, [userLoggedIn, moviesCountOnPage, shortFilmsFilterOn, user]);
 
 
   return (
@@ -305,9 +304,9 @@ function logout(){
             isOverlayMenuOpen={isOverlayMenuOpen}
             isOverlayMenuClosed={closeAllpopups}
             openOverlayMenu={handleOpenOverlayMenuClick}
-            data={!shortFilmsFilterOn ? allBeatFilmMovies : allBeatFilmMovies.filter((movie)=> movie.duration < 40)}
+            data={moviesOnPage}
             saveMovie={(movie)=>{toggleMoviesSavedStatus(movie)}}
-            submitSearchForm={(input) => {filterAndSearchMovies(input, shortFilmsFilterOn, allBeatFilmMovies)}}
+            submitSearchForm={(input) => {filterAndSearchMovies(input, shortFilmsFilterOn, allBeatFilmMovies, shortBeatFilmMovies)}}
             filterShortFilms={()=>{filterMoviesByDuration()}}
             filterShortFilmsOn={shortFilmsFilterOn}
             addFilmsToPage={()=> addMoviesToPage()}

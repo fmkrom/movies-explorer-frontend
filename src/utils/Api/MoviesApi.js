@@ -6,16 +6,35 @@ class Api {
       this._token = settings.token;
   }
 
-  getRes(res){
-      if (res.ok) {
-        // console.log(res);
-        return res.json();
-      } else {
-        return Promise.reject(`Ошибка получения данных с сервера: ${res.status}`);
+ async getAllBeatFilmMovies(){
+   try {
+     const result = await fetch(`${this._url}`,
+     {
+      method: 'GET',
+      headers: {
+       'Content-Type': 'application/json',
+       },
+     })
+
+     if (result.ok) {
+        const beatFilmMovies = await result.json();
+        const beatFilmShortMovies = beatFilmMovies.filter((movie)=> movie.duration < 40);
+
+        return {
+          beatFilmMovies,
+          beatFilmShortMovies
+        }
+
+      } else if (!result.ok){
+        return result.status
       }
-  };
-  
-  getMovies(){
+   } catch (err) {
+     console.log (err);
+   }
+ }
+
+ /*
+ getMovies(){
     return fetch(`${this._url}`,
     {
      method: 'GET',
@@ -143,6 +162,7 @@ class Api {
     }
     ).then(this.getRes)
   };
+  */
 }
 
 const apiSettings = {
