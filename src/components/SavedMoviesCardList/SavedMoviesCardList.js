@@ -6,8 +6,6 @@ import ContentBlockMain from '../ContentBlockMain/ContentBlockMain';
 
 function SavedMoviesCardList(props){
 
-// console.log(props);
-
 return (
     <ContentBlockMain>
         <div className="movies-cards-list">
@@ -16,7 +14,7 @@ return (
                         return (
                             <SavedMoviesCard
                                 moviesCardImage={currentMovie.image}
-                                trailer={currentMovie.trailerLink}
+                                trailer={currentMovie.trailer}
                                 movieName={currentMovie.nameRU}
                                 movieDuration={currentMovie.duration}
                                 key={currentMovie._id}

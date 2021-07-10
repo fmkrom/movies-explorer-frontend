@@ -38,7 +38,7 @@ function App() {
   const [ allBeatFilmMovies, setAllBeatFilmMovies ] = useState([]);
 
   const [ mySavedMovies, setMySavedMovies ] = useState([]);
-  const [ mySavedMoviesFilteredByDuration, setMySavedMoviesFilteredByDuration ] = useState([]);
+  // const [ mySavedMoviesFilteredByDuration, setMySavedMoviesFilteredByDuration ] = useState([]);
   
   const [ mySavedMoviesIDs, setMySavedMoviesIDs ] = useState([]);
   const [ isPreloaderShown, setPreloaderShown ] = useState(false);
@@ -55,7 +55,7 @@ function App() {
   const [ saveProfileButtonShown, setSaveProfileButtonShown ] = useState(false); 
 
   const [ shortFilmsFiltered, setShortFilmsFiltered] = useState(false);
-  const [ mySavedMoviesShortFiltered, setMySavedMoviesShortFiltered] = useState(false);
+  // const [ mySavedMoviesShortFiltered, setMySavedMoviesShortFiltered] = useState(false);
 
   const [ shortFilmsFilterOn, switchshortFilmsFilterOn ] = useState(false);
 
