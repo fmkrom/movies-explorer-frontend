@@ -5,7 +5,7 @@ import SavedMoviesCardTitleBlock from '../SavedMoviesCardTitleBlock/SavedMoviesC
 
 function SavedMoviesCard(props){
 
-console.log(props);
+//console.log(props);
 
 return (
             <div className="movies-card">

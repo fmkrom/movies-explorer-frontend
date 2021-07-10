@@ -6,7 +6,7 @@ import ContentBlockMain from '../ContentBlockMain/ContentBlockMain';
 
 function SavedMoviesCardList(props){
 
-console.log(props);
+// console.log(props);
 
 return (
     <ContentBlockMain>

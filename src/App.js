@@ -38,6 +38,8 @@ function App() {
   const [ allBeatFilmMovies, setAllBeatFilmMovies ] = useState([]);
 
   const [ mySavedMovies, setMySavedMovies ] = useState([]);
+  const [ mySavedMoviesFilteredByDuration, setMySavedMoviesFilteredByDuration ] = useState([]);
+  
   const [ mySavedMoviesIDs, setMySavedMoviesIDs ] = useState([]);
   const [ isPreloaderShown, setPreloaderShown ] = useState(false);
 
@@ -53,6 +55,9 @@ function App() {
   const [ saveProfileButtonShown, setSaveProfileButtonShown ] = useState(false); 
 
   const [ shortFilmsFiltered, setShortFilmsFiltered] = useState(false);
+  const [ mySavedMoviesShortFiltered, setMySavedMoviesShortFiltered] = useState(false);
+
+  const [ shortFilmsFilterOn, switchshortFilmsFilterOn ] = useState(false);
 
   const history = useHistory();
   
@@ -165,6 +170,7 @@ function logout(){
     mainApi.deleteSavedMovie(movieId, token)
     .then((res)=>{
       setMySavedMovies(mySavedMovies.filter((movie) => !(movie._id === movieId)))
+      // setMySavedMoviesFilteredByDuration(mySavedMoviesFilteredByDuration.filter((movie) => !(movie._id === movieId)))
       return res.deletedMovie;
     }).catch((err)=>{
       console.log(err);
@@ -180,34 +186,34 @@ function logout(){
       deleteSavedMovie(currentSavedMovie._id);
     }
   }
-
-  function filterMoviesByDuration(moviesArrayForSearch){
+/*
+  function filterMoviesByDuration(moviesArray){
     if (shortFilmsFiltered === false){   
         setShortFilmsFiltered(true);
-        const moviesFilteredByDuration = moviesArrayForSearch.filter((movie)=> movie.duration < 40);
-        setMovies(moviesFilteredByDuration);
-        return moviesFilteredByDuration;
+        const moviesFilteredByDuration = moviesArray.filter((movie)=> movie.duration < 40);
+        return setMovies(moviesFilteredByDuration);
+        //return moviesFilteredByDuration;
     } else if (shortFilmsFiltered === true){
         setShortFilmsFiltered(false);
-        setMovies(moviesArrayForSearch);
-        return moviesArrayForSearch;
+        console.log(moviesArray)
+        return setMovies(moviesArray);
+        //return;
     }
   }
+  */
 
-  function filterMySavedMoviesByDuration(moviesArrayForSearch){
-    if (shortFilmsFiltered === false){   
-        setShortFilmsFiltered(true);
-        const moviesFilteredByDuration = moviesArrayForSearch.filter((movie)=> movie.duration < 40);
-        setMySavedMovies(moviesFilteredByDuration);
-        return moviesFilteredByDuration;
-    } else if (shortFilmsFiltered === true){
-        setShortFilmsFiltered(false);
-        setMySavedMovies(moviesArrayForSearch);
-        return moviesArrayForSearch;
+  function filterMoviesByDuration(){
+    if (shortFilmsFilterOn === false) {
+      switchshortFilmsFilterOn(true)
+      console.log('Filter: ', shortFilmsFilterOn)
+    } else if (shortFilmsFilterOn === true) {
+      switchshortFilmsFilterOn(false)
+      console.log('Filter: ', shortFilmsFilterOn)
     }
   }
 
   function filterAndSearchMovies(input, moviesArray){
+       
     if (shortFilmsFiltered === false){
       const foundMovies = moviesArray.filter((movie)=> movie.nameRU.toLowerCase().includes(input.toLowerCase()));
       setMovies(foundMovies);
@@ -239,6 +245,8 @@ function logout(){
     }
   }
 
+
+
   useEffect(() => {
     function checkToken(){
       if (isTokenPresent){
@@ -262,21 +270,19 @@ function logout(){
 
   useEffect(()=>{
     const token = localStorage.getItem('jwt');
-
     setPreloaderShown(true)
     if(userLoggedIn) {
       Promise.all([
         MoviesApi.getMovies(),
         mainApi.getUsersSavedMovies(token, user)
       ]).then(([moviesData, usersSavedMovies])=>{
-        const slicedMoviesArray = moviesData.slice(0, moviesCountOnPage);
-        setAllBeatFilmMovies(moviesData)
-        setMovies(slicedMoviesArray);
-        
-       const currentIdsArray = usersSavedMovies.map((mySavedMovie)=>{return mySavedMovie.movieId})
-       // console.log(currentIdsArray);
-       setMySavedMoviesIDs(currentIdsArray);
-       setMySavedMovies(usersSavedMovies.reverse());
+       setAllBeatFilmMovies(moviesData)
+       setMovies(moviesData);
+       
+      const currentIdsArray = usersSavedMovies.map((mySavedMovie)=>{return mySavedMovie.movieId})
+
+      setMySavedMoviesIDs(currentIdsArray);
+      setMySavedMovies(usersSavedMovies.reverse());
 
       }).catch((err)=>{
         console.log(err);
@@ -285,7 +291,17 @@ function logout(){
     setPreloaderShown(false)
   }, [userLoggedIn, moviesCountOnPage, user]);
 
-  
+  /*useEffect(()=>{
+    if (shortFilmsFilterOn === true){
+      const moviesFilteredByDuration = mySavedMovies.filter((movie)=> movie.duration < 40);
+      setMySavedMovies(moviesFilteredByDuration) 
+    } else if (shortFilmsFilterOn === false) {
+      setMySavedMovies(mySavedMovies)
+    }
+  },[mySavedMovies, shortFilmsFilterOn]);*/
+
+
+
 
   return (
     <CurrentUserContext.Provider value={user}>
@@ -317,11 +333,11 @@ function logout(){
             isOverlayMenuOpen={isOverlayMenuOpen}
             isOverlayMenuClosed={closeAllpopups}
             openOverlayMenu={handleOpenOverlayMenuClick}
-            data={movies}
+            data={!shortFilmsFilterOn ? movies : movies.filter((movie)=> movie.duration < 40)}
             saveMovie={(movie)=>{toggleMoviesSavedStatus(movie)}}
             submitSearchForm={(input) => {filterAndSearchMovies(input, allBeatFilmMovies)}}
-            filterShortFilms={()=>{filterMoviesByDuration(allBeatFilmMovies)}}
-            filterShortFilmsOn={shortFilmsFiltered}
+            filterShortFilms={()=>{filterMoviesByDuration()}}
+            filterShortFilmsOn={shortFilmsFilterOn}
             addFilmsToPage={()=> addMoviesToPage()}
           />
 
@@ -333,11 +349,10 @@ function logout(){
             isOverlayMenuOpen={isOverlayMenuOpen}
             isOverlayMenuClosed={closeAllpopups}
             openOverlayMenu={handleOpenOverlayMenuClick}
-            data={mySavedMovies}
-            // isSaved={setMoviesSavedStatus}
+            data={!shortFilmsFilterOn ? mySavedMovies: mySavedMovies.filter((movie)=> movie.duration < 40)}
             saveMovie={(movie)=> {deleteSavedMovie(movie._id)}}
-            filterShortFilms={()=>{filterMySavedMoviesByDuration(mySavedMovies)}}
-            filterShortFilmsOn={shortFilmsFiltered}
+            filterShortFilms={()=>{filterMoviesByDuration()}}
+            filterShortFilmsOn={shortFilmsFilterOn}
             //submitSearchForm={(input) => filterAndSearchMySavedMovies(input, mySavedMovies)}
           />
 
