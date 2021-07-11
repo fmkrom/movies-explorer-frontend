@@ -38,14 +38,11 @@ function App() {
   const [ moviesOnPage, setMoviesOnPage ] = useState([]);
 
   const [ mySavedMovies, setMySavedMovies ] = useState([]);
-  // const [ mySavedMoviesFilteredByDuration, setMySavedMoviesFilteredByDuration ] = useState([]);
-  
   const [ mySavedMoviesIDs, setMySavedMoviesIDs ] = useState([]);
   const [ isPreloaderShown, setPreloaderShown ] = useState(false);
 
   const [ isOverlayMenuOpen, handleOpenOverlayMenuClick ] = useState(false);
   const [ userLoggedIn, setUserLoggedIn] = useState(isTokenPresent);
-  const [ moviesCountOnPage, setMoviesCountOnPage ] = useState(4);
 
   const [errorMessageTextLogin, setErrorMessageTextLogin] = useState('');
   const [errorMessageTextRegister, setErrorMessageTextRegister] = useState('');
@@ -54,13 +51,24 @@ function App() {
   const [ editProfileButtonShown, setEditProfileButtonShown ] = useState(true);
   const [ saveProfileButtonShown, setSaveProfileButtonShown ] = useState(false); 
 
-  // const [ shortFilmsFiltered, setShortFilmsFiltered] = useState(false);
-  // const [ mySavedMoviesShortFiltered, setMySavedMoviesShortFiltered] = useState(false);
-
   const [ shortFilmsFilterOn, switchshortFilmsFilterOn ] = useState(false);
+  
+  function returnAmountOfCards(){
+    if (window.innerWidth < 2560 && window.innerWidth > 1276){
+      return 12
+    } else if (window.innerWidth < 1276 && window.innerWidth > 999){
+      return 9
+    } else if (window.innerWidth < 998 && window.innerWidth > 669){
+      return 8
+    } else if (window.innerWidth < 669){
+      return 5
+    }  
+  }
+
+  const [ amountOfCardsOnPage, setAmountOfCardsOnPage ] = useState(returnAmountOfCards());
 
   const history = useHistory();
-  
+
   function closeAllpopups(){
     handleOpenOverlayMenuClick(false)
   }
@@ -199,7 +207,6 @@ function logout(){
       const foundMovies = moviesArray.filter((movie)=> movie.nameRU.toLowerCase().includes(input.toLowerCase()));
       setMoviesOnPage(foundMovies);
     } else if (status === true){
-      // const moviesFilteredByDuration = moviesArray.filter((movie)=> movie.duration < 40)
       const foundMovies = shortMoviesArray.filter((movie)=> movie.nameRU.toLowerCase().includes(input.toLowerCase()));
       setMoviesOnPage(foundMovies);
     }
@@ -214,23 +221,26 @@ function logout(){
        const foundMovies = moviesFilteredByDuration.filter((movie)=> movie.nameRU.toLowerCase().includes(input.toLowerCase()));
       setMySavedMovies(foundMovies);
      }
-   };
-
-  function regulateMoviesCountOnPage(i){
-    setMoviesCountOnPage(moviesCountOnPage + i);
-    console.log(moviesCountOnPage);
   };
 
+  // Функции количества карточек
+
+  function regulateMoviesCountOnPage(i){
+    setAmountOfCardsOnPage(amountOfCardsOnPage + i)
+  }
+ 
   function addMoviesToPage(){
-    if (window.innerWidth > 1300 && window.innerWidth < 768){
-      regulateMoviesCountOnPage(12);
-    } else if (window.innerWidth < 999 && window.innerWidth > 669){
-      regulateMoviesCountOnPage(3);
-    } else if (window.innerWidth < 767 && window.innerWidth > 320){
-      regulateMoviesCountOnPage(2);
+    if (window.innerWidth < 2560 && window.innerWidth > 1276){
+      regulateMoviesCountOnPage(4);
+    } else if (window.innerWidth < 1276 && window.innerWidth > 999){
+      regulateMoviesCountOnPage(3)
+    } else if (window.innerWidth < 998 && window.innerWidth > 669){
+      regulateMoviesCountOnPage(2)
+    } else if (window.innerWidth < 669){
+      regulateMoviesCountOnPage(2)
     }
   }
-  
+    
   useEffect(() => {
     function checkToken(){
       if (isTokenPresent){
@@ -260,19 +270,19 @@ function logout(){
         MoviesApi.getAllBeatFilmMovies(),
         mainApi.getUsersSavedMovies(token, user)
       ]).then(([moviesData, usersSavedMovies])=>{
-      setAllBeatFilmMovies(moviesData.beatFilmMovies);
-      setShortBeatfilmMovies(moviesData.beatFilmShortMovies);
-      setMoviesOnPage(!shortFilmsFilterOn ? moviesData.beatFilmMovies.slice(0, 4) : moviesData.beatFilmShortMovies.slice(0, 4));
-      const currentIdsArray = usersSavedMovies.map((mySavedMovie)=>{return mySavedMovie.movieId});
-      setMySavedMoviesIDs(currentIdsArray);
-      setMySavedMovies(usersSavedMovies.reverse());
+        // setMoviesCountOnPage();
+        setAllBeatFilmMovies(moviesData.beatFilmMovies);
+        setShortBeatfilmMovies(moviesData.beatFilmShortMovies);
+        setMoviesOnPage(!shortFilmsFilterOn ? moviesData.beatFilmMovies.slice(0, amountOfCardsOnPage) : moviesData.beatFilmShortMovies.slice(0, amountOfCardsOnPage));
+        const currentIdsArray = usersSavedMovies.map((mySavedMovie)=>{return mySavedMovie.movieId});
+        setMySavedMoviesIDs(currentIdsArray);
+        setMySavedMovies(usersSavedMovies.reverse());
       }).catch((err)=>{
         console.log(err);
       });
     }
     setPreloaderShown(false)
-  }, [userLoggedIn, moviesCountOnPage, shortFilmsFilterOn, user]);
-
+  }, [userLoggedIn, shortFilmsFilterOn, amountOfCardsOnPage, user]);
 
   return (
     <CurrentUserContext.Provider value={user}>
@@ -309,7 +319,7 @@ function logout(){
             submitSearchForm={(input) => {filterAndSearchMovies(input, shortFilmsFilterOn, allBeatFilmMovies, shortBeatFilmMovies)}}
             filterShortFilms={()=>{filterMoviesByDuration()}}
             filterShortFilmsOn={shortFilmsFilterOn}
-            addFilmsToPage={()=> addMoviesToPage()}
+            addFilmsToPage={()=> {addMoviesToPage()}}
           />
 
           <ProtectedRoute
