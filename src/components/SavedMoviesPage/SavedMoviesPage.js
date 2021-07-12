@@ -22,14 +22,19 @@ function SavedMoviesPage(props){
             filterShortFilms={()=>{props.filterShortFilms()}}
             filterShortFilmsOn={props.filterShortFilmsOn}
         />
-        <Preloader
-            isShown={props.preloaderIsShown}
-        />
-        <SavedMoviesCardList 
-            data={props.data}
-            addFilmsToPage={props.addFilms}
-            saveMovie={(movie)=>{props.saveMovie(movie)}}
-        />
+        {
+            props.preloaderIsShown ? 
+            <Preloader
+                isShown={props.preloaderIsShown}
+                /> :
+        <>    
+            <SavedMoviesCardList 
+                data={props.data}
+                addFilmsToPage={props.addFilms}
+                saveMovie={(movie)=>{props.saveMovie(movie)}}
+            />
+        </>
+        }       
         <Footer />
     </>   
     )

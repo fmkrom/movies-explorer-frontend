@@ -41,6 +41,8 @@ function App() {
   const [ mySavedMoviesIDs, setMySavedMoviesIDs ] = useState([]);
   const [ isPreloaderShown, setPreloaderShown ] = useState(false);
 
+  console.log(isPreloaderShown);
+
   const [ isOverlayMenuOpen, handleOpenOverlayMenuClick ] = useState(false);
   const [ userLoggedIn, setUserLoggedIn] = useState(isTokenPresent);
 
@@ -264,8 +266,8 @@ function logout(){
 
   useEffect(()=>{
     const token = localStorage.getItem('jwt');
-    setPreloaderShown(true)
     if(userLoggedIn) {
+      setPreloaderShown(true);
       Promise.all([
         MoviesApi.getAllBeatFilmMovies(),
         mainApi.getUsersSavedMovies(token, user)
@@ -277,11 +279,12 @@ function logout(){
         const currentIdsArray = usersSavedMovies.map((mySavedMovie)=>{return mySavedMovie.movieId});
         setMySavedMoviesIDs(currentIdsArray);
         setMySavedMovies(usersSavedMovies.reverse());
+        setPreloaderShown(false)
       }).catch((err)=>{
         console.log(err);
       });
     }
-    setPreloaderShown(false)
+    
   }, [userLoggedIn, shortFilmsFilterOn, amountOfCardsOnPage, user]);
 
   return (
