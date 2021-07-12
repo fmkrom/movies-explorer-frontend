@@ -137,6 +137,7 @@ async function updateUser(name, email){
       setUser({ name: res.name, email: res.email });
       setSaveProfileButtonShown(false);
       setEditProfileButtonShown(true);
+      setErrorMessageUpdateUser('Данные профиля обновлены');
       return;
     } else {
       if (res === 400) {
