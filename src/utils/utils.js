@@ -1,38 +1,7 @@
 import auth from './Api/Auth';
 
-function register(name, email, password){
-    auth.register(name, email, password)
-    .then((res) =>{
-        console.log(`Register sucesfull: ${res}`);
-        console.log(res);
-    })
-    .catch((err)=> console.log(err));
-}
-
-function login(email, password){
-    auth.login(email, password)
-    .then((res) =>{
-        console.log(`Login sucesfull: ${res}`);
-    })
-    .catch((err)=> console.log(err));
-}
-
-
-function editProfile(name, email){
-    console.log('Edited User name: ', name);
-    console.log('Edited User email: ', email);
-}
-
-function logout(){
-    console.log('Logout successful!')
-}
-
 function closePopup(popupHookName){
     popupHookName(false)
-}
-
-function regulateArrayLength(array, currentLength){
-    return array.length = currentLength;
 }
 
 function increaseArrayLength(array){
@@ -76,15 +45,19 @@ function getTimeFromMins(mins) {
     let hours = Math.trunc(mins/60);
     let minutes = mins % 60;
     return hours + 'ч ' + minutes + 'м';
-};    
+};
+
+function setFoundDataToLocalStorage(name, array){
+    localStorage.setItem(name, JSON.stringify(array));
+}
+
+function getFoundDataFromLocalStorage(name){
+    const localStorageData = localStorage.getItem(name);
+    return JSON.parse(localStorageData);
+}
 
 const functions = {
-    login, 
-    register,
-    editProfile,
-    logout,
     closePopup,
-    regulateArrayLength,
     increaseArrayLength,
     
     validateEmailInput,
@@ -92,7 +65,9 @@ const functions = {
     validateNameInput,
     filterMoviesByOwner,
 
-    getTimeFromMins
+    getTimeFromMins,
+    setFoundDataToLocalStorage,
+    getFoundDataFromLocalStorage
 }
 
 export default functions;

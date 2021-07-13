@@ -26,6 +26,7 @@ import MoviesApi from './utils/Api/MoviesApi';
 
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import CurrentUserContext from './contexts/CurrentUserContext';
+import functions from './utils/utils';
 
 function App() {
 
@@ -36,14 +37,13 @@ function App() {
   const [ allBeatFilmMovies, setAllBeatFilmMovies ] = useState([]);
   const [ shortBeatFilmMovies, setShortBeatfilmMovies ] = useState([]);
   const [ moviesOnPage, setMoviesOnPage ] = useState([]);
+  const [ currentFoundMovies, setCurrentFoundMovies ] = useState([]);
 
   const [ mySavedMovies, setMySavedMovies ] = useState([]);
   const [ mySavedMoviesIDs, setMySavedMoviesIDs ] = useState([]);
   const [ isPreloaderShown, setPreloaderShown ] = useState(false);
   const [ noMoviesFoundShown, setNoMoviesFoundShown ] = useState(false);
-  const [ moreButtonShown, setMoreButtonShown ] = useState(true)
-
-  console.log(isPreloaderShown);
+  const [ moreButtonShown, setMoreButtonShown ] = useState(true);
 
   const [ isOverlayMenuOpen, handleOpenOverlayMenuClick ] = useState(false);
   const [ userLoggedIn, setUserLoggedIn] = useState(isTokenPresent);
@@ -160,6 +160,7 @@ async function updateUser(name, email){
 
 function logout(){
   localStorage.removeItem('jwt');
+  localStorage.removeItem('movies');
   setUserLoggedIn(false);
   setUser({});
   history.push('/login');
@@ -218,7 +219,10 @@ function logout(){
         setMoviesOnPage(foundMovies);
         setMoreButtonShown(false);
       } else {
-        setMoviesOnPage(foundMovies);
+        functions.setFoundDataToLocalStorage('movies', foundMovies);
+        const localStorageMovies = functions.getFoundDataFromLocalStorage('movies');
+        console.log(localStorageMovies);
+        setMoviesOnPage(localStorageMovies);
         setNoMoviesFoundShown(false);
         setMoreButtonShown(true);
       }
