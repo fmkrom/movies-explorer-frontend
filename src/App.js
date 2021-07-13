@@ -23,6 +23,7 @@ import auth from './utils/Api/Auth';
 import mainApi from './utils/Api/MainApi';
 import MoviesApi from './utils/Api/MoviesApi';  
 // import functions from './utils/utils';
+import widthsData from './utils/widths';
 
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import CurrentUserContext from './contexts/CurrentUserContext';
@@ -59,13 +60,13 @@ function App() {
   
   function returnAmountOfCards(){
     if (window.innerWidth < 2560 && window.innerWidth > 1276){
-      return 12
+      return widthsData.widths.widescreen
     } else if (window.innerWidth < 1276 && window.innerWidth > 999){
-      return 9
+      return widthsData.widths.laptop
     } else if (window.innerWidth < 998 && window.innerWidth > 669){
-      return 8
+      return widthsData.widths.tablet
     } else if (window.innerWidth < 669){
-      return 5
+      return widthsData.widths.smartphone
     }  
   }
 
@@ -80,9 +81,9 @@ function App() {
   async function register(name, email, password){
     try {
       const res = await auth.register(name, email, password);
-      if (res){
-        history.push('/login');
+      if (res.status === 200){
         setErrorMessageTextRegister('');
+        history.push('/login');
         return;
       } else {
         if (res === 409) {
@@ -136,7 +137,8 @@ async function updateUser(name, email){
   const token = localStorage.getItem('jwt');
   try{
     const res = await mainApi.setUser(name, email, token);
-    if (res) {
+    console.log(res);
+    if (res.status === 200) {
       setUser({ name: res.name, email: res.email });
       setSaveProfileButtonShown(false);
       setEditProfileButtonShown(true);
@@ -251,7 +253,7 @@ function logout(){
         setMySavedMovies(false);
       }
      } else if (status === true){
-       const moviesFilteredByDuration = moviesArray.filter((movie)=> movie.duration < 40)
+       const moviesFilteredByDuration = moviesArray.filter((movie)=> movie.duration < widthsData.shortFilmDuration)
        const foundMovies = moviesFilteredByDuration.filter((movie)=> movie.nameRU.toLowerCase().includes(input.toLowerCase()));
       if (foundMovies.length === 0){
         setMoreButtonShown(false);
@@ -271,13 +273,13 @@ function logout(){
  
   function addMoviesToPage(){
     if (window.innerWidth < 2560 && window.innerWidth > 1276){
-      regulateMoviesCountOnPage(4);
+      regulateMoviesCountOnPage(widthsData.add.widescreen);
     } else if (window.innerWidth < 1276 && window.innerWidth > 999){
-      regulateMoviesCountOnPage(3)
+      regulateMoviesCountOnPage(widthsData.add.laptop)
     } else if (window.innerWidth < 998 && window.innerWidth > 669){
-      regulateMoviesCountOnPage(2)
+      regulateMoviesCountOnPage(widthsData.add.tablet)
     } else if (window.innerWidth < 669){
-      regulateMoviesCountOnPage(2)
+      regulateMoviesCountOnPage(widthsData.add.smartphone)
     }
   }
     
@@ -374,7 +376,7 @@ function logout(){
             isOverlayMenuOpen={isOverlayMenuOpen}
             isOverlayMenuClosed={closeAllpopups}
             openOverlayMenu={handleOpenOverlayMenuClick}
-            data={!shortFilmsFilterOn ? mySavedMovies: mySavedMovies.filter((movie)=> movie.duration < 40)}
+            data={!shortFilmsFilterOn ? mySavedMovies: mySavedMovies.filter((movie)=> movie.duration < widthsData.shortFilmDuration)}
             saveMovie={(movie)=> {deleteSavedMovie(movie._id)}}
             filterShortFilms={()=>{filterMoviesByDuration()}}
             filterShortFilmsOn={shortFilmsFilterOn}

@@ -11,6 +11,7 @@ function checkRes(res) {
 }
 
 async function setUser(userName, userEmail, token){
+  try {
       const result = await fetch(`${URL.MY_BASE}/users/me`, {
         method: 'PATCH',
         headers: {
@@ -22,15 +23,16 @@ async function setUser(userName, userEmail, token){
           name: userName
         })
       })
-      
       if (result.ok){
-        console.log(result.status);
         const res = await result.json();
         return res;
       } else if (!result.ok){
         return result.status
       }
-      return result.status;
+      return result;
+    } catch (err) {
+      console.log(err);
+    }
 };
 
 function saveMovie(movie, token){
