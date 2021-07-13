@@ -3,6 +3,7 @@
 import '../SavedMoviesCardList/SavedMoviesCardList.css';
 import SavedMoviesCard from '../SavedMoviesCard/SavedMoviesCard';
 import ContentBlockMain from '../ContentBlockMain/ContentBlockMain';
+import functions from '../../utils/utils';
 
 function SavedMoviesCardList(props){
 
@@ -16,7 +17,7 @@ return (
                                 moviesCardImage={currentMovie.image}
                                 trailer={currentMovie.trailer}
                                 movieName={currentMovie.nameRU}
-                                movieDuration={currentMovie.duration}
+                                movieDuration={functions.getTimeFromMins(currentMovie.duration)}
                                 key={currentMovie._id}
                                 saveMovie={()=>{props.saveMovie(currentMovie)}}
                             />

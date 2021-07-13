@@ -3,6 +3,7 @@
 import '../MoviesCardList/MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
 import ContentBlockMain from '../ContentBlockMain/ContentBlockMain';
+import functions from '../../utils/utils';
 
 function MoviesCardList(props){
 
@@ -18,7 +19,7 @@ return (
                                 moviesCardImage={`https://api.nomoreparties.co${currentMovie.image.url}`}
                                 trailer={currentMovie.trailerLink}
                                 movieName={currentMovie.nameRU}
-                                movieDuration={currentMovie.duration}
+                                movieDuration={functions.getTimeFromMins(currentMovie.duration)}
                                 key={props.isOnSaveMoviesPage? currentMovie._id : currentMovie.id }
                                 saveMovie={()=>{props.saveMovie(currentMovie)}}
                                 isMovieSaved={Boolean(props.savedMoviesIds.includes(currentMovie.id))}
