@@ -5,6 +5,7 @@ import SearchForm from "../SearchForm/SearchForm";
 import SavedMoviesCardList from "../SavedMoviesCardList/SavedMoviesCardList";
 import Preloader from "../Preloader/Preloader";
 import Footer from "../Footer/Footer";
+import NoMoviesFound from "../NoMoviesFound/NoMoviesFound";
 
 function SavedMoviesPage(props){
     return(
@@ -28,6 +29,9 @@ function SavedMoviesPage(props){
                 isShown={props.preloaderIsShown}
                 /> :
         <>    
+            <NoMoviesFound
+                noMoviesFoundShown={props.noMoviesFoundShown}
+            />
             <SavedMoviesCardList 
                 data={props.data}
                 addFilmsToPage={props.addFilms}

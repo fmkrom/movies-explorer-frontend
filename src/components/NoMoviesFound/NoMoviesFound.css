@@ -1,0 +1,20 @@
+.no-movies-found{
+    width: 100%;
+    height: max-content;
+    text-align: center;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 17px;
+    letter-spacing: 0em;
+    color: #A0A0A0;
+}
+
+.no-movies-found_shown{
+    display: block;
+}
+
+.no-movies-found_hidden{
+    display: none;
+}
+

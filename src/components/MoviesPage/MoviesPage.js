@@ -5,6 +5,7 @@ import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import Footer from "../Footer/Footer";
 import ButtonLong from "../ButtonLong/ButtonLong";
 import Preloader from "../Preloader/Preloader";
+import NoMoviesFound from "../NoMoviesFound/NoMoviesFound";
 
 function MoviesPage(props){
     
@@ -29,6 +30,9 @@ function MoviesPage(props){
             isShown={props.preloaderIsShown}
             /> :
             <>
+                <NoMoviesFound
+                    noMoviesFoundShown={props.noMoviesFoundShown}
+                />
                 <MoviesCardList 
                     savedMoviesIds={props.savedMoviesIds}
                     data={props.data}
@@ -38,6 +42,7 @@ function MoviesPage(props){
                     addFilms={()=> {props.addFilmsToPage()}}
                 />
                 <ButtonLong 
+                    isShown={props.isMoreButtonShown}
                     buttonText="Еще"
                     onClick={()=> {props.addFilmsToPage()}}
                 />

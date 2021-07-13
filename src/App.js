@@ -40,6 +40,8 @@ function App() {
   const [ mySavedMovies, setMySavedMovies ] = useState([]);
   const [ mySavedMoviesIDs, setMySavedMoviesIDs ] = useState([]);
   const [ isPreloaderShown, setPreloaderShown ] = useState(false);
+  const [ noMoviesFoundShown, setNoMoviesFoundShown ] = useState(false);
+  const [ moreButtonShown, setMoreButtonShown ] = useState(true)
 
   console.log(isPreloaderShown);
 
@@ -97,6 +99,7 @@ function App() {
     }
   }
 
+  // Функция логина в App.js:
   async function login(email, password){
     try {
       const res = await auth.login(email, password);
@@ -198,6 +201,8 @@ function logout(){
   }
 
   function filterMoviesByDuration(){
+    setNoMoviesFoundShown(false);
+    setMoreButtonShown(true);
     if (shortFilmsFilterOn === false) {
       switchshortFilmsFilterOn(true)
     } else if (shortFilmsFilterOn === true) {
@@ -208,21 +213,49 @@ function logout(){
   function filterAndSearchMovies(input, status, moviesArray, shortMoviesArray){
     if (status === false){
       const foundMovies = moviesArray.filter((movie)=> movie.nameRU.toLowerCase().includes(input.toLowerCase()));
-      setMoviesOnPage(foundMovies);
+      if (foundMovies.length === 0){
+        setNoMoviesFoundShown(true);
+        setMoviesOnPage(foundMovies);
+        setMoreButtonShown(false);
+      } else {
+        setMoviesOnPage(foundMovies);
+        setNoMoviesFoundShown(false);
+        setMoreButtonShown(true);
+      }
     } else if (status === true){
       const foundMovies = shortMoviesArray.filter((movie)=> movie.nameRU.toLowerCase().includes(input.toLowerCase()));
-      setMoviesOnPage(foundMovies);
+      if (foundMovies.length === 0){
+        setNoMoviesFoundShown(true);
+        setMoviesOnPage(foundMovies);
+        setMoreButtonShown(false);
+      } else {
+        setMoviesOnPage(foundMovies);
+        setNoMoviesFoundShown(false);
+        setMoreButtonShown(true);
+      }
     }
   };
   
   function filterAndSearchMySavedMovies(input, status, moviesArray){
      if (status === false){
        const foundMovies = moviesArray.filter((movie)=> movie.nameRU.toLowerCase().includes(input.toLowerCase()));
-       setMySavedMovies(foundMovies);
+       if (foundMovies.length === 0){
+        setNoMoviesFoundShown(true);
+        setMySavedMovies(foundMovies);
+      } else {
+        setMoviesOnPage(foundMovies);
+        setMySavedMovies(false);
+      }
      } else if (status === true){
        const moviesFilteredByDuration = moviesArray.filter((movie)=> movie.duration < 40)
        const foundMovies = moviesFilteredByDuration.filter((movie)=> movie.nameRU.toLowerCase().includes(input.toLowerCase()));
-      setMySavedMovies(foundMovies);
+      if (foundMovies.length === 0){
+        setMoreButtonShown(false);
+        setNoMoviesFoundShown(true);
+      } else {
+        setMoviesOnPage(foundMovies);
+        setMySavedMovies(false);
+      }
      }
   };
 
@@ -313,7 +346,9 @@ function logout(){
             savedMoviesIds={mySavedMoviesIDs}
             exact path='/movies'
             component={MoviesPage}
+            isMoreButtonShown={moreButtonShown}
             loggedIn={userLoggedIn}
+            noMoviesFoundShown={noMoviesFoundShown}
             preloaderIsShown={isPreloaderShown}
             isOverlayMenuOpen={isOverlayMenuOpen}
             isOverlayMenuClosed={closeAllpopups}
@@ -330,6 +365,7 @@ function logout(){
             exact path='/saved-movies'
             component={SavedMoviesPage}
             loggedIn={userLoggedIn}
+            noMoviesFoundShown={noMoviesFoundShown}
             preloaderIsShown={isPreloaderShown}
             isOverlayMenuOpen={isOverlayMenuOpen}
             isOverlayMenuClosed={closeAllpopups}
