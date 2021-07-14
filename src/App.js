@@ -136,22 +136,22 @@ function showSaveProfileButton(){
 async function updateUser(name, email){
   const token = localStorage.getItem('jwt');
   try{
-    const res = await mainApi.setUser(name, email, token);
-    console.log(res);
-    if (res.status === 200) {
-      setUser({ name: res.name, email: res.email });
+    const data = await mainApi.setUser(name, email, token);
+    console.log(data);
+    if (data.status === 200) {
+      setUser({ name: data.res.name, email: data.res.email });
       setSaveProfileButtonShown(false);
       setEditProfileButtonShown(true);
       setErrorMessageUpdateUser('Данные профиля обновлены');
       return;
     } else {
-      if (res === 400) {
+      if (data.status === 400) {
         setErrorMessageUpdateUser('Введите корректные данные!');
-      } else if (res === 409) {
+      } else if (data.status === 409) {
         setErrorMessageUpdateUser('Пользователь с таким e-mail уже существует')
-      } else if (res === 500){
-        setErrorMessageUpdateUser('При обновлении профиля произошла ошибка');
-      } else if (!res){
+      } else if (data.status === 500){
+        setErrorMessageUpdateUser('Пользователь с таким e-mail уже существует');
+      } else if (!data.status){
         setErrorMessageUpdateUser('Неизвестная ошибка');
       }
     }
@@ -243,24 +243,24 @@ function logout(){
   };
   
   function filterAndSearchMySavedMovies(input, status, moviesArray){
-     if (status === false){
+    if (status === false){
        const foundMovies = moviesArray.filter((movie)=> movie.nameRU.toLowerCase().includes(input.toLowerCase()));
        if (foundMovies.length === 0){
         setNoMoviesFoundShown(true);
         setMySavedMovies(foundMovies);
       } else {
-        setMoviesOnPage(foundMovies);
-        setMySavedMovies(false);
+        setNoMoviesFoundShown(false);
+        setMySavedMovies(foundMovies);
       }
      } else if (status === true){
        const moviesFilteredByDuration = moviesArray.filter((movie)=> movie.duration < widthsData.shortFilmDuration)
        const foundMovies = moviesFilteredByDuration.filter((movie)=> movie.nameRU.toLowerCase().includes(input.toLowerCase()));
       if (foundMovies.length === 0){
-        setMoreButtonShown(false);
         setNoMoviesFoundShown(true);
+        setMySavedMovies(foundMovies);
       } else {
-        setMoviesOnPage(foundMovies);
-        setMySavedMovies(false);
+        setNoMoviesFoundShown(false);
+        setMySavedMovies(foundMovies);
       }
      }
   };
@@ -319,7 +319,8 @@ function logout(){
         const currentIdsArray = usersSavedMovies.map((mySavedMovie)=>{return mySavedMovie.movieId});
         setMySavedMoviesIDs(currentIdsArray);
         setMySavedMovies(usersSavedMovies.reverse());
-        setPreloaderShown(false)
+        // console.log('Users saved movies in useEffect: ', usersSavedMovies);
+        setPreloaderShown(false);
       }).catch((err)=>{
         console.log(err);
       });

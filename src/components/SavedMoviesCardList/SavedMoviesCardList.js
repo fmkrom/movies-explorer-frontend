@@ -6,6 +6,8 @@ import ContentBlockMain from '../ContentBlockMain/ContentBlockMain';
 import functions from '../../utils/utils';
 
 function SavedMoviesCardList(props){
+// console.log('Props in SavedMoviesCardList: ', props);
+// console.log('DATA in SavedMoviesCardList: ', props.data);
 
 return (
     <ContentBlockMain>
@@ -30,13 +32,3 @@ return (
 };
    
 export default SavedMoviesCardList;
-
-/*
-moviesCardImage={currentMovie.image}
-                                trailer={currentMovie.trailerLink}
-                                movieName={currentMovie.nameRU}
-                                movieDuration={currentMovie.duration}
-                                key={currentMovie._id}
-                                saveMovie={()=>{props.saveMovie(currentMovie)}}
-
-*/

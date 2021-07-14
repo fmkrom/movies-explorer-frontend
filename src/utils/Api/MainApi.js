@@ -24,13 +24,15 @@ async function setUser(userName, userEmail, token){
       })
       
       if (result.ok){
-        console.log(result.status);
         const res = await result.json();
-        return res;
+        const status = result.status;
+        return {
+          res, 
+          status
+        };
       } else if (!result.ok){
         return result.status
       }
-      return result.status;
 };
 
 function saveMovie(movie, token){
@@ -68,8 +70,6 @@ function deleteSavedMovie(movieId, token){
       }).then(checkRes); 
 }
 
-
-
 function toggleMoviesSavedStatus(status, movie, token){
     if (status === false){
       saveMovie(movie, token)
@@ -79,7 +79,6 @@ function toggleMoviesSavedStatus(status, movie, token){
 }
 
 async function getUsersSavedMovies(token, user){
-  try {
     const result = await fetch(`${URL.MY_BASE}/movies`,
     {
      method: 'GET',
@@ -91,14 +90,11 @@ async function getUsersSavedMovies(token, user){
     if (result.ok){
       const movies = await result.json();
       const usersSavedMovies = movies.filter((movie)=> movie.owner === user.id);
-      // console.log(usersSavedMovies);
+      // console.log('Users saved movies in API: ', usersSavedMovies);
       return usersSavedMovies;
     } else if (!result.ok){
       return result.status
     }
-  } catch (err) {
-    console.log(err);
-  }
 }
 
 function getAllSavedMovies(token){
