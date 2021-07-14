@@ -11,7 +11,7 @@ function Login(props){
     const email = useInputValidation('', { isEmpty: true, minLength: 6, isEmail: true });
     const password = useInputValidation('', { isEmpty: true, minLength: 8, });
 
-    const buttonDisabled = Boolean(!email.inputValid || !password.inputValid);
+    const buttonDisabled = Boolean(!(email.inputValid && !functions.validateEmailInput(email)) || !password.inputValid);
 
     function handleLoginUserSubmit(e){
         e.preventDefault();

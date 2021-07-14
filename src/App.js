@@ -325,7 +325,6 @@ function logout(){
         console.log(err);
       });
     }
-    
   }, [userLoggedIn, shortFilmsFilterOn, amountOfCardsOnPage, user]);
 
   return (

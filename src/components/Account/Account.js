@@ -11,14 +11,9 @@ function Account(props){
   const name = useInputValidation('', { isEmpty: true, minLength: 2, isName: true});
   const email = useInputValidation('', { isEmpty: true, minLength: 6, isEmail: true });
 
-  //console.log(name.value);
-  //console.log(email.value);
-  
-  const buttonDisabled = Boolean(!email.inputValid || !name.inputValid);
+  const buttonDisabled = Boolean(!(email.inputValid && !functions.validateEmailInput(email)) || !name.inputValid);
 
   function handleEditProfileSubmit(e){
-    // console.log(e);
-    // console.log(name.value, email.value);
     e.preventDefault();
     props.onEditProfile(name.value, email.value);
   }
