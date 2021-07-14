@@ -1,4 +1,4 @@
-import auth from './Api/Auth';
+// import auth from './Api/Auth';
 
 function closePopup(popupHookName){
     popupHookName(false)
@@ -24,6 +24,13 @@ function validatePasswordInput(input){
     
     const passwordIsInvalid = Boolean(passwordInputIsEmpty || passwordTooShort);
     return passwordIsInvalid;
+}
+
+function validateSearchInput(input){
+    const searchInputIsEmpty = Boolean(input.isEmpty && input.isDirty);
+    const searchInputTooShort = Boolean(input.isDirty && input.minLength);
+    const searchInputIsInvalid = Boolean(searchInputIsEmpty || searchInputTooShort);
+    return searchInputIsInvalid;
 }
 
 function validateNameInput(input){
@@ -62,6 +69,7 @@ const functions = {
     validateEmailInput,
     validatePasswordInput,
     validateNameInput,
+    validateSearchInput,
     filterMoviesByOwner,
 
     getTimeFromMins,

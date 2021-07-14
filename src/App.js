@@ -38,7 +38,7 @@ function App() {
   const [ allBeatFilmMovies, setAllBeatFilmMovies ] = useState([]);
   const [ shortBeatFilmMovies, setShortBeatfilmMovies ] = useState([]);
   const [ moviesOnPage, setMoviesOnPage ] = useState([]);
-  const [ currentFoundMovies, setCurrentFoundMovies ] = useState([]);
+  // const [ currentFoundMovies, setCurrentFoundMovies ] = useState([]);
 
   const [ mySavedMovies, setMySavedMovies ] = useState([]);
   const [ mySavedMoviesIDs, setMySavedMoviesIDs ] = useState([]);
@@ -312,14 +312,14 @@ function logout(){
         MoviesApi.getAllBeatFilmMovies(),
         mainApi.getUsersSavedMovies(token, user)
       ]).then(([moviesData, usersSavedMovies])=>{
-        // setMoviesCountOnPage();
+        const localStorageMovies = functions.getFoundDataFromLocalStorage('movies');
+        const localStorageShortMovies = localStorageMovies.filter((movie)=> movie.duration < widthsData.shortFilmDuration)
         setAllBeatFilmMovies(moviesData.beatFilmMovies);
         setShortBeatfilmMovies(moviesData.beatFilmShortMovies);
-        setMoviesOnPage(!shortFilmsFilterOn ? moviesData.beatFilmMovies.slice(0, amountOfCardsOnPage) : moviesData.beatFilmShortMovies.slice(0, amountOfCardsOnPage));
+        setMoviesOnPage(!shortFilmsFilterOn ? localStorageMovies.slice(0, amountOfCardsOnPage) : localStorageShortMovies.slice(0, amountOfCardsOnPage));
         const currentIdsArray = usersSavedMovies.map((mySavedMovie)=>{return mySavedMovie.movieId});
         setMySavedMoviesIDs(currentIdsArray);
         setMySavedMovies(usersSavedMovies.reverse());
-        // console.log('Users saved movies in useEffect: ', usersSavedMovies);
         setPreloaderShown(false);
       }).catch((err)=>{
         console.log(err);
