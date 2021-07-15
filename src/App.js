@@ -388,7 +388,7 @@ function logout(){
             component={SavedMoviesPage}
             loggedIn={userLoggedIn}
             noMoviesFoundShown={noMoviesFoundShown}
-            preloaderIsShown={isPreloaderShown}
+            preloaderIsShown={false}
             isOverlayMenuOpen={isOverlayMenuOpen}
             isOverlayMenuClosed={closeAllpopups}
             openOverlayMenu={handleOpenOverlayMenuClick}
