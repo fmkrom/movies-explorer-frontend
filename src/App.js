@@ -108,7 +108,7 @@ function App() {
     try {
       const res = await auth.login(email, password);
       if (localStorage.getItem('jwt') === res.toString()) {
-          localStorage.setItem('movies', JSON.stringify([]));  
+        // localStorage.setItem('movies', JSON.stringify());
           setErrorMessageTextLogin('');
           setUserLoggedIn(true);
           history.push('/movies');
@@ -222,9 +222,9 @@ function logout(){
       setPreloaderShown(true);
       const foundMovies = functions.searchMovies(moviesArray, input);
       if (foundMovies.length === 0){
-        // console.log('movies null: ', foundMovies)
         setNoMoviesFoundShown(true);
         functions.setLocalStorageMovies('movies', foundMovies);
+        setMoviesOnPage([]);
         setMoreButtonShown(false);
       } else {
       // console.log('movies present: ', foundMovies)
@@ -238,7 +238,7 @@ function logout(){
       setPreloaderShown(true);
       const foundShortMovies = functions.searchMovies(shortMoviesArray, input);
       if (foundShortMovies.length === 0){
-      // console.log('short movies null: ', foundShortMovies)
+        setMoviesOnPage([]);
         setNoMoviesFoundShown(true);
         functions.setLocalStorageMovies('movies', foundShortMovies);
         setMoreButtonShown(false);
@@ -252,8 +252,6 @@ function logout(){
       setPreloaderShown(false);
     }
   };
-
-  
   
   function filterAndSearchMySavedMovies(input, status, moviesArray){
     if (status === false){
@@ -296,12 +294,15 @@ function logout(){
     }
   }
 
-  
-    
   useEffect(() => {
     function checkToken(){
       if (isTokenPresent){
       setUserLoggedIn(true);
+      const localStorageMovies = localStorage.getItem('movies');
+      const moviesFound = Boolean(localStorageMovies);
+      console.log(moviesFound);
+      moviesFound ? setPreloaderShown(true) : setPreloaderShown(false);  
+
       auth.getContent(localStorage.getItem('jwt'))
         .then((data)=>{
           setUser({
@@ -321,14 +322,12 @@ function logout(){
 
   useEffect(()=>{
     const token = localStorage.getItem('jwt');
-    
     if(userLoggedIn) {
       setPreloaderShown(true);
       Promise.all([
         MoviesApi.getAllBeatFilmMovies(),
         mainApi.getUsersSavedMovies(token, user),
       ]).then(([moviesData, usersSavedMovies ])=>{
-        // console.log('useEffect Works!');
         const localStorageMovies = functions.getLocalStorageMovies('movies');
         const localStorageShortMovies = functions.getLocalStorageShortMovies('movies');
         setMoviesOnPage(!shortFilmsFilterOn ? localStorageMovies.slice(0, amountOfCardsOnPage) : localStorageShortMovies.slice(0, amountOfCardsOnPage)); 
@@ -337,7 +336,7 @@ function logout(){
         const currentIdsArray = usersSavedMovies.map((mySavedMovie)=>{return mySavedMovie.movieId});
         setMySavedMoviesIDs(currentIdsArray);
         setMySavedMovies(usersSavedMovies.reverse());
-        setPreloaderShown(false);
+        // setPreloaderShown(false);
       }).catch((err)=>{
         console.log(err);
       });
