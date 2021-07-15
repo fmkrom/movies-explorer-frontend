@@ -40,6 +40,9 @@ function App() {
   const [ moviesOnPage, setMoviesOnPage ] = useState([]);
   // const [ currentFoundMovies, setCurrentFoundMovies ] = useState([]);
 
+  //const [ localStorageMovies, setLocalStorageMovies ]  = useState([]);
+  // const [ localStorageShortMovies, setLocalStorageShortMovies ]  = useState([]);
+
   const [ mySavedMovies, setMySavedMovies ] = useState([]);
   const [ mySavedMoviesIDs, setMySavedMoviesIDs ] = useState([]);
   const [ isPreloaderShown, setPreloaderShown ] = useState(false);
@@ -105,6 +108,7 @@ function App() {
     try {
       const res = await auth.login(email, password);
       if (localStorage.getItem('jwt') === res.toString()) {
+          localStorage.setItem('movies', JSON.stringify([]));  
           setErrorMessageTextLogin('');
           setUserLoggedIn(true);
           history.push('/movies');
@@ -215,32 +219,41 @@ function logout(){
 
   function filterAndSearchMovies(input, status, moviesArray, shortMoviesArray){
     if (status === false){
-      const foundMovies = moviesArray.filter((movie)=> movie.nameRU.toLowerCase().includes(input.toLowerCase()));
+      setPreloaderShown(true);
+      const foundMovies = functions.searchMovies(moviesArray, input);
       if (foundMovies.length === 0){
+        // console.log('movies null: ', foundMovies)
         setNoMoviesFoundShown(true);
-        setMoviesOnPage(foundMovies);
+        functions.setLocalStorageMovies('movies', foundMovies);
         setMoreButtonShown(false);
       } else {
-        functions.setFoundDataToLocalStorage('movies', foundMovies);
-        const localStorageMovies = functions.getFoundDataFromLocalStorage('movies');
-        console.log(localStorageMovies);
-        setMoviesOnPage(localStorageMovies);
+      // console.log('movies present: ', foundMovies)
+        functions.setLocalStorageMovies('movies', foundMovies);
+        setMoviesOnPage(foundMovies);
         setNoMoviesFoundShown(false);
         setMoreButtonShown(true);
       }
+      setPreloaderShown(false);
     } else if (status === true){
-      const foundMovies = shortMoviesArray.filter((movie)=> movie.nameRU.toLowerCase().includes(input.toLowerCase()));
-      if (foundMovies.length === 0){
+      setPreloaderShown(true);
+      const foundShortMovies = functions.searchMovies(shortMoviesArray, input);
+      if (foundShortMovies.length === 0){
+      // console.log('short movies null: ', foundShortMovies)
         setNoMoviesFoundShown(true);
-        setMoviesOnPage(foundMovies);
+        functions.setLocalStorageMovies('movies', foundShortMovies);
         setMoreButtonShown(false);
       } else {
-        setMoviesOnPage(foundMovies);
+        // console.log('short movies present: ', foundShortMovies)
+        functions.setLocalStorageMovies('movies', foundShortMovies);
+        setMoviesOnPage(foundShortMovies);
         setNoMoviesFoundShown(false);
         setMoreButtonShown(true);
       }
+      setPreloaderShown(false);
     }
   };
+
+  
   
   function filterAndSearchMySavedMovies(input, status, moviesArray){
     if (status === false){
@@ -282,6 +295,8 @@ function logout(){
       regulateMoviesCountOnPage(widthsData.add.smartphone)
     }
   }
+
+  
     
   useEffect(() => {
     function checkToken(){
@@ -306,17 +321,19 @@ function logout(){
 
   useEffect(()=>{
     const token = localStorage.getItem('jwt');
+    
     if(userLoggedIn) {
       setPreloaderShown(true);
       Promise.all([
         MoviesApi.getAllBeatFilmMovies(),
-        mainApi.getUsersSavedMovies(token, user)
-      ]).then(([moviesData, usersSavedMovies])=>{
-        const localStorageMovies = functions.getFoundDataFromLocalStorage('movies');
-        const localStorageShortMovies = localStorageMovies.filter((movie)=> movie.duration < widthsData.shortFilmDuration)
+        mainApi.getUsersSavedMovies(token, user),
+      ]).then(([moviesData, usersSavedMovies ])=>{
+        // console.log('useEffect Works!');
+        const localStorageMovies = functions.getLocalStorageMovies('movies');
+        const localStorageShortMovies = functions.getLocalStorageShortMovies('movies');
+        setMoviesOnPage(!shortFilmsFilterOn ? localStorageMovies.slice(0, amountOfCardsOnPage) : localStorageShortMovies.slice(0, amountOfCardsOnPage)); 
         setAllBeatFilmMovies(moviesData.beatFilmMovies);
         setShortBeatfilmMovies(moviesData.beatFilmShortMovies);
-        setMoviesOnPage(!shortFilmsFilterOn ? localStorageMovies.slice(0, amountOfCardsOnPage) : localStorageShortMovies.slice(0, amountOfCardsOnPage));
         const currentIdsArray = usersSavedMovies.map((mySavedMovie)=>{return mySavedMovie.movieId});
         setMySavedMoviesIDs(currentIdsArray);
         setMySavedMovies(usersSavedMovies.reverse());
@@ -325,7 +342,7 @@ function logout(){
         console.log(err);
       });
     }
-  }, [userLoggedIn, shortFilmsFilterOn, amountOfCardsOnPage, user]);
+  }, [userLoggedIn, shortFilmsFilterOn, amountOfCardsOnPage, user ]);
 
   return (
     <CurrentUserContext.Provider value={user}>
@@ -393,7 +410,7 @@ function logout(){
             userName={user.name}
             userEmail={user.email}
             editUserProfile={(name, email)=>{updateUser(name, email)}}
-            logout={()=>{console.log('Does logout work???'); logout()}}
+            logout={()=>{logout()}}
             errorMessageText={errorMessageUpdateUser}
             showSaveProfileButton={()=> {showSaveProfileButton()}}
             editProfileButtonDisplayed={editProfileButtonShown}

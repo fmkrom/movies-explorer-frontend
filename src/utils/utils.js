@@ -1,5 +1,7 @@
 // import auth from './Api/Auth';
 
+import widthsData from "./widths";
+
 function closePopup(popupHookName){
     popupHookName(false)
 }
@@ -53,13 +55,29 @@ function getTimeFromMins(mins) {
     return hours + 'ч ' + minutes + 'м';
 };
 
-function setFoundDataToLocalStorage(name, array){
-    localStorage.setItem(name, JSON.stringify(array));
+function searchMovies(moviesArray, input){
+    const foundMovies = moviesArray.filter((movie)=> movie.nameRU.toLowerCase().includes(input.toLowerCase()));
+    return foundMovies;
 }
 
-function getFoundDataFromLocalStorage(name){
-    const localStorageData = localStorage.getItem(name);
-    return JSON.parse(localStorageData);
+function getLocalStorageMovies(name){
+    const localStorageMovies = JSON.parse(localStorage.getItem(name));
+    if (localStorageMovies === null) {
+        return []
+    } else {
+        return localStorageMovies;
+    }   
+}
+
+function getLocalStorageShortMovies(name){
+    const localStorageMovies = getLocalStorageMovies(name);
+    const localStorageShportMovies = localStorageMovies.filter((movie)=> movie.duration < widthsData.shortFilmDuration);
+    // console.log('localStorageShportMovies in utils: ', localStorageShportMovies)
+    return localStorageShportMovies;
+}
+
+function setLocalStorageMovies(name, array){
+    localStorage.setItem(name, JSON.stringify(array));
 }
 
 const functions = {
@@ -73,8 +91,10 @@ const functions = {
     filterMoviesByOwner,
 
     getTimeFromMins,
-    setFoundDataToLocalStorage,
-    getFoundDataFromLocalStorage
+    searchMovies,
+    getLocalStorageMovies,
+    getLocalStorageShortMovies,
+    setLocalStorageMovies
 }
 
 export default functions;
