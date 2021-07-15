@@ -38,14 +38,10 @@ function App() {
   const [ allBeatFilmMovies, setAllBeatFilmMovies ] = useState([]);
   const [ shortBeatFilmMovies, setShortBeatfilmMovies ] = useState([]);
   const [ moviesOnPage, setMoviesOnPage ] = useState([]);
-  // const [ currentFoundMovies, setCurrentFoundMovies ] = useState([]);
-
-  //const [ localStorageMovies, setLocalStorageMovies ]  = useState([]);
-  // const [ localStorageShortMovies, setLocalStorageShortMovies ]  = useState([]);
-
   const [ mySavedMovies, setMySavedMovies ] = useState([]);
   const [ mySavedMoviesIDs, setMySavedMoviesIDs ] = useState([]);
   const [ isPreloaderShown, setPreloaderShown ] = useState(false);
+
   const [ noMoviesFoundShown, setNoMoviesFoundShown ] = useState(false);
   const [ moreButtonShown, setMoreButtonShown ] = useState(true);
 
@@ -108,7 +104,6 @@ function App() {
     try {
       const res = await auth.login(email, password);
       if (localStorage.getItem('jwt') === res.toString()) {
-        // localStorage.setItem('movies', JSON.stringify());
           setErrorMessageTextLogin('');
           setUserLoggedIn(true);
           history.push('/movies');
@@ -218,8 +213,8 @@ function logout(){
   }
 
   function filterAndSearchMovies(input, status, moviesArray, shortMoviesArray){
+    setPreloaderShown(false);
     if (status === false){
-      setPreloaderShown(true);
       const foundMovies = functions.searchMovies(moviesArray, input);
       if (foundMovies.length === 0){
         setNoMoviesFoundShown(true);
@@ -233,9 +228,7 @@ function logout(){
         setNoMoviesFoundShown(false);
         setMoreButtonShown(true);
       }
-      setPreloaderShown(false);
     } else if (status === true){
-      setPreloaderShown(true);
       const foundShortMovies = functions.searchMovies(shortMoviesArray, input);
       if (foundShortMovies.length === 0){
         setMoviesOnPage([]);
@@ -249,7 +242,6 @@ function logout(){
         setNoMoviesFoundShown(false);
         setMoreButtonShown(true);
       }
-      setPreloaderShown(false);
     }
   };
   
@@ -298,11 +290,6 @@ function logout(){
     function checkToken(){
       if (isTokenPresent){
       setUserLoggedIn(true);
-      const localStorageMovies = localStorage.getItem('movies');
-      const moviesFound = Boolean(localStorageMovies);
-      console.log(moviesFound);
-      moviesFound ? setPreloaderShown(true) : setPreloaderShown(false);  
-
       auth.getContent(localStorage.getItem('jwt'))
         .then((data)=>{
           setUser({
@@ -323,20 +310,22 @@ function logout(){
   useEffect(()=>{
     const token = localStorage.getItem('jwt');
     if(userLoggedIn) {
-      setPreloaderShown(true);
       Promise.all([
         MoviesApi.getAllBeatFilmMovies(),
         mainApi.getUsersSavedMovies(token, user),
       ]).then(([moviesData, usersSavedMovies ])=>{
         const localStorageMovies = functions.getLocalStorageMovies('movies');
         const localStorageShortMovies = functions.getLocalStorageShortMovies('movies');
+        
+        const preloader = Boolean(localStorage.getItem('movies') === null);
+        preloader ? setPreloaderShown(true) : setPreloaderShown(false);
+        
         setMoviesOnPage(!shortFilmsFilterOn ? localStorageMovies.slice(0, amountOfCardsOnPage) : localStorageShortMovies.slice(0, amountOfCardsOnPage)); 
         setAllBeatFilmMovies(moviesData.beatFilmMovies);
         setShortBeatfilmMovies(moviesData.beatFilmShortMovies);
         const currentIdsArray = usersSavedMovies.map((mySavedMovie)=>{return mySavedMovie.movieId});
         setMySavedMoviesIDs(currentIdsArray);
         setMySavedMovies(usersSavedMovies.reverse());
-        // setPreloaderShown(false);
       }).catch((err)=>{
         console.log(err);
       });
