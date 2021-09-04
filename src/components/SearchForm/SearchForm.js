@@ -30,7 +30,7 @@ function SearchForm(props){
                       onBlur={e=> search.onBlur(e)}
                       required 
                       className="search-form__input" 
-                      placeholder="Фильм" 
+                      placeholder="Введите название фильма..."
                       type="text" 
                       minLength="2" 
                       maxlenght="40"

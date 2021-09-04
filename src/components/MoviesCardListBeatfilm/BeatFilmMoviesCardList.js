@@ -5,7 +5,7 @@ import ButtonLong from '../ButtonLong/ButtonLong';
 // import URL from '../../utils/constants';
 
 function BeatFilmMoviesCardList(props){
-    
+
 return (
     <ContentBlockMain>
         <div className="movies-cards-list">

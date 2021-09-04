@@ -1,0 +1,22 @@
+.portfolio__title{
+    font-weight: normal;
+    font-size: 2.5em;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.portfolio__subtitle{
+    font-weight: normal;
+    font-weight: normal;
+    font-size: 1em;
+}
+
+.portfolio__info{
+    text-align: left;
+}
+
+@media screen and (max-width: 764px){
+    .portfolio__info{
+        text-align: center;
+    }    
+}

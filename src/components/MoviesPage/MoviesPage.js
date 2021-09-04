@@ -8,7 +8,7 @@ import Preloader from "../Preloader/Preloader";
 import NoMoviesFound from "../NoMoviesFound/NoMoviesFound";
 
 function MoviesPage(props){
-    
+
     return(
     <>
         <OverlayMenu 
@@ -35,7 +35,7 @@ function MoviesPage(props){
                 />
                 <MoviesCardList 
                     savedMoviesIds={props.savedMoviesIds}
-                    data={props.data}
+                    currentData={props.data}
                     saveMovie={(movie)=>{props.saveMovie(movie)}}
                     savedMoviedata={props.data}
                     isOnSaveMoviesPage={false}

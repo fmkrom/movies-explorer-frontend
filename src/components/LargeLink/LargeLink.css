@@ -1,0 +1,31 @@
+.large_link{
+    width:200px;
+    height: 40px;
+    
+    color:white;
+    background-color: blue;
+    font-size: large;
+    border-radius: 5px;
+
+    margin-top: 25px;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    font-size: small;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 16px;
+    letter-spacing: 0px;
+    text-decoration: none;
+}
+
+@media screen and (max-width: 764px) {
+    .icon_link{
+        width:82px;
+        height:26px;
+    }
+}
+

@@ -7,11 +7,16 @@ import functions from '../../utils/utils';
 
 function MoviesCardList(props){
 
+console.log('Props in MoviesCardList: ', props);
+console.log('Data in MoviesCardList: ', props.data);
+
 return (
     <ContentBlockMain>
         <div className="movies-cards-list">
                 {
-                    props.data.map((currentMovie) => {
+                    props.currentData.map((currentMovie) => {
+                        console.log('Current Movie: ', currentMovie);
+                        
                         return (
                             <MoviesCard
                                 savedMoviesIds={props.savedMoviesIds}

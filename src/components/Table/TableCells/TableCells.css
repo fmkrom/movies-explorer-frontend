@@ -1,0 +1,14 @@
+.table__cell-content{
+    width: 15%;
+    font-size: 0.8em;
+}
+
+.table__cell-link{
+    text-decoration: none;
+    cursor: pointer;
+    color:black;
+}
+
+.table__cell-content_left{
+    text-align: left;
+}

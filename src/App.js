@@ -9,6 +9,8 @@ import AboutProject from './components/AboutProject/AboutProject';
 import Techs from './components/Techs/Techs';
 import AboutMe from './components/AboutMe/AboutMe'
 import Footer from './components/Footer/Footer';
+import Resume from './components/Resume/Resume';
+// import HowToLearn from '../src/projects/HowToLearn/HowToLearn';
 
 import Login from './components/Login/Login';
 import Register from './components/Register/Register';
@@ -18,12 +20,14 @@ import MoviesPage from './components/MoviesPage/MoviesPage';
 import SavedMoviesPage from './components/SavedMoviesPage/SavedMoviesPage';
 import AccountPage from './components/AccountPage/AccountPage';
 import PageNotFound from './components/PageNotFound/PageNotFound';
+import Portfolio from './components/Portfolio/Portfolio';
+import Table from './components/Table/Table';
 
 import auth from './utils/Api/Auth';
 import mainApi from './utils/Api/MainApi';
 import MoviesApi from './utils/Api/MoviesApi';  
-// import functions from './utils/utils';
 import widthsData from './utils/widths';
+import info from './info/info';
 
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import CurrentUserContext from './contexts/CurrentUserContext';
@@ -56,7 +60,7 @@ function App() {
   const [ saveProfileButtonShown, setSaveProfileButtonShown ] = useState(false); 
 
   const [ shortFilmsFilterOn, switchshortFilmsFilterOn ] = useState(false);
-  
+
   function returnAmountOfCards(){
     if (window.innerWidth < 2560 && window.innerWidth > 1276){
       return widthsData.widths.widescreen
@@ -269,7 +273,6 @@ function logout(){
   };
 
   // Функции количества карточек
-
   function regulateMoviesCountOnPage(i){
     setAmountOfCardsOnPage(amountOfCardsOnPage + i)
   }
@@ -404,6 +407,19 @@ function logout(){
             editProfileButtonDisplayed={editProfileButtonShown}
             saveProfileButtonDisplayed={saveProfileButtonShown}
           />
+
+          <Route exact path="/beatfilm-full-list">
+            <OverlayMenu 
+              isOpen={isOverlayMenuOpen}
+              isClosed={closeAllpopups}
+            />
+            <Header
+              isLoggedIn={userLoggedIn}
+              onOpenOverlayMenu={handleOpenOverlayMenuClick}
+            />
+            <Table data={allBeatFilmMovies} />
+            <Footer />
+          </Route>
           
           <Route exact path="/login">
               <Login 
@@ -417,6 +433,36 @@ function logout(){
                 onRegisterUser={register}
                 errorMessageText={errorMessageTextRegister}
               />
+          </Route>
+
+          <Route exact path="/resume">
+            <OverlayMenu 
+              isOpen={isOverlayMenuOpen}
+              isClosed={closeAllpopups}
+            />
+            <Header
+              isLoggedIn={userLoggedIn}
+              onOpenOverlayMenu={handleOpenOverlayMenuClick}
+            />
+            <Resume 
+              info={info}
+            />
+            <Footer />
+          </Route>
+
+          <Route exact path="/portfolio">
+            <OverlayMenu 
+              isOpen={isOverlayMenuOpen}
+              isClosed={closeAllpopups}
+            />
+            <Header
+              isLoggedIn={userLoggedIn}
+              onOpenOverlayMenu={handleOpenOverlayMenuClick}
+            />
+            <Portfolio 
+              projects={info.projects}
+            />
+            <Footer />
           </Route>
 
           <Route exact path="*">

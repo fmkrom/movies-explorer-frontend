@@ -1,0 +1,39 @@
+.data{
+    margin:0 auto;
+    width:max-content;
+    font-size: 14px;
+}
+
+.data-table{
+    width:1024px;
+    border-collapse: separate;
+    border-spacing: 0 20px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.table__title{
+    font-size: 22px;
+    font-weight: normal;
+    margin-bottom: 20px;
+    /*text-transform: uppercase;*/
+}
+
+.table__cell-header{
+    width:15%;
+    border-bottom: 1px solid blue;
+    padding-bottom: 10px;
+    font-weight: normal;
+    font-size: 1.3em;
+}
+
+.table__cell-content{
+    width: 15%;
+}
+
+.table__cell-link{
+    text-decoration: none;
+    cursor: pointer;
+    color:white;
+}
+
