@@ -27,7 +27,8 @@ import auth from './utils/Api/Auth';
 import mainApi from './utils/Api/MainApi';
 import MoviesApi from './utils/Api/MoviesApi';  
 import widthsData from './utils/widths';
-import info from './info/info';
+import portfolio from './info/portfolio';
+import resume from './info/resume';
 
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import CurrentUserContext from './contexts/CurrentUserContext';
@@ -445,12 +446,42 @@ function logout(){
               onOpenOverlayMenu={handleOpenOverlayMenuClick}
             />
             <Resume 
-              info={info}
+              data={resume.ru}
             />
             <Footer />
           </Route>
 
-          <Route exact path="/portfolio">
+          <Route exact path="/resume/ru">
+            <OverlayMenu 
+              isOpen={isOverlayMenuOpen}
+              isClosed={closeAllpopups}
+            />
+            <Header
+              isLoggedIn={userLoggedIn}
+              onOpenOverlayMenu={handleOpenOverlayMenuClick}
+            />
+            <Resume 
+              data={resume.ru}
+            />
+            <Footer />
+          </Route>
+
+          <Route exact path="/resume/en">
+            <OverlayMenu 
+              isOpen={isOverlayMenuOpen}
+              isClosed={closeAllpopups}
+            />
+            <Header
+              isLoggedIn={userLoggedIn}
+              onOpenOverlayMenu={handleOpenOverlayMenuClick}
+            />
+            <Resume
+              data={resume.en}
+            />
+            <Footer />
+          </Route>
+
+          <Route exact path="/portfolio/ru">
             <OverlayMenu 
               isOpen={isOverlayMenuOpen}
               isClosed={closeAllpopups}
@@ -460,7 +491,42 @@ function logout(){
               onOpenOverlayMenu={handleOpenOverlayMenuClick}
             />
             <Portfolio 
-              projects={info.projects}
+              portfolioTitle="Портфолио"
+              portfolioSubtitle="Junior Web разработчика"
+              buttonText="Резюме"
+              linkRoute="../resume/ru"
+              portfolioName="Ефима Романенко"
+              typeTitle="Тип: "
+              technologiesTitle="Технологии: "
+              githubTitle="Код на Github: "
+              frontendTitle="Фронтэнд"
+              backendTitle="Бэкенд"
+              projects={portfolio.ru}
+            />
+            <Footer />
+          </Route>
+
+          <Route exact path="/portfolio/en">
+            <OverlayMenu 
+              isOpen={isOverlayMenuOpen}
+              isClosed={closeAllpopups}
+            />
+            <Header
+              isLoggedIn={userLoggedIn}
+              onOpenOverlayMenu={handleOpenOverlayMenuClick}
+            />
+            <Portfolio 
+              portfolioTitle="Portfolio"
+              portfolioSubtitle="by Efim Romanenko"
+              buttonText="Resume"
+              linkRoute="../resume/en"
+              portfolioName="a Junior Web Developer"
+              typeTitle="Type: "
+              technologiesTitle="Technologies: "
+              githubTitle="Code on Github: "
+              frontendTitle="Frontend"
+              backendTitle="Backend"
+              projects={portfolio.en}
             />
             <Footer />
           </Route>

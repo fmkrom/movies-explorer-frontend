@@ -1,0 +1,45 @@
+.language-links{
+    width:100%;
+    height: max-content;
+    display: flex;
+    justify-content: flex-end;
+}
+
+@media screen and (max-width:764px) {
+    .language-links{
+        justify-content: center;
+    }
+}
+
+.language-link{
+    margin-left: 10px;
+    margin-right: 10px;
+    text-decoration: none;
+    color:black;
+    display:flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.language__button{
+    width:25px;
+    height:25px;
+    margin-left: 5px;
+    margin-right: 5px;
+    background-color: transparent;
+    background-image: url('../../images/icons/flag-russian.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    border:0;
+    cursor: pointer;
+}
+
+.language__button_russian{
+    background-image: url('../../images/icons/flag-russian.png');
+}
+
+.language__button_english{
+    background-image: url('../../images/icons/flag-english.png');
+}

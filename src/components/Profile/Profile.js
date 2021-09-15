@@ -13,6 +13,17 @@ function Profile(props){
                   <div>
                     {props.children}
                   </div>
+                  <div className="profile__icons">
+                    <a href="mailto: fmkrom@yandex.ru">
+                      <button className="profile__icon profile__icon_mail"></button>
+                    </a>
+                    <a href="https://api.whatsapp.com/send?phone=+79651658664">
+                      <button className="profile__icon profile__icon_whatsapp"></button>
+                    </a>
+                    <a href="https://github.com/fmkrom">
+                      <button className="profile__icon profile__icon_github"></button>
+                    </a>
+                  </div>
                 </div>
                 <div className="profile__info-buttons">
                 <LargeLink

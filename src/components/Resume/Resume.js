@@ -4,30 +4,117 @@ import BlockHeadline from '../BlockHeadline/BlockHeadline';
 import ResumeList from './ResumeList/ResumeList';
 import ResumeItem from './ResumeItem/ResumeItem';
 import Profile from '../Profile/Profile';
+import LanguagesLinks from '../LanguagesLinks/LanguagesLinks';
 
 function Resume(props){
 
 return (
-        <>
+      <>
+        <ContentBlock>
+          <LanguagesLinks 
+            languageLinkRus="../resume/ru"
+            languageLinkEng="../resume/en"
+          />
+        </ContentBlock>
         <ContentBlock>
           <Profile
-            title="Ефим Романенко"
-            subtitle="Junior Web-Разработчик"
-            buttonText="Портфолио"
-            linkRoute='./portfolio'
+            title={props.data.header.title}
+            subtitle={props.data.header.subtitle}
+            buttonText={props.data.header.buttonText}
+            linkRoute={props.data.header.buttonLink}
           >
-            <p className="profile__item">Год рождения: 1985</p>
-            <p className="profile__item">Место жительства: Россия, Москва</p>
-            <p className="profile__item">Гражданство: Россия</p>
+            <p className="profile__item">{props.data.header.info.born}</p>
+            <p className="profile__item">{props.data.header.info.nationality}</p>
+            <p className="profile__item">{props.data.header.info.married}</p>
           </Profile>
         </ContentBlock>
         <ContentBlock>
           <div className="resume__block resume__block_skills">
               <BlockHeadline
-                blockTitle="Ключевые навыки"
+                blockTitle={props.data.skills.headline}
               />
               <ResumeList 
-                list={props.info.skills.main}
+                list={props.data.skills.list}
+              />
+          </div>
+        </ContentBlock>
+        <ContentBlock>
+          <div className="resume__block resume__block_skills">
+              <BlockHeadline
+                blockTitle={props.data.languages.headline}
+              />
+              <ResumeList 
+                list={props.data.languages.list}
+              />
+          </div>
+        </ContentBlock>
+        <ContentBlock>
+          <div className="resume__block resume__block_education">
+              <BlockHeadline
+                blockTitle={props.data.courses.headline}
+              />
+              {
+                props.data.courses.courses.map((item)=>{
+                  return <ResumeItem 
+                    key={item.key}
+                    dates={item.dates}
+                    title={item.title}
+                    subtitle={item.subtitle}
+                    duties={item.duties}
+                  />
+                })
+              }
+          </div>
+        </ContentBlock>
+        <ContentBlock>
+        <div className="resume__block resume__block_career">
+            <BlockHeadline
+              blockTitle={props.data.career.headline}
+            />
+            {
+              props.data.career.jobs.map((item)=>{
+                return <ResumeItem 
+                  dates={item.dates}
+                  title={item.title}
+                  subtitle={item.subtitle}
+                  duties={item.duties}
+                />
+              })
+            }
+        </div>
+      </ContentBlock>
+      <ContentBlock>
+        <div className="resume__block resume__block_education">
+            <BlockHeadline
+              blockTitle={props.data.education.headline}
+            />
+            {
+              props.data.education.universities.map((item)=>{
+                return <ResumeItem 
+                  dates={item.dates}
+                  title={item.title}
+                  subtitle={item.subtitle}
+                  duties={item.duties}
+                />
+              })
+            }
+        </div>
+      </ContentBlock>
+
+    </>
+    )
+};
+
+export default Resume;
+
+/*
+        <ContentBlock>
+          <div className="resume__block resume__block_skills">
+              <BlockHeadline
+                blockTitle={props.info.skills.blockTitle}
+              />
+              <ResumeList 
+                list={props.info.skills}
               />
           </div>
         </ContentBlock>
@@ -59,6 +146,7 @@ return (
             {
               props.info.courses.map((item)=>{
                 return <ResumeItem 
+                  key={item.key}
                   dates={item.dates}
                   title={item.title}
                   subtitle={item.subtitle}
@@ -74,7 +162,7 @@ return (
               blockTitle="Карьера"
             />
             {
-              props.info.jobs.map((item)=>{
+              props.info.career.map((item)=>{
                 return <ResumeItem 
                   dates={item.dates}
                   title={item.title}
@@ -109,7 +197,7 @@ return (
             />
         </div>
         <ResumeList 
-          list={props.info.otherInfo.qualities}
+          list={props.info.qualities}
         />
       </ContentBlock>
       <ContentBlock>
@@ -119,12 +207,9 @@ return (
             />
         </div>
         <ResumeList 
-          list={props.info.otherInfo.miscellanea}
+          list={props.info.misc}
         />
       </ContentBlock>
       </>
-      )
-};
-
-export default Resume;
+*/
 

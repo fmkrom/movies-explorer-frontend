@@ -54,11 +54,19 @@
     margin-bottom: 5px;
 }
 
+@media screen and (max-width: 764px) {
+    .portfolio-item__text-block{
+        flex-direction: column;
+    }
+}
+
 .portfolio-item__text-item{
     font-weight: normal;
     margin-right: 10px;
     color: darkslategray;
 }
+
+
 
 /*color: #E8E8E8*/
 
@@ -83,4 +91,10 @@
 
 .portfolio-item__github-link_hidden{
     display: none;
+}
+
+.portfolio-item__list{
+    text-align: left;
+    margin-top: 3px;
+    margin-bottom: 3px;
 }
